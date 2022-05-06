@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   envp_init.c                                        :+:      :+:    :+:   */
+/*   eclown_utils.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/04 04:08:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/06 19:15:01 by EClown           ###   ########.fr       */
+/*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
+/*   Updated: 2022/05/06 18:57:07 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
-#include "envp.h"
+#ifndef ECLOWN_UTILS_H
+# define ECLOWN_UTILS_H
 
-void	envp_init(char **envp)
-{
-	g_ms.envp = ft_strings_dup(envp);
-	envp_status();
-}
+# include "../../minishell.h"
+
+void	ft_free_text(char **text);
+int		ft_max_int(int n1, int n2);
+int		ft_min_int(int n1, int n2);
+char	**ft_split_new(char *str, char sep);
+char	*ft_strjoin3(char *str1, char *str2, char *str3);
+int		ft_is_str_equal(char *str1, char *str2);
+
+#endif  /* ECLOWN_UTILS_H */

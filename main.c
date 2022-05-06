@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/06 13:42:57 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 21:14:34 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
+
 
 
 int	str_wildcard_compare(char *str, char *ptrn);
@@ -35,6 +36,17 @@ int	main(int argc, char **argv, char **envp)
 	(void) argv;
 	(void) argc;
 	(void) envp;
+
+	
+	chdir("asdasd");
+	ft_putstr_fd("ay-yay-yay: ", 2);
+	perror("hello from perror");
+	return (0);
+	if (ft_is_str_equal(NULL, NULL))
+		printf("TRUE\n");
+	else
+		printf("FALSE\n");
+
 
 
 /* // TEST CASE FOR symb_count_before_char
@@ -126,7 +138,7 @@ int	main(int argc, char **argv, char **envp)
 		free(files);
 	} */
 	
-// TEST CASE FOR expand_wildcard_in_str
+/* // TEST CASE FOR expand_wildcard_in_str
 	char *answer = malloc(256);
 
 	while (answer)
@@ -138,7 +150,7 @@ int	main(int argc, char **argv, char **envp)
 		free(answer);
 		printf("---\n=> %s\n\n", files);
 		free(files);
-	}
+	} */
 
 /* // TEST CASE FOR pre_str_wildcard_compare
 	

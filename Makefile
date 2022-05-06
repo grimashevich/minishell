@@ -18,6 +18,7 @@ SOURCE		=	main.c															\
 				$(wildcard utils/*.c)											\
 				$(wildcard wildcard/*.c)										\
 				$(wildcard wildcard/utils/*.c)									\
+				$(wildcard envp/*.c)									\
 
 OBJECT		=	$(SOURCE:.c=.o)
 
