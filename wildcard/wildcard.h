@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   wildcard.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/04 19:31:42 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 13:33:15 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef WILDCARD_H
+# define WILDCARD_H
 
 # define TMP_FILE_NAME ".tmp_file"
 # define LLI_MIN "9223372036854775808"
@@ -26,7 +26,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
+# include "utils/eclown_utils.h"
 
 typedef struct s_str
 {
@@ -120,8 +121,6 @@ char	**ft_list_to_strings(t_list *list);
 
 t_list	*ft_strings_to_list(char **strings);
 
-void	ft_strcpy(const char *from, char *to);
-
 /* 
 
 РЕКУРСИВНЫЙ ПАРСЕР 1 УР.
@@ -155,4 +154,4 @@ s_cmd	*parser_lvl1(char *str, int start, int end)
 
  */
 
-#endif  /* MINISHELL_H */
+#endif  /* WILDCARD_H */

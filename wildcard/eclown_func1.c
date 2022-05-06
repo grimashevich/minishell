@@ -6,11 +6,11 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/07 11:01:55 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/04 19:53:49 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 15:07:15 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "wildcard.h"
 
 char	*ec_str_copy(char *str, int cut_start, int cut_end)
 {

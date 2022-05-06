@@ -6,40 +6,35 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/05 21:03:31 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 13:42:57 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include <stdio.h>
 
-int	main(void)
+#include "minishell.h"
+#include <time.h>
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+
+int	str_wildcard_compare(char *str, char *ptrn);
+
+void print_text(char **text)
 {
-	printf("%zu \n", ft_strlen("Hello"));
-	return (0);
+	while (*text)
+	{
+		printf("%s\n", *text);
+		text++;
+	}
+	
 }
 
-// #include "minishell.h"
-// #include <time.h>
-
-
-// int	str_wildcard_compare(char *str, char *ptrn);
-
-// void print_text(char **text)
-// {
-// 	while (*text)
-// 	{
-// 		printf("%s\n", *text);
-// 		text++;
-// 	}
-	
-// }
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	(void) argv;
-// 	(void) argc;
-// 	(void) envp;
+int	main(int argc, char **argv, char **envp)
+{
+	(void) argv;
+	(void) argc;
+	(void) envp;
 
 
 /* // TEST CASE FOR symb_count_before_char
@@ -132,18 +127,18 @@ int	main(void)
 	} */
 	
 // TEST CASE FOR expand_wildcard_in_str
-	// char *answer = malloc(256);
+	char *answer = malloc(256);
 
-	// while (answer)
-	// {
+	while (answer)
+	{
 	
-	// 	answer = readline("Enter command with wildcard: ");
-	// 	add_history(answer);
-	// 	char *files = expand_wildcard_in_str(answer);
-	// 	free(answer);
-	// 	printf("---\n=> %s\n\n", files);
-	// 	free(files);
-	// }
+		answer = readline("Enter command with wildcard: ");
+		add_history(answer);
+		char *files = expand_wildcard_in_str(answer);
+		free(answer);
+		printf("---\n=> %s\n\n", files);
+		free(files);
+	}
 
 /* // TEST CASE FOR pre_str_wildcard_compare
 	
@@ -171,6 +166,6 @@ int	main(void)
 	ft_free_text(text2);
 */
 	
-// 	return (0);
-// }
+	return (0);
+}
  

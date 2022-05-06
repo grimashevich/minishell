@@ -6,14 +6,13 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 18:13:51 by ccamie            #+#    #+#             */
-/*   Updated: 2022/04/10 23:49:33 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 13:36:03 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../minishell.h"
 #include <dirent.h>
 #include <stdlib.h>
-// #include <stdio.h>
 
 static t_list	*get_list(DIR *dir)
 {

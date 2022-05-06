@@ -54,6 +54,3 @@ dkms.conf
 .vscode
 minishell
 .DS_Store
-a*test
-abtest
-te*st

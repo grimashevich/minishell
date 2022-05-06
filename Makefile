@@ -9,9 +9,15 @@ CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror
 # CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
+LDFLAGS 	=	-lreadline
 RM			=	rm -f
 
-SOURCE		=	main.c
+SOURCE		=	main.c															\
+				$(wildcard eclown/*.c)											\
+				$(wildcard eclown/utils/*.c)									\
+				$(wildcard utils/*.c)											\
+				$(wildcard wildcard/*.c)										\
+				$(wildcard wildcard/utils/*.c)									\
 
 OBJECT		=	$(SOURCE:.c=.o)
 
@@ -20,7 +26,7 @@ OBJECT		=	$(SOURCE:.c=.o)
 all			:	libft $(NAME)
 
 $(NAME)		:	$(OBJECT) 
-				$(CC) $(CFLAGS) $(OBJECT) $(LIBFT) -o $(NAME)
+				$(CC) $(LDFLAGS) $(CFLAGS) $(OBJECT) $(LIBFT) -o $(NAME)
 
 %.o			:	%.c $(LIBFT)
 				$(CC) $(CFLAGS) -c $< -o $@

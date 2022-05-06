@@ -6,11 +6,11 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:28:44 by EClown            #+#    #+#             */
-/*   Updated: 2022/04/11 23:54:44 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 13:08:45 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "wildcard.h"
 
 int compare_closed_str(char *str, char *ptrn)
 {
