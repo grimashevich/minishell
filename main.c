@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/07 18:59:09 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/07 19:28:02 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	main(int argc, char **argv, char **envp)
 	while (1)
 	{
 		printf("\tPWD from envp:\t\t%s\n", envp_get_value("PWD"));
-		printf("\tOLDPWD from envp:\t%s\n", envp_get_value("OLDPWD"));
+		printf("\tOLDPWD from envp:\t%s\n\n", envp_get_value("OLDPWD"));
 		cwd =  getcwd(NULL, MAX_PATH_LEN);
 		printf("\tPWD from get_cwd:\t%s\n",cwd);
 		free(cwd);

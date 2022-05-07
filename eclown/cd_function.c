@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:14:43 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/07 18:51:49 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/07 19:26:22 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,28 @@ Try to change pwd, return errno from chdir
  */
 static int update_pwd(char *new_cwd)
 {
-	int	errn;
+	int		chdir_result;
+	char	*cwd;
 
-	errn = chdir(new_cwd);
-	if (errn != 0)
-		ms_error("cd", NULL, errn);
+	chdir_result = chdir(new_cwd);
+	if (chdir_result != 0)
+		ms_error("cd", NULL, errno);
 	else
 	{
+		cwd = getcwd(NULL, MAX_PATH_LEN);
+		if (! cwd)
+		{
+			ms_error("cd -> update_pwd", NULL, errno);
+			return (errno);
+		}
 		if (envp_get_value("OLDPWD") == NULL)
 			envp_append("OLDPWD", envp_get_value("PWD"));
 		else
 			envp_replace("OLDPWD", envp_get_value("PWD"));
-		envp_replace("PWD", new_cwd);
+		envp_replace("PWD", cwd);
+		free(cwd);
 	}
-	return (errn);
+	return (errno);
 }
 
 /*
