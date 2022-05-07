@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/07 18:54:32 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/07 18:59:09 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <stdio.h>
 #include <readline/readline.h>
 #include <readline/history.h>
-
+#include "eclown/cd_function.h"
 
 
 int	str_wildcard_compare(char *str, char *ptrn);
@@ -51,6 +51,9 @@ int	main(int argc, char **argv, char **envp)
 		printf("\tPWD from get_cwd:\t%s\n",cwd);
 		free(cwd);
 		answer = readline("\nEnter new dir for cd command: ");
+		change_direcory(answer);
+		free(answer);
+		printf("\n\n");
 	}
 	
 
