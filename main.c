@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/06 21:14:34 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/07 18:54:32 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,21 @@ int	main(int argc, char **argv, char **envp)
 	(void) envp;
 
 	
-	chdir("asdasd");
-	ft_putstr_fd("ay-yay-yay: ", 2);
-	perror("hello from perror");
-	return (0);
-	if (ft_is_str_equal(NULL, NULL))
-		printf("TRUE\n");
-	else
-		printf("FALSE\n");
+	// TEST CASE FOR change_directory
+	char *answer = malloc(256);
+	char *cwd;
 
+	envp_init(envp);
+	while (1)
+	{
+		printf("\tPWD from envp:\t\t%s\n", envp_get_value("PWD"));
+		printf("\tOLDPWD from envp:\t%s\n", envp_get_value("OLDPWD"));
+		cwd =  getcwd(NULL, MAX_PATH_LEN);
+		printf("\tPWD from get_cwd:\t%s\n",cwd);
+		free(cwd);
+		answer = readline("\nEnter new dir for cd command: ");
+	}
+	
 
 
 /* // TEST CASE FOR symb_count_before_char

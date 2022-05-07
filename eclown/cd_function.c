@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:14:43 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/07 18:29:58 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/07 18:51:49 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,23 @@ Change current ENVP by "void	envp_replace(char *variable, char *value)"
 
 int	change_direcory(char *new_path)
 {
-	char	*cwd;
 	char	*home_dir;
 	char	*old_pwd;
 	int		errn;
 
-	if (new_path == NULL || ft_is_str_equal(new_path, "~"))
+	if (new_path == NULL || new_path[0] == 0 || ft_is_str_equal(new_path, "~"))
 	{
 		home_dir = envp_get_value("HOME");
 		if (home_dir == NULL)
 			return(cd_error("HOME not set", 0));
-		update_pwd(home_dir);
+		errn = update_pwd(home_dir);
+		return(! errn);
 	}
 	else if (ft_is_str_equal(new_path, "-"))
 	{
 		old_pwd = envp_get_value("OLDPWD");
-		update_pwd(old_pwd);
+		errn = update_pwd(old_pwd);
+		return(! errn);
 	}
-	return(! errn);
+	return (! update_pwd(new_path));
 }
