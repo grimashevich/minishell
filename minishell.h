@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/05 21:18:16 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 15:15:04 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
-# include <string.h>	// ban
+# include "libft/libft.h"
 
 enum e_boolean
 {
@@ -26,15 +26,24 @@ enum e_boolean
 
 enum e_type
 {
+	END,
 	COMMAND,
 	CONTAINER
 };
 
+enum e_operator
+{
+	EMPTY,
+	AND,
+	OR,
+	PIPE,
+	SEQUENCE
+};
+
 typedef struct s_tag
 {
-	void			*data;		// Содержит указатель либо на команду, либо на контейнер
-	int				type;		// Содержит информацию о типе указатель
-	struct s_tag	*next;		// Содержит указатель на следующий элемент
+	int		type;		// Содержит информацию о типе указатель
+	void	*data;		// Содержит указатель либо на команду, либо на контейнер
 }	t_tag;
 
 typedef struct s_cont
@@ -103,158 +112,7 @@ t_tag	*tag_init(void *data, int type);	// struct
 t_tag	*tag_last(t_tag *head);	// struct
 t_tag	*tag_add_back(t_tag **head, t_tag *new);	// struct
 
-int		ft_isspace(int character);	// ban
-size_t	ft_strlen(char *string);	// ban
-size_t	ft_strlcpy(char *from, char *to, size_t lenght);	// ban
-char	*ft_substr(char *string, size_t start, size_t length);	// ban
-int		ft_strcmp(char *one, char *two);	// ban
-int		ft_strncmp(char *one, char *two, size_t length);	// ban
-
 #endif // MINISHELL_H
-
-
-
-
-// echo 1 && (echo 2 || echo 3) && echo 4
-
-//   tag -> tag -> tag -> NULL
-//    |      |      |
-//   echo 1 con   echo 4
-//           |
-//          tag -> tag -> NULL
-//           |      |
-//         echo 1 echo 2
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// --------------------------------------------------------------
-
-
-
-// (echo 1 | echo 2) > file
-
-//   tag -> tag -> NULL
-//    |      |
-//   con   "out"
-//    |
-//   tag -> tag -> NULL
-//    |      |
-//  echo 1 echo 2
-
-// iscase = CONTAINER;        // prev_operator = NULL
-// data = container;    ->    // next_operator = ">"
-// next = tag;                // 
-                              // 
-							  //
-
-// iscase = FILE;
-// data = "out"
-// next = NULL;
-
-// iscase = COMMAND;          // prev_operator = NULL
-// data = command;      ->    // next_operator = "|"
-// next = tag;                // command[0] = "echo"
-                              // command[1] = "1"
-                              // command[2] = NULL
-
-// iscase = COMMAND;          // prev_operator = "|"
-// data = command;      ->    // next_operator = NULL
-// next = NULL;               // command[0] = "echo"
-                              // command[1] = "2"
-                              // command[2] = NULL
-
-
-
-// --------------------------------------------------------------
-
-
-// echo 1 | (echo 2 | echo 3) > file
-
-//   tag -> tag -> tag -> NULL
-//    |      |      |
-//   echo 1 con   "out"
-//           |
-//          tag -> tag -> NULL
-//           |      |
-//         echo 1 echo 2
-
-// iscase = COMMAND;          // prev_operator = NULL
-// data = command;      ->    // next_operator = "|"
-// next = tag;                // command[0] = "echo"
-                              // command[1] = "1"
-                              // command[2] = NULL
-
-// iscase = CONTAINER;        // prev_operator = "|"
-// data = container;    ->    // next_operator = ">"
-// next = tag;                // 
-                              // 
-							  //
-
-// iscase = FILE;
-// data = "out"
-// next = NULL;
-
-// iscase = COMMAND;          // prev_operator = NULL
-// data = command;      ->    // next_operator = "|"
-// next = tag;                // command[0] = "echo"
-                              // command[1] = "2"
-                              // command[2] = NULL
-							  // container <-
-
-// iscase = COMMAND;          // prev_operator = "|"
-// data = command;      ->    // next_operator = NULL
-// next = NULL;               // command[0] = "echo"
-                              // command[1] = "3"
-                              // command[2] = NULL
-
-
-
-// --------------------------------------------------------------
-
-
-
-// echo 1 | (echo 2 && echo 3) > file
-
-
-
-// --------------------------------------------------------------
-
-
 
 // |--------------------------|
 // | Start -> Parser -> Check |
@@ -374,6 +232,3 @@ int		ft_strncmp(char *one, char *two, size_t length);	// ban
 // |---------------------------|
 // |        WTF Moment         |
 // |---------------------------|
-
-// (echo 1 | echo 2) | echo 3
-// (echo 1) - Он должен наследовать 2 канала на запись?
