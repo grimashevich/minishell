@@ -1,26 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   lvl2_parsing.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/16 18:12:54 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/12 19:02:06 by EClown           ###   ########.fr       */
+/*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
+/*   Updated: 2022/05/12 21:48:24 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
-#include "ft_string.h"
+#ifndef LVL2_PARSING_H
+# define LVL2_PARSING_H
 
-char	*ft_strtrim(char *string, char *set)
+# include "../libft/libft.h"
+# include "../minishell.h"
+
+/* 
+Keep filenames and fd's from command
+default fd:
+	0 for '<' redirect
+	1 for '>' redirect
+Example:
+3<file1 echo abc >file2 2>file3 4>file4
+ */
+
+typedef struct s_rdr_fls
 {
-	size_t	lenght;
+	int					fd;
+	char				*path;
+	struct s_rdr_fls	*next;
+} t_rdr_fls;
 
-	while (*string && ft_strchr(set, *string))
-		string += 1;
-	lenght = ft_strlen(string);
-	while (lenght != 0 && ft_strchr(set, string[lenght]) != NULL)
-		lenght -= 1;
-	return (ft_substr(string, 0, lenght + 1));
-}
+#endif  /* LVL2_PARSING_H */

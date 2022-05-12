@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/07 19:28:02 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/12 21:57:27 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,20 @@ void print_text(char **text)
 	
 }
 
+char* del_from_str(char *str, int start, int end);
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void) argv;
 	(void) argc;
 	(void) envp;
 
+char *test = "test  string";
+char *result = del_from_str(test, 0, 11);
+printf("|%s|\n", result);
+
 	
-	// TEST CASE FOR change_directory
+/* 	// TEST CASE FOR change_directory
 	char *answer = malloc(256);
 	char *cwd;
 
@@ -54,10 +60,8 @@ int	main(int argc, char **argv, char **envp)
 		change_direcory(answer);
 		free(answer);
 		printf("\n\n");
-	}
+	} */
 	
-
-
 /* // TEST CASE FOR symb_count_before_char
 	
 	char *answer = malloc(256);

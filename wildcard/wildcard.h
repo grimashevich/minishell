@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/06 17:07:40 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/12 16:35:46 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ typedef struct s_dict
 	char			*value;
 	struct s_str	*next;
 }	t_dict;
-
+/*
 enum Exec_condition
 {
 	ANY_CASE,
@@ -70,6 +70,8 @@ typedef struct s_cmd_cntr
 	t_list				*cntrs;
 
 }	t_cmd_c;
+
+*/
 
 typedef struct s_2int2
 {
