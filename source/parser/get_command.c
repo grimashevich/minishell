@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/06 17:12:08 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/13 17:56:11 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,42 @@ static int	get_next_operator(char *line)
 	return (EMPTY);	
 }
 
+char	*new_line_after_operator(char *line, t_cmd *commamd)
+{
+	char	*new;
+	int		start;
+	int		end;
+
+	start = 0;
+	if (commamd->prev_operator != EMPTY)
+	{
+		if (commamd->prev_operator == AND || commamd->prev_operator == OR)
+			start = 2;
+		else
+			start = 1;
+	}
+	end = 0;
+	if (commamd->next_operator != EMPTY)
+	{
+		if (commamd->next_operator == AND || commamd->next_operator == OR)
+			end = 2;
+		else
+			end = 1;
+	}
+	new = ft_substr(line, start, ft_strlen(line) - end - start);
+	if (new == NULL)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	remove_insignificant_spases(&new);
+	printf("\x1b[32mNew line after operator:\x1b[0m\n");
+	printf("+------------------------------------------------------------------------------+\n");
+	printf("| %-77s|\n", new);
+	printf("+------------------------------------------------------------------------------+\n");
+	return (new);
+}
+
 t_cmd	*get_command(char *line)
 {
 	t_cmd	*commamd;
@@ -117,8 +153,10 @@ t_cmd	*get_command(char *line)
 	}
 	commamd->prev_operator = get_prev_operator(line);
 	commamd->next_operator = get_next_operator(line);
+	line = new_line_after_operator(line, commamd);
 	commamd->command = (char **)malloc(2 * sizeof(char *));	// ban
 	commamd->command[0] = ft_strdup(line);
 	commamd->command[1] = NULL;
+	free(line);
 	return (commamd);
 }

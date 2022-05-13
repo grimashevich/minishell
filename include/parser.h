@@ -3,7 +3,11 @@
 
 # include "minishell.h"
 
-int		check_the_syntax(char *line);
+int		check_syntax(char *line);
+int		check_quotation_mark_syntax(char *line);
+int		check_syntax_of_parentheses(char *line);
+int		check_syntax_of_the_operators(char *line);
+int		check_syntax_of_the_redirect(char *line);
 
 void	remove_insignificant_spases(char **line);
 void	remove_insignificant_brackets(char **line);

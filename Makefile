@@ -6,7 +6,7 @@ LIBFT		=	libft/library/libft.a
 
 CC			=	cc
 
-CFLAGS		=	
+CFLAGS		=	-g
 
 CPPFLAGS	=	-Wall -Wextra -Werror	\
 				-I libft/include		\
@@ -28,6 +28,7 @@ FUNCTIONS	=	test1.c								\
 					check_quotation_mark_syntax.c	\
 					check_syntax_of_parentheses.c	\
 					check_syntax_of_the_operators.c	\
+					check_syntax_of_the_redirect.c	\
 					check_syntax.c					\
 					)								\
 				$(addprefix print/,					\
@@ -61,7 +62,7 @@ $(FOLDER)	:
 				$(MKDIR) $@
 
 object/%.o	:	source/%.c $(HEADER)
-				$(CC) $(CPPFLAGS) -c $< -o $@
+				$(CC) -g $(CPPFLAGS) -c $< -o $@
 
 libft		:
 				make -C libft

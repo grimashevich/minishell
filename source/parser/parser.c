@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/06 19:56:39 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/13 22:19:14 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,14 @@ void	fill_the_current_level(char *line, t_tag *head, int number_of_commands)
 		part = give_a_line_before_operator(&line, &prev_op_int);
 		if (iscommand(part) == TRUE)
 		{
+			remove_insignificant_spases(&part);
 			print_this_is_something(part, "Command");	// ban
 			head[i].type = COMMAND;
 			head[i].data = get_command(part);
 		}
 		else
 		{
+			remove_insignificant_spases(&part);
 			print_this_is_something(part, "Container");	// ban
 			head[i].type = CONTAINER;
 			head[i].data = get_container(part);
@@ -98,7 +100,7 @@ t_tag	*parser(char *line)
 		perror("minishell)");
 		exit(1);
 	}
-	if (check_the_syntax(line) != 0)
+	if (check_syntax(line) != 0)
 	{
 		return (NULL);
 	}

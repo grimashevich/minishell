@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:54 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/06 19:57:13 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/13 17:36:50 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,18 @@ void	tree_remove_all(t_tag **head)
 	*head = NULL;
 }
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_tag	*head;
 	char	*line;
 
+	if (argc != 2)
+		return (1);
+	line = ft_strdup(argv[1]);
 	printf("\x1b[32mInput:\x1b[0m\n");
 	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", LINE);
+	printf("| %-77s|\n", line);
 	printf("+------------------------------------------------------------------------------+\n");
-	line = ft_strdup(LINE);
 	if (line == NULL)
 		return (1);
 	head = parser(line);
