@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/12 18:52:49 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/13 21:45:25 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include "wildcard/wildcard.h"
 # include "eclown/cd_function.h"
+# include "eclown/lvl2_parsing.h"
 # include "libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>

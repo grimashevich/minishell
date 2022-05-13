@@ -6,7 +6,7 @@ HEADER		=	libft.h
 LIBFT		=	libft/libft.a
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	-Wall -Wextra -Werror -g
 # CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 LDFLAGS 	=	-lreadline

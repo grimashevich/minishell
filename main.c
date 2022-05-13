@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/12 21:57:27 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/13 21:48:32 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,13 @@ void print_text(char **text)
 	
 }
 
-char* del_from_str(char *str, int start, int end);
+int str_is_numeric(char *str);
+void encode_str(char *str);
+void decode_str(char *str);
+char *find_num_left_from_char(char *str, char *c);
+int find_word_right_from_needle(char *c, const char *needle, char **to_write);
+const char *get_rdr_type(int type);
+t_rdr_fls *eject_redirect(char **str, char *c, int rdr_type);
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -39,9 +45,17 @@ int	main(int argc, char **argv, char **envp)
 	(void) argc;
 	(void) envp;
 
-char *test = "test  string";
-char *result = del_from_str(test, 0, 11);
-printf("|%s|\n", result);
+	char *answer = malloc(256);
+	
+	while (answer)
+	{
+		//answer = readline("Enter str: ");
+		answer = ft_strdup("ehco abc 2> error.log || next cmd");
+		add_history(answer);
+		eject_redirect(&answer, ft_strnstr(answer, ">", ft_strlen(answer)), 0);
+		//int *result = find_num_left_from_char(answer, ft_strnstr(answer, "<", ft_strlen(answer)));
+		free(answer);
+	}
 
 	
 /* 	// TEST CASE FOR change_directory
