@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/13 21:48:32 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/14 19:33:05 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,6 @@
 
 
 int	str_wildcard_compare(char *str, char *ptrn);
-
-void print_text(char **text)
-{
-	while (*text)
-	{
-		printf("%s\n", *text);
-		text++;
-	}
-	
-}
-
 int str_is_numeric(char *str);
 void encode_str(char *str);
 void decode_str(char *str);
@@ -38,6 +27,25 @@ char *find_num_left_from_char(char *str, char *c);
 int find_word_right_from_needle(char *c, const char *needle, char **to_write);
 const char *get_rdr_type(int type);
 t_rdr_fls *eject_redirect(char **str, char *c, int rdr_type);
+t_rdr_fls *extract_all_rdrs(char **str);
+void free_rdr_list(t_rdr_fls *item);
+
+void print_text(char **text)
+{
+	while (*text)
+	{
+		printf("%s\n", *text);
+		text++;
+	}	
+}
+
+
+void print_rdr(t_rdr_fls *item)
+{
+	printf("TYPE: %s, FD: %d, PATH: %s\n", get_rdr_type(item->type), item->fd, item->path);
+}
+
+
 
 int	main(int argc, char **argv, char **envp)
 {
@@ -46,16 +54,18 @@ int	main(int argc, char **argv, char **envp)
 	(void) envp;
 
 	char *answer = malloc(256);
-	
-	while (answer)
-	{
-		//answer = readline("Enter str: ");
-		answer = ft_strdup("ehco abc 2> error.log || next cmd");
-		add_history(answer);
-		eject_redirect(&answer, ft_strnstr(answer, ">", ft_strlen(answer)), 0);
-		//int *result = find_num_left_from_char(answer, ft_strnstr(answer, "<", ft_strlen(answer)));
-		free(answer);
-	}
+	t_rdr_fls	*rdr;
+
+	//answer = readline("Enter str: "); 
+	//answer = ft_strdup("ehco abc <<hereDOC >out.txt <infile 2>error.log 3>number3file next_cmd");
+	answer = ft_strdup("ehco abc 2>error.log next_cmd");
+	//add_history(answer);
+	rdr = extract_all_rdrs(&answer);
+	print_rdr(rdr);
+	printf("%s\n", answer);
+	//int *result = find_num_left_from_char(answer, ft_strnstr(answer, "<", ft_strlen(answer)));
+	free(answer);
+	free_rdr_list(rdr);
 
 	
 /* 	// TEST CASE FOR change_directory

@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/13 21:21:28 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/14 19:31:59 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,5 @@ typedef struct s_rdr_fls
 	char				*path;
 	struct s_rdr_fls	*next;
 } t_rdr_fls;
-
-typedef struct s_rdr_ptrn
-{
-	enum Rdr_type	type;	
-	int				start;
-	int				end;
-	int				fd;
-} t_rdr_ptrn;
 
 #endif  /* LVL2_PARSING_H */

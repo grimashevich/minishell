@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/13 22:08:58 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/14 19:36:17 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_rdr_fls	*create_rdr_fls(char *path, int fd)
 	result = malloc(sizeof(t_rdr_fls));
 	if (! result)
 		return (NULL);
-	result->path = ft_strdup(path);
+	result->path = path;
 	if (! result->path)
 	{
 		free(result);
@@ -46,13 +46,40 @@ t_rdr_fls	*create_rdr_fls(char *path, int fd)
 	return (result);
 }
 
-void add_last_rdr_file(t_rdr_fls *start, t_rdr_fls *value)
+t_rdr_fls *add_last_rdr_file(t_rdr_fls *start, t_rdr_fls *value)
 {
+	t_rdr_fls	*tmp;
+
+	if (start == NULL && value == NULL)
+		return (NULL);
 	if (start == NULL)
-		return ;
+		return (value);
+	if (value == NULL)
+		return (start);
+	tmp = start;
 	while (start->next)
 		start = start->next;
 	start->next = value;
+	return (tmp);
+}
+
+void free_rdr(t_rdr_fls *item)
+{
+	if (item->path)
+		free(item->path);
+	free(item);
+}
+
+void free_rdr_list(t_rdr_fls *item)
+{
+	t_rdr_fls *tmp;
+
+	while (item)
+	{
+		tmp = item->next;
+		free_rdr(item);
+		item = tmp;
+	}
 }
 
 /*
@@ -156,6 +183,7 @@ int find_word_right_from_needle(char *c, const char *needle, char **to_write)
 	int	i;
 	int	_;
 
+	*to_write = NULL;
 	if (c == NULL || needle == NULL)
 		return (-1);
 	i = 0;
@@ -204,30 +232,104 @@ void delete_rdr_from_str(char **str, int start, int end)
 	*str = tmp;
 }
 
+int fd_str_len(int fd, char *fd_str)
+{
+	int	i;
+
+	if (fd_str != NULL)
+		return (ft_strlen(fd_str));
+	i = 0;
+	while (fd)
+	{
+		fd = fd / 10;
+		i++;
+	}
+	return (i);
+}
+
+/* 
+TODO FIX WORKING WITH QUOTES
+
+TODO find leaks
+ */
 t_rdr_fls *eject_redirect(char **str, char *c, int rdr_type)
 {
 	t_rdr_fls	*result;
 	char		*fd_str;
 	char		*fname;
 	int			fd_int;
-	const char	*str_rdr;
 	int			r_word_len;
 
-	str_rdr = get_rdr_type(rdr_type);
 	fd_int = get_default_fd_by_rdr_type(rdr_type);
 	fd_str = find_num_left_from_char(*str, c);
 	if (fd_str)
 		fd_int = ft_atoi(fd_str);
-	r_word_len = find_word_right_from_needle(c, str_rdr, &fname);
+	r_word_len = find_word_right_from_needle(c, get_rdr_type(rdr_type), &fname);
 	if (r_word_len == -1)
 		return (NULL);
 	result = create_rdr_fls(fname, fd_int);
 	if (! result)
 		return (NULL);
+	result->type = rdr_type;
 	delete_rdr_from_str(str, 
-		c - *str - ft_strlen(fd_str),
-		c - *str + ft_strlen((char *) str_rdr) - 1 + r_word_len);
+		c - *str - fd_str_len(fd_int, fd_str),
+		c - *str + ft_strlen((char *) get_rdr_type(rdr_type)) - 1 + r_word_len);
+	if (fd_str)
+		free(fd_str);
 	return (result);
+}
+
+/* 
+Search next redirect in str, return type of redirect.
+if not found, -1 will be returned
+put into *out_start_rdr pointer to first char of found value
+ */
+int find_next_redirect(char *str, char **out_start_rdr)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		*out_start_rdr = &str[i];
+		if (str[i] == '>')
+		{
+			if (is_char_in_quotes(str, &str[i]))
+				continue;
+			if (str[i + 1] == '>')
+				return (1);
+			return (0);
+		}
+		if (str[i] == '<')
+		{
+			if (is_char_in_quotes(str, &str[i]))
+				continue ;
+			if (str[i + 1] == '<')
+				return (3);
+			return (2);
+		}
+	}
+	return (-1);
+}
+
+t_rdr_fls *extract_all_rdrs(char **str)
+{
+	t_rdr_fls	*result;
+	t_rdr_fls	*cur_rdr;
+	char		*cur_rdr_start;
+	int			cur_rdr_type;
+
+	result = NULL;
+	cur_rdr = NULL;
+	cur_rdr_start =  NULL;
+	while (1)
+	{
+		cur_rdr_type = find_next_redirect(*str, &cur_rdr_start);
+		if (cur_rdr_type == -1)
+			return (result);
+		cur_rdr = eject_redirect(str, cur_rdr_start, cur_rdr_type);
+		result = add_last_rdr_file(result, cur_rdr);
+	}
 }
 
 /* ehco abc 2 >> error.log */
