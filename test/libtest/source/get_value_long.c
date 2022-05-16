@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   get_value_long.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:48 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/15 16:38:59 by ivnvtosh         ###   ########.fr       */
+/*   Created: 2022/05/11 16:40:45 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/11 16:40:46 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libtest.h"
 
-//		
-size_t	ft_strlen(char *string)
+long	get_value_long(char *variable)
 {
-	size_t	i;
+	char	*temporary;
+	long	value;
 
-	i = 0;
-	while (string[i] != '\0')
-		i += 1;
-	return (i);
+	temporary = get_value(variable);
+	value = atol(temporary);
+	free(temporary);
+	return (value);
 }

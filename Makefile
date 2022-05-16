@@ -2,6 +2,8 @@ SHELL		=	/bin/sh
 
 NAME		=	minishell
 
+LIBPARSER	=	library/libparser.a
+
 LIBFT		=	libft/library/libft.a
 
 CC			=	cc
@@ -11,6 +13,11 @@ CFLAGS		=	-g
 CPPFLAGS	=	-Wall -Wextra -Werror	\
 				-I libft/include		\
 				-I include
+
+AR			=	ar
+ARFLAGS		=	crs
+
+CP			=	cp
 
 MKDIR		=	mkdir -p
 RMDIR		=	rm -rf
@@ -22,8 +29,7 @@ HEADER		=	libft/include/libft.h	\
 				parser.h				\
 				)
 
-FUNCTIONS	=	test1.c								\
-				$(addprefix parser/,				\
+FUNCTIONS	=	$(addprefix parser/,				\
 				$(addprefix check_syntax/,			\
 					check_quotation_mark_syntax.c	\
 					check_syntax_of_parentheses.c	\
@@ -46,7 +52,7 @@ FUNCTIONS	=	test1.c								\
 
 SOURCE		=	$(addprefix source/, $(FUNCTIONS))
 OBJECT		=	$(addprefix object/, $(FUNCTIONS:.c=.o))
-FOLDER		=	$(sort $(dir object/ $(OBJECT)))
+FOLDER		=	$(sort $(dir object/ $(OBJECT) $(LIBPARSER)))
 
 .SUFFIXES	:
 .SUFFIXES	:	.c .o
@@ -55,14 +61,18 @@ FOLDER		=	$(sort $(dir object/ $(OBJECT)))
 
 all			:	libft $(FOLDER) $(NAME)
 
-$(NAME)		:	$(OBJECT) $(LIBFT)
-				$(CC) $(CFLAGS) $(OBJECT) $(LIBFT) -o $(NAME)
+$(NAME)		:	$(LIBPARSER)
+				$(CC) $(CFLAGS) $(CPPFLAGS) $(LIBPARSER) source/test1.c -o $(NAME)
+
+$(LIBPARSER):	$(OBJECT) $(LIBFT)
+				$(CP) $(LIBFT) $(LIBPARSER)
+				$(AR) $(ARFLAGS) $(LIBPARSER) $?
 
 $(FOLDER)	:
 				$(MKDIR) $@
 
 object/%.o	:	source/%.c $(HEADER)
-				$(CC) -g $(CPPFLAGS) -c $< -o $@
+				$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 libft		:
 				make -C libft

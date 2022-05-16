@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:29 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/11 20:41:25 by ccamie           ###   ########.fr       */
+/*   Created: 2022/05/10 17:46:17 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/10 23:34:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "test.h"
 
-//		
-void	ft_strcpy(char *from, char *to)
+int	check_test(void)
 {
-	size_t	i;
+	t_data	data;
+	int		status;
 
-	i = 0;
-	while (from[i] != '\0')
-	{
-		to[i] = from[i];
-		i += 1;
-	}
-	to[i] = '\0';
+	data = parser();
+	data.returned = count_the_number_of_operators(data.line);
+	status = data.returned == data.expected;
+	remove_all(data);
+	if (status == 1)
+		return (0);
+	else
+		return (1);
 }

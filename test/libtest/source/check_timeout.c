@@ -1,27 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   check_timeout.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:29 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/11 20:41:25 by ccamie           ###   ########.fr       */
+/*   Created: 2022/05/10 17:43:22 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/10 19:04:58 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libtest.h"
+#include <pthread.h>
 
-//		
-void	ft_strcpy(char *from, char *to)
+static void	*_check_timeout(void *pointer)
 {
-	size_t	i;
+	sleep(1);
+	exit(TEST_TIMEOUT);
+	return (pointer);
+}
 
-	i = 0;
-	while (from[i] != '\0')
-	{
-		to[i] = from[i];
-		i += 1;
-	}
-	to[i] = '\0';
+void	check_timeout(void)
+{
+	pthread_t	thread;
+
+	if (pthread_create(&thread, NULL, _check_timeout, NULL) != 0)
+		exit(TEST_ERROR);
+	if (pthread_detach(thread) != 0)
+		exit(TEST_ERROR);
 }

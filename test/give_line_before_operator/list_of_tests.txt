@@ -1,0 +1,8 @@
+TEST:01:LINE:	echo1	&&	echo2	:EXPECTED:	echo1	&&.&&	echo2	
+TEST:02:LINE:	echo1	&&	(echo2	||	echo3)	:EXPECTED:	echo1	&&.&&	(echo2	||	echo3)	
+TEST:03:LINE:	echo1	&&	echo2	||	echo3	:EXPECTED:	echo1	&&.&&	echo2	||.||	echo3	
+TEST:04:LINE:	echo1	:EXPECTED:	echo1	
+TEST:05:LINE:echo1&&echo2:EXPECTED:echo1&&.&&echo2
+TEST:06:LINE:echo1&&(echo2||echo3):EXPECTED:echo1&&.&&(echo2||echo3)
+TEST:07:LINE:echo1&&echo2||echo3:EXPECTED:echo1&&.&&echo2||.||echo3
+TEST:08:LINE:echo1:EXPECTED:echo1

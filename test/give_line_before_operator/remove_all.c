@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   remove_all.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:48 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/15 16:38:59 by ivnvtosh         ###   ########.fr       */
+/*   Created: 2022/05/10 21:30:57 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/10 21:38:58 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "test.h"
 
-//		
-size_t	ft_strlen(char *string)
+void	remove_all(t_data data)
 {
-	size_t	i;
-
-	i = 0;
-	while (string[i] != '\0')
-		i += 1;
-	return (i);
+	free(data.line);
+	free(data.returned);
+	ft_strings_remove_all(&data.expected);
 }

@@ -1,24 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:48 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/15 16:38:59 by ivnvtosh         ###   ########.fr       */
+/*   Created: 2022/05/10 17:46:17 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/10 23:34:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "test.h"
 
-//		
-size_t	ft_strlen(char *string)
+int	check_test(void)
 {
-	size_t	i;
+	t_data	data;
+	int		status;
 
-	i = 0;
-	while (string[i] != '\0')
-		i += 1;
-	return (i);
+	data = parser();
+	status = 1;
+	remove_all(data);
+	if (status == 1)
+		return (0);
+	else
+		return (1);
 }

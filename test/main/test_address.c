@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   test_address.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:48 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/15 16:38:59 by ivnvtosh         ###   ########.fr       */
+/*   Created: 2022/05/10 17:49:42 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/11 18:13:51 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../libtest/include/libtest.h"
 
-//		
-size_t	ft_strlen(char *string)
+void	launch_test(void);
+void	print_test_address(void);
+
+int	main(int argc, char **argv)
 {
-	size_t	i;
-
-	i = 0;
-	while (string[i] != '\0')
-		i += 1;
-	return (i);
+	g_input = argv[1];
+	g_output_file = argv[2];
+	launch_test();
+	print_test_address();
 }

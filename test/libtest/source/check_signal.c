@@ -1,27 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   check_signal.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:29 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/11 20:41:25 by ccamie           ###   ########.fr       */
+/*   Created: 2022/05/10 17:43:19 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/10 19:04:55 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libtest.h"
+#include <signal.h>
 
-//		
-void	ft_strcpy(char *from, char *to)
+static void	_check_signal(int signal)
 {
-	size_t	i;
-
-	i = 0;
-	while (from[i] != '\0')
+	if (signal == SIGABRT)
 	{
-		to[i] = from[i];
-		i += 1;
+		exit(SIGABRT);
 	}
-	to[i] = '\0';
+	if (signal == SIGBUS)
+	{
+		exit(SIGBUS);
+	}
+	if (signal == SIGSEGV)
+	{
+		exit(SIGSEGV);
+	}
+}
+
+void	check_signal(void)
+{
+	signal(SIGABRT, _check_signal);
+	signal(SIGBUS, _check_signal);
+	signal(SIGSEGV, _check_signal);
 }

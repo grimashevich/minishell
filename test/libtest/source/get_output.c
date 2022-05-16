@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   get_output.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:29 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/11 20:41:25 by ccamie           ###   ########.fr       */
+/*   Created: 2022/05/11 18:35:29 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/11 20:06:40 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "libtest.h"
 
-//		
-void	ft_strcpy(char *from, char *to)
+char	*get_output(void)
 {
-	size_t	i;
+	char	buffer[BUFFER];
+	char	*output;
+	ssize_t	readed;
+	int		fd;
 
-	i = 0;
-	while (from[i] != '\0')
-	{
-		to[i] = from[i];
-		i += 1;
-	}
-	to[i] = '\0';
+	fd = open(g_output_file, O_RDONLY, 0777);
+	if (fd == -1)
+		exit(TEST_ERROR);
+	readed = read(fd, buffer, BUFFER);
+	if (readed == -1)
+		exit(TEST_ERROR);
+	if (close(fd) == -1)
+		exit(TEST_ERROR);
+	buffer[readed] = '\0';
+	output = strdup(buffer);
+	if (output == NULL)
+		exit(TEST_ERROR);
+	return (output);
 }

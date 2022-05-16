@@ -17,6 +17,7 @@ char	*give_a_line_before_operator(char **line, int *prev_op_int);
 t_cmd	*get_command(char *line);
 t_cont	*get_container(char *line);
 
+int		count_the_number_of_operators(char *line);
 
 void	print_end(void);
 void	print_result(char *line);

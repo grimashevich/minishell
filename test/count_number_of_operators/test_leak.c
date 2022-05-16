@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   test_leak.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:48 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/15 16:38:59 by ivnvtosh         ###   ########.fr       */
+/*   Created: 2022/05/10 17:46:18 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/11 20:33:33 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "test.h"
 
-//		
-size_t	ft_strlen(char *string)
+int	check_test(void)
 {
-	size_t	i;
+	t_data	data;
 
-	i = 0;
-	while (string[i] != '\0')
-		i += 1;
-	return (i);
+	data = parser();
+	data.returned = count_the_number_of_operators(data.line);
+	remove_all(data);
+	return (0);
 }

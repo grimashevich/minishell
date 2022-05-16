@@ -19,13 +19,14 @@ int	check_syntax_of_the_redirect(char *line);
 
 int	check_syntax(char *line)
 {
-	if (check_quotation_mark_syntax(line) != 0)
-		return (-1);
-	if (check_syntax_of_parentheses(line) != 0)
-		return (-1);
-	if (check_syntax_of_the_operators(line) != 0)
-		return (-1);
-	if (check_syntax_of_the_redirect(line) != 0)
-		return (-1);
+	(void)line;
+	// if (check_quotation_mark_syntax(line) != 0)
+	// 	return (-1);
+	// if (check_syntax_of_parentheses(line) != 0)
+	// 	return (-1);
+	// if (check_syntax_of_the_operators(line) != 0)
+	// 	return (-1);
+	// if (check_syntax_of_the_redirect(line) != 0)
+	// 	return (-1);
 	return (0);
 }

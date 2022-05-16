@@ -1,24 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   test.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:48 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/15 16:38:59 by ivnvtosh         ###   ########.fr       */
+/*   Created: 2022/05/10 19:04:28 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/10 23:24:24 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#ifndef TEST_H
+# define TEST_H
 
-//		
-size_t	ft_strlen(char *string)
+# include "libtest.h"
+
+typedef struct s_data
 {
-	size_t	i;
+	char	*line;
+	char	*returned;
+	char	**expected;
+}	t_data;
 
-	i = 0;
-	while (string[i] != '\0')
-		i += 1;
-	return (i);
-}
+t_data	parser(void);
+void	remove_all(t_data data);
+
+#endif

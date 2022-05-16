@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:48 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/15 16:38:59 by ivnvtosh         ###   ########.fr       */
+/*   Created: 2022/05/10 19:06:09 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/11 17:42:20 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "test.h"
 
-//		
-size_t	ft_strlen(char *string)
+t_data	parser(void)
 {
-	size_t	i;
+	t_data	data;
 
-	i = 0;
-	while (string[i] != '\0')
-		i += 1;
-	return (i);
+	data.returned = NULL;
+	data.expected = get_value("EXPECTED");
+	return (data);
 }

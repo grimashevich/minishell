@@ -1,27 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcpy.c                                        :+:      :+:    :+:   */
+/*   test_address.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:29 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/11 20:41:25 by ccamie           ###   ########.fr       */
+/*   Created: 2022/05/10 17:46:19 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/10 21:36:32 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "test.h"
 
-//		
-void	ft_strcpy(char *from, char *to)
+int	check(t_data data)
 {
-	size_t	i;
+	char	*line;
+	char	**expected;
+	int		prev_op_int;
 
-	i = 0;
-	while (from[i] != '\0')
+	line = data.line;
+	expected = data.expected;
+	prev_op_int = 0;
+	while (*line != '\0')
 	{
-		to[i] = from[i];
-		i += 1;
+		data.returned = give_a_line_before_operator(&line, &prev_op_int);
+		strlen(data.returned);
+		free(data.returned);
 	}
-	to[i] = '\0';
+	return (1);
+}
+
+int	check_test(void)
+{
+	t_data	data;
+
+	data = parser();
+	check(data);
+	remove_all(data);
+	return (0);
 }
