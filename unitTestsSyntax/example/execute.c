@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:00:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/18 15:35:18 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/18 17:23:08 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ enum e_operator
 	SEQUENCE
 };
 
+int	ft_isdigit(int character)
+{
+	return (character >= 48 && character <= 57);
+}
+
 int	ft_isalnum(int character)
 {
 	return ((character >= 48 && character <= 57) + \
@@ -34,6 +39,23 @@ int	ft_isalnum(int character)
 int	ft_isspace(int character)
 {
 	return ((character >= 9 && character <= 13) || character == 32);
+}
+
+long	ft_atol(char *string)
+{
+	long long	num;
+	long long	sign;
+
+	while (ft_isspace(*string))
+		string += 1;
+	sign = 1;
+	if (*string == 43 || *string == 45)
+		if (*string++ == 45)
+			sign = -1;
+	num = 0;
+	while (ft_isdigit(*string))
+		num = num * 10 + *string++ - 48;
+	return (num * sign);
 }
 
 int	is_this_operator(char **string)
@@ -492,17 +514,87 @@ int	check_syntax_of_operators(char *string)
 
 
 
+int	check_newline(char *string)
+{
+	while (ft_isspace(*string) == TRUE)
+	{
+		string += 1;
+	}
+	if (*string == '\0')
+	{
+		return (TRUE);
+	}
+	else
+	{
+		return (FALSE);
+	}
+}
 
+int	check_fd_redirect_outfile(char *string)
+{
+	char	*num;
+	int		i;
+
+	while (ft_isspace(*string) == TRUE)
+	{
+		string += 1;
+	}
+	num = string;
+	i = 0;
+	while (ft_isdigit(*string) == TRUE)
+	{
+		string += 1;
+		i += 1;
+	}
+	if (*string == '>' && i != 0)
+	{
+		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
+		write(1, num, i); // '\n'
+		write(1, "'", 1); // '\n'
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
+int	check_fd_redirect_infile(char *string)
+{
+	char	*num;
+	int		i;
+
+	while (ft_isspace(*string) == TRUE)
+	{
+		string += 1;
+	}
+	num = string;
+	i = 0;
+	while (ft_isdigit(*string) == TRUE)
+	{
+		string += 1;
+		i += 1;
+	}
+	if (*string == '>' && i != 0)
+	{
+		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
+		if (ft_atol(num) > 2147483647)
+		{
+			write(1, "-1", 2);	
+		}
+		else
+		{
+			write(1, num, i); // '\n'
+		}
+		write(1, "'", 1); // '\n'
+		return (TRUE);
+	}
+	return (FALSE);
+}
 
 int	check_syntax_of_redirect_outfile(char *string)
 {
-	// int	i;
-
 	while (*string !='\0')
 	{
 		if (*string == '>')
 		{
-			// i = 0;
 			string += 1;
 			if (*string == '>')
 			{
@@ -512,8 +604,18 @@ int	check_syntax_of_redirect_outfile(char *string)
 			{
 				string += 1;
 			}
-			if (ft_isalnum(*string) != TRUE)
+			if (check_fd_redirect_outfile(string) == TRUE)
 			{
+				return (-1);
+			}
+			if (ft_isalnum(*string) == FALSE)
+			{
+				if (check_newline(string) == TRUE)
+				{
+					// printf("minishell: syntax error near unexpected token 'newline'\n");
+					write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+					return (-1);
+				}
 				if (*(string + 1) == '>')
 				{
 					// printf("minishell: syntax error near unexpected token '>>'\n");
@@ -527,6 +629,7 @@ int	check_syntax_of_redirect_outfile(char *string)
 					return (-1);
 				}
 			}
+			
 		}
 		string += 1;
 	}
@@ -546,6 +649,16 @@ int	check_syntax_of_redirect_infile(char *string)
 			{
 				i += 1;
 			}
+			if (check_fd_redirect_infile(string + i) == TRUE)
+			{
+				return (-1);
+			}
+			if (check_newline(string + i) == TRUE)
+			{
+				// printf("minishell: syntax error near unexpected token 'newline'\n");
+				write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+				return (-1);
+			}
 			if (i == 4)
 			{
 				// printf("minishell: syntax error near unexpected token '<'\n");
@@ -564,7 +677,7 @@ int	check_syntax_of_redirect_infile(char *string)
 				write(1, "minishell: syntax error near unexpected token '<<<'", 51); // '\n'
 				return (-1);
 			}
-			*string += i;
+			string += i;
 		}
 		string += 1;
 	}
@@ -573,11 +686,11 @@ int	check_syntax_of_redirect_infile(char *string)
 
 int	check_syntax_of_redirect(char *string)
 {
-	if (check_syntax_of_redirect_outfile(string) != 0)
+	if (check_syntax_of_redirect_infile(string) != 0)
 	{
 		return (-1);
 	}
-	if (check_syntax_of_redirect_infile(string) != 0)
+	if (check_syntax_of_redirect_outfile(string) != 0)
 	{
 		return (-1);
 	}

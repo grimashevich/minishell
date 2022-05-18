@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:00:18 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/17 16:33:56 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/18 17:00:59 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	pre_print(int fd)
 
 void	print(int fd)
 {
+	dprintf(fd, "\t\t \x1b[37m\x1b[1m test:     %d \x1b[0m\n", g_data.id);
 	dprintf(fd, "\t\t \x1b[37m\x1b[40m input:    %-16s \x1b[0m\n", \
 		g_data.string);
 	dprintf(fd, "\t\t \x1b[37m expected: \x1b[1m\x1b[33m%-16s \x1b[0m\n", \

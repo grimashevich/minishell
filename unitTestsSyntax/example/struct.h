@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 23:59:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/18 00:51:04 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/18 16:59:07 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 
 typedef struct s_data
 {
+	int		id;
 	char	*string;
 	int		returned;
 	int		expected_returned;
