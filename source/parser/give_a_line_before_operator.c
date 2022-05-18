@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:33 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/13 22:17:34 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/18 18:57:09 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,9 @@ char	*give_a_line_before_operator(char **line, int *prev_op_int)
 	j = 0;
 	while (temporary[i] != '\0')
 	{
-		is_this_a_brace(temporary + i, &i);
 		is_this_a_double_quotation_mark(temporary + i, &i);
 		is_this_a_single_quotation_mark(temporary + i, &i);
+		is_this_a_brace(temporary + i, &i);
 		if (is_this_an_operator(temporary + i, &j) == TRUE)
 		{
 			temporary = ft_substr(temporary - *prev_op_int, 0, i + *prev_op_int + j);

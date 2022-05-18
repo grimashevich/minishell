@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:27 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/13 22:17:28 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/18 18:55:03 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,10 @@ int	count_the_number_of_operators(char *line)
 	number_of_operators = 0;
 	while (*line != '\0')
 	{
-		is_this_an_operator(&line, &number_of_operators);
-		is_this_a_brace(&line);
 		is_this_a_single_quotation_mark(&line);
 		is_this_a_double_quotation_mark(&line);
+		is_this_a_brace(&line);
+		is_this_an_operator(&line, &number_of_operators);
 	}
 	printf("\x1b[33mNumber of operators:\x1b[0m\n");
 	printf("+------------------------------------------------------------------------------+\n");
