@@ -9,3 +9,4 @@ TEST:08:LINE:echo1&&(echo2||echo3):EXPECTED:1
 TEST:09:LINE:echo1&&(echo2||echo3)|echo4:EXPECTED:2
 TEST:10:LINE:echo1&&(echo2||echo3)|echo4&&echo5:EXPECTED:3
 TEST:11:LINE:echo1&&(echo2||echo3)|echo4&&echo5;(echo6|echo7):EXPECTED:4
+TEST:12:LINE:((echo\t1\t&&\techo\t2\t'\t&&\techo\t4'\t)\t||\techo\t5\t|\techo\t'6\t|\techo\t7\t)')\t&&\techo\t2\t:EXPECTED:1
