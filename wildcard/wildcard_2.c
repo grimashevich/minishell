@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:36:31 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/06 13:08:50 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/18 20:06:45 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		compare_start(char *str, char *ptrn);
 int		compare_end(char *str, char *ptrn);
 int		compare_closed_str(char *str, char *ptrn);
 char	*str_join_3(char *str1, char *str2, char *str3);
+char	*encode_spec_chars_quotes_str(char *str);
 
 int	str_wildcard_compare(char *str, char *ptrn)
 {
@@ -164,6 +165,89 @@ static void hide_hidden_fles(char **files, char * wildcard)
 	}
 }
 
+/*
+Free old str, malloc ans return new str with quotes
+*/
+char *put_str_in_quotes(char *str, char quote, int need_free)
+{
+	char	*result;
+	int		strlen;
+	int		i;
+
+	strlen = ft_strlen(str);
+	if (str == NULL)
+		return (NULL);
+	result = malloc(sizeof(char) * (strlen + 3));
+	if (! result)
+		return (NULL);
+	i = 0;
+	result[0] = quote;
+	while (str[i])
+	{
+		result[i + 1] = str[i];
+		i++;
+	}
+	result[i + 1] = quote;
+	result[i + 2] = 0;
+	if (need_free)
+		free(str);
+	return (result);
+}
+
+int is_spec_in_string(char *str)
+{
+	int	spec_in_str;
+
+	if (! str)
+		return (0);
+	while (*str)
+	{
+		spec_in_str = ft_isspace(*str) || ft_strchr("<>*\"", *str);
+		if (spec_in_str)
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+char *escape_single_quotes(char *str, int need_free)
+{
+	char	**splits;
+	char	*result;
+	int		i;
+
+	if (str == NULL)
+		return (NULL);
+	splits = ft_split_new(str, '\'');
+	i = 0;
+	while (splits[i])
+	{
+		splits[i] = put_str_in_quotes(splits[i], '\'', 1);\
+		i++;
+	}
+	result = ft_anti_split(splits, "\\\'");
+	ft_free_text(splits);
+	if (need_free)
+		free(str);
+	return (result);
+}
+
+char **quote_str_with_spec(char **text)
+{
+	int	i;
+
+	i = 0;
+	while (text[i])
+	{
+		if (is_spec_in_string(text[i]))
+			text[i] = put_str_in_quotes(text[i], '\'', 1);
+		else if (ft_strchr(text[i], '\''))
+			text[i] = escape_single_quotes(text[i], 1);
+		i++;
+	}
+	return (text);
+}
+
 char	*expand_wildcard_cwd(char *wildcard)
 {
 	char	*cwd;
@@ -188,7 +272,7 @@ char	*expand_wildcard_cwd(char *wildcard)
 	ft_free_text(files);
 	if (!result_files || !result_files[0])
 		return (ft_strjoin3("'", wildcard, "'"));
-	result = ft_anti_split(result_files, " ");
+	result = ft_anti_split(quote_str_with_spec(result_files), " ");
 	ft_free_text(result_files);
 	return (result);
 }
@@ -234,5 +318,6 @@ char	*expand_wildcard_in_str(char *str)
 	ft_free_text(words);
 	if (! tmp_word)
 		return (NULL);
+	//return (encode_spec_chars_quotes_str(tmp_word));
 	return (tmp_word);
 } 

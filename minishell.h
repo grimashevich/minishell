@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/13 21:45:25 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/16 19:53:03 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,20 +23,12 @@
 # include <errno.h>
 # include <string.h>
 
+
 typedef struct s_tag
 {
 	void			*data;		// Содержит указатель либо на команду, либо на контейнер
 	int				type;		// Содержит информацию о типе указатель
 }	t_tag;
-
-
-typedef struct s_ms
-{
-	char	**envp;				// Список переменных окружения
-	int		ms_errno;				// Exit code последней исполненной команды
-	t_tag	*commands;			// Указатель на начало списка текущих команд
-}   t_ms;
-t_ms	g_ms;
 
 typedef struct s_cont
 {
@@ -58,11 +50,20 @@ typedef struct s_cmd
 	char	*infile;			// Путь до файла						|
 	char	*outfile;			// Путь до файла						|
 	int		append_outfile;		// Создать или добававить в файл		|	отдельная структура???
-	int		here_doc;			// TODO добавлено мной
+	int		here_doc;			// TODO добавлено eClown
 	int		isheredoc;			// Создать временый файл				|
 	char	**command;			// Команда с флагами
 	t_cont	*container;			// Проверка на глобальные оператоы перенаправления 
+	t_rdr_fls		*redirects;	// Содержит относвязный список редиректов //TODO добавлено eClown
 }	t_cmd;
+
+typedef struct s_ms
+{
+	char	**envp;				// Список переменных окружения
+	int		ms_errno;				// Exit code последней исполненной команды
+	t_tag	*commands;			// Указатель на начало списка текущих команд
+}   t_ms;
+t_ms	g_ms;
 
 void ms_error(char *func_name, char *str_error, int errn);
 

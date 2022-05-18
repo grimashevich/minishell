@@ -6,11 +6,11 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/14 19:36:17 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/18 18:36:22 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lvl2_parsing.h"
+#include "../minishell.h"
 
 int	is_char_in_quotes(char *str, char *c);
 
@@ -108,23 +108,68 @@ char* del_from_str(char *str, int start, int end)
 	return (result);
 }
 
+int is_char_in_str(char c, char *str)
+{
+	while (*str)
+	{
+		if (*str == c)
+			return (1);
+	}
+	return (0);
+}
+
 /*
-Replace char > and < to its negative variant if it in quotes
+Replace char witch contains in char2encode to its negative variant if it in quotes
 */
-void encode_str(char *str)
+void encode_quotes_str(char *str, char *char2encode)
 {
 	int	i;
 
 	i = 0;
 	while (str[i])
 	{
-		if ((str[i] == '>' || str[i] == '<') && is_char_in_quotes(str, &str[i]))
+		if (is_char_in_str(str[i], char2encode) && is_char_in_quotes(str, &str[i]))
 			str[i] *= -1;
 		i++;
 	}
 }
 
-void decode_str(char *str)
+void encode_spcs_quotes_str(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (ft_isspace(str[i]) && is_char_in_quotes(str, &str[i]))
+			str[i] *= -1;
+		i++;
+	}
+}
+
+/*
+Nothing to be malloced
+Returned tha same pointer
+*/
+char	*encode_spec_chars_quotes_str(char *str)
+{
+	int	i;
+	int	searched_chars;
+
+	i = 0;
+	while (str[i])
+	{
+		searched_chars = ft_isspace(str[i]) || str[i] == '*';
+		searched_chars = searched_chars && is_char_in_quotes(str, &str[i]);
+		if (searched_chars)
+			str[i] *= -1;
+		i++;
+	}
+	return str;
+}
+
+
+void decode_quotes_str(char *str)
 {
 	while (*str)
 	{
@@ -193,7 +238,7 @@ int find_word_right_from_needle(char *c, const char *needle, char **to_write)
 		i++;
 	while (c[i] && ft_isspace(c[i]))
 		_ = word_len >= 0 && i++ == result++;
-	while (c[i] && ! ft_isspace(c[i]))
+	while ((c[i] && ! ft_isspace(c[i])) || is_char_in_quotes(&c[i - result], &c[i]))
 		_ = 0 <= word_len++ && i++ == result++;
 	if (word_len == 0)
 		return (-1);
@@ -249,8 +294,6 @@ int fd_str_len(int fd, char *fd_str)
 
 /* 
 TODO FIX WORKING WITH QUOTES
-
-TODO find leaks
  */
 t_rdr_fls *eject_redirect(char **str, char *c, int rdr_type)
 {
@@ -332,67 +375,75 @@ t_rdr_fls *extract_all_rdrs(char **str)
 	}
 }
 
-/* ehco abc 2 >> error.log */
+void decode_text(char **text)
+{
+	while (*text)
+		decode_quotes_str(*(text++));	
+}
+
+void open_quotes_text(char **text)
+{
+	char	*tmp;
+
+	while (*text)
+	{
+		tmp = open_quotes(*text);
+		if (! tmp)
+			ms_error("open_quotes_text", "malloc error", 1);
+		free(*text);
+		*text = tmp;
+		text++;
+	}
+}
 
 /*
-
-012345678
-
-123 abc>>  some word
-i = 		7
-result = 	6
-word_len = 	4
-
- */
-
-/* 
-void extract_redirect(char *str, int start, enum Rdr_type type)
+INPUT:
+malloced t_cmd *cmd_struct
+*/
+void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 {
-	char	search_rdr[3];
+	char	*cmd;
+	char	**args;
 
-	search_rdr[2] = 0;
-	if (type == WRITE || type == APPEND)
-		search_rdr[0] = '>';
-	else if (type == READ || type == HERE_DOC)
-		search_rdr[0] = '<';
-	
-} */
+	cmd = ft_strdup(cmd_str);
+	if (! cmd)
+		return ;
 
-
-
-
-/* 
-Fill
-arr[0] - for input
-arr[0] for output
-if redirectes found ins str, the function will change given string.
-	It will remove resirectes from string.
-
-EXAMPLE:
-	INPUT str = "< in.txt echo 1 > out.txt"
-	arr[0] = "in.txt"
-	arr[1] = "out.txt"
-	str = "echo 1"
- */
-
-/* void	extract_redirects(char *str, t_cmd *cmd)
-{
-	char	**result;
-
-	
+	//TODO  работа с переменными
+	encode_spcs_quotes_str(cmd);
+	cmd_struct->redirects = extract_all_rdrs(&cmd);
+	args = ft_split(cmd, ' ');
+	if (args == NULL)
+	{
+		free_rdr_list(cmd_struct->redirects);
+		return ;
+	}
+	free(cmd);
+	decode_text(args);
+	open_quotes_text(args);
 }
+
+//TODO Кавычки
+
+
+/* 
+
+ИДЕЯ:
+Экранируем все ЗНАЧИМЫЕ? символы, находящи0еся в кавычках в элементах "новых строк"
+ИСТОЧНИКИ НОВЫХ СТРОК:
+	1. Строка, которую передает Антон
+	2. Переменные
+	3. Шаблоны со *
+РАСКОДИРУЕМ ВСЮ СТРОКУ
+
+1. Раскрываем переменные
+4. Раскрываем *
+5. Извлекаем редиректы
+6. Бъем команду на бинарник и агргумены
+7. Ликвидация лишних пробелов
+8. Раскрываем кавычки
+
+
+<< > 2(echo 1 && echo 3) > 1.txt
+
  */
-
-/* void parse_lvl2(t_cmd *cmd, char *cmd_str)
-{
-	char	*str;
-	char	tmp;
-	char	**redirects;
-
-	str = ft_strdup(cmd_str);
-	extract_redirects(str, cmd);
-	tmp = str;
-	str = ft_strtrim(str, " \t\n");
-	free(tmp);
-	
-} */
