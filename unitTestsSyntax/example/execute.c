@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:00:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 16:48:30 by ivnvtosh         ###   ########.fr       */
+/*   Updated: 2022/05/19 19:08:31 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,9 +126,7 @@ int	check_single_quotation_mark(char *string)
 			string += 1;
 			string += skip_double_quotation_mark(string);
 			if (*string == '\0' && *(string + 1) == '\0')
-			{
 				return (0);
-			}
 		}
 		if (*string == '\'')
 		{
@@ -136,9 +134,7 @@ int	check_single_quotation_mark(char *string)
 
 			string += skip_single_quotation_mark(string);
 			if (*string == '\0' && *(string + 1) == '\0')
-			{
 				return (-1);
-			}
 		}
 		string += 1;
 	}
@@ -154,9 +150,7 @@ int	check_double_quotation_mark(char *string)
 			string += 1;
 			string += skip_double_quotation_mark(string);
 			if (*string == '\0' && *(string + 1) == '\0')
-			{
 				return (-1);
-			}
 		}
 		if (*string == '\'')
 		{
@@ -208,35 +202,8 @@ int	check_quotation_mark_syntax(char *string)
 
 
 
-
-
-int	check_open_and_close(char *string)
+int	check_open_close_parentheses(int number_of_open_parenthesis)
 {
-	int	number_of_open_parenthesis;
-
-	number_of_open_parenthesis = 0;
-	while (*string != '\0')
-	{
-		if (*string == '\'')
-		{
-			string += 1;
-			string += skip_single_quotation_mark(string);
-		}
-		if (*string == '\"')
-		{
-			string += 1;
-			string += skip_double_quotation_mark(string);
-		}
-		if (*string == '(')
-		{
-			number_of_open_parenthesis += 1;
-		}
-		else if (*string == ')')
-		{
-			number_of_open_parenthesis -= 1;
-		}
-		string += 1;
-	}
 	if (number_of_open_parenthesis > 0)
 	{
 		// printf("minishell: syntax error near unexpected token '('\n");
@@ -252,6 +219,28 @@ int	check_open_and_close(char *string)
 	return (0);
 }
 
+int	check_open_and_close(char *string)
+{
+	int	number_of_open_parenthesis;
+
+	number_of_open_parenthesis = 0;
+	while (*string != '\0')
+	{
+		if (*string == '\'')
+			string += skip_single_quotation_mark(string + 1) + 1;
+		if (*string == '\"')
+			string += skip_double_quotation_mark(string + 1) + 1;
+		if (*string == '(')
+			number_of_open_parenthesis += 1;
+		else if (*string == ')')
+			number_of_open_parenthesis -= 1;
+		string += 1;
+	}
+	if (check_open_close_parentheses(number_of_open_parenthesis) == -1)
+		return (-1);
+	return (0);
+}
+
 int	check_parentheses_befor_operator(char *string)
 {
 	int	iscommand;
@@ -262,19 +251,11 @@ int	check_parentheses_befor_operator(char *string)
 	while (*string != '\0')
 	{
 		if (*string == '\'')
-		{
-			string += 1;
-			string += skip_single_quotation_mark(string);
-		}
+			string += skip_single_quotation_mark(string + 1) + 1;
 		if (*string == '\"')
-		{
-			string += 1;
-			string += skip_double_quotation_mark(string);
-		}
+			string += skip_double_quotation_mark(string + 1) + 1;
 		if (ft_isalnum(*string) == TRUE)
-		{
 			iscommand = TRUE;
-		}
 		if (*string == '(' && iscommand == TRUE)
 		{
 			// printf("minishell: syntax error near unexpected token '('\n");
@@ -283,9 +264,7 @@ int	check_parentheses_befor_operator(char *string)
 		}
 		operator = is_this_operator(&string);
 		if (operator != EMPTY)
-		{
 			iscommand = FALSE;
-		}
 	}
 	return (0);
 }
@@ -302,6 +281,34 @@ int	get_lenght(char *string)
 	return (i);
 }
 
+int	check_parentheses_all_t(char **string, int *operator)
+{
+	if (**string == '\'')
+		*string += skip_single_quotation_mark(*string + 1) + 1;
+	if (**string == '\"')
+		*string += skip_double_quotation_mark(*string + 1) + 1;
+	while (**string == '>' || **string == '<')
+	{
+		*string += 1;
+		while (ft_isspace(**string) == TRUE)
+			*string += 1;
+		while (ft_isalnum(**string) == TRUE)
+			*string += 1;
+		while (ft_isspace(**string) == TRUE)
+			*string += 1;
+	}
+	if (ft_isalnum(**string) == TRUE)
+	{
+		// printf("minishell: syntax error near unexpected token '('\n");
+		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
+		write(1, *string, get_lenght(*string));
+		write(1, "''", 1);
+		return (-1);
+	}
+	*operator = is_this_operator(string);
+	return (0);
+}
+
 int	check_parentheses_after_operator(char *string)
 {
 	int	operator;
@@ -312,58 +319,19 @@ int	check_parentheses_after_operator(char *string)
 		while (*string != ')' && *string != '\0')
 		{
 			if (*string == '\'')
-			{
-				string += 1;
-				string += skip_single_quotation_mark(string);
-			}
+				string += skip_single_quotation_mark(string + 1) + 1;
 			if (*string == '\"')
-			{
-				string += 1;
-				string += skip_double_quotation_mark(string);
-			}
+				string += skip_double_quotation_mark(string + 1) + 1;
 			string += 1;
 		}
 		if (*string == '\0')
-		{
 			return (0);
-		}
 		while (operator == EMPTY && *string != '\0')
 		{
-			if (*string == '\'')
+			if (check_parentheses_all_t(&string, &operator) == -1)
 			{
-				string += 1;
-				string += skip_single_quotation_mark(string);
-			}
-			if (*string == '\"')
-			{
-				string += 1;
-				string += skip_double_quotation_mark(string);
-			}
-			while (*string == '>' || *string == '<')
-			{
-				string += 1;
-				while (ft_isspace(*string) == TRUE)
-				{
-					string += 1;
-				}
-				while (ft_isalnum(*string) == TRUE)
-				{
-					string += 1;
-				}
-				while (ft_isspace(*string) == TRUE)
-				{
-					string += 1;
-				}
-			}
-			if (ft_isalnum(*string) == TRUE)
-			{
-				// printf("minishell: syntax error near unexpected token '('\n");
-				write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
-				write(1, string, get_lenght(string));
-				write(1, "''", 1);
 				return (-1);
 			}
-			operator = is_this_operator(&string);
 		}
 	}
 	return (0);
@@ -438,6 +406,44 @@ void	print_error(int operator)
 	}
 }
 
+int	skip_all_quotation_mar_operator(char **string)
+{
+	if (**string == '\'')
+	{
+		*string += skip_single_quotation_mark(*string + 1) + 1;
+		if (*(*string + 1) == '\0')
+			return (1);
+	}
+	if (**string == '\"')
+	{
+		*string += skip_double_quotation_mark(*string + 1) + 1;
+		if (*(*string + 1) == '\0')
+			return (1);
+	}
+	return (0);
+}
+
+int	check_all_operators(char **string, 	int	*iscommand, int *operator, int *was_operator)
+{
+	if (ft_isalnum(**string) == TRUE)
+		*iscommand = TRUE;
+	*operator = is_this_operator(string);
+	if (*operator != EMPTY)
+	{
+		if (*iscommand == FALSE)
+		{
+			print_error(*operator);
+			return (-1);
+		}
+		else
+		{
+			*was_operator = *operator;
+			*iscommand = FALSE;
+		}
+	}
+	return (0);
+}
+
 int	check_syntax_of_operators(char *string)
 {
 	int	iscommand;
@@ -449,42 +455,10 @@ int	check_syntax_of_operators(char *string)
 	was_operator = EMPTY;
 	while (*string != '\0')
 	{
-		if (*string == '\'')
-		{
-			string += 1;
-			string += skip_single_quotation_mark(string);
-			if (*(string + 1) == '\0')
-			{
-				return (0);
-			}
-		}
-		if (*string == '\"')
-		{
-			string += 1;
-			string += skip_double_quotation_mark(string);
-			if (*(string + 1) == '\0')
-			{
-				return (0);
-			}
-		}
-		if (ft_isalnum(*string) == TRUE)
-		{
-			iscommand = TRUE;
-		}
-		operator = is_this_operator(&string);
-		if (operator != EMPTY)
-		{
-			if (iscommand == FALSE)
-			{
-				print_error(operator);
-				return (-1);
-			}
-			else
-			{
-				was_operator = operator;
-				iscommand = FALSE;
-			}
-		}
+		if (skip_all_quotation_mar_operator(&string) == 1)
+			return (0);
+		if (check_all_operators(&string, &iscommand, &operator, &was_operator) == -1)
+			return (-1);
 	}
 	if (operator != EMPTY || iscommand == FALSE)
 	{
@@ -548,9 +522,7 @@ int	check_fd_redirect_outfile(char *string)
 	int		i;
 
 	while (ft_isspace(*string) == TRUE)
-	{
 		string += 1;
-	}
 	num = string;
 	i = 0;
 	while (ft_isdigit(*string) == TRUE)
@@ -574,9 +546,7 @@ int	check_fd_redirect_infile(char *string)
 	int		i;
 
 	while (ft_isspace(*string) == TRUE)
-	{
 		string += 1;
-	}
 	num = string;
 	i = 0;
 	while (ft_isdigit(*string) == TRUE)
@@ -588,17 +558,36 @@ int	check_fd_redirect_infile(char *string)
 	{
 		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
 		if (ft_atol(num) > 2147483647)
-		{
 			write(1, "-1", 2);	
-		}
 		else
-		{
 			write(1, num, i); // '\n'
-		}
 		write(1, "'", 1); // '\n'
 		return (TRUE);
 	}
 	return (FALSE);
+}
+
+int	print_error_redirect_outfile(char *string)
+{
+	if (check_newline(string) == TRUE)
+	{
+		// printf("minishell: syntax error near unexpected token 'newline'\n");
+		write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+		return (-1);
+	}
+	if (*(string + 1) == '>')
+	{
+		// printf("minishell: syntax error near unexpected token '>>'\n");
+		write(1, "minishell: syntax error near unexpected token '>>'", 50); // '\n'
+		return (-1);
+	}
+	else
+	{
+		// printf("minishell: syntax error near unexpected token '>'\n");
+		write(1, "minishell: syntax error near unexpected token '>'", 49); // '\n'
+		return (-1);
+	}
+	return (0);
 }
 
 int	check_syntax_of_redirect_outfile(char *string)
@@ -609,41 +598,47 @@ int	check_syntax_of_redirect_outfile(char *string)
 		{
 			string += 1;
 			if (*string == '>')
-			{
 				string += 1;
-			}
 			while (ft_isspace(*string) == TRUE)
-			{
 				string += 1;
-			}
 			if (check_fd_redirect_outfile(string) == TRUE)
-			{
 				return (-1);
-			}
 			if (ft_isalnum(*string) == FALSE)
 			{
-				if (check_newline(string) == TRUE)
-				{
-					// printf("minishell: syntax error near unexpected token 'newline'\n");
-					write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+				if (print_error_redirect_outfile(string) == -1)
 					return (-1);
-				}
-				if (*(string + 1) == '>')
-				{
-					// printf("minishell: syntax error near unexpected token '>>'\n");
-					write(1, "minishell: syntax error near unexpected token '>>'", 50); // '\n'
-					return (-1);
-				}
-				else
-				{
-					// printf("minishell: syntax error near unexpected token '>'\n");
-					write(1, "minishell: syntax error near unexpected token '>'", 49); // '\n'
-					return (-1);
-				}
 			}
-			
 		}
 		string += 1;
+	}
+	return (0);
+}
+
+int	check_error_infile(char *string, int i)
+{
+	if (check_newline(string + i) == TRUE)
+	{
+		// printf("minishell: syntax error near unexpected token 'newline'\n");
+		write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+		return (-1);
+	}
+	if (i == 4)
+	{
+		// printf("minishell: syntax error near unexpected token '<'\n");
+		write(1, "minishell: syntax error near unexpected token '<'", 50); // '\n'
+		return (-1);
+	}
+	if (i == 5)
+	{
+		// printf("minishell: syntax error near unexpected token '<<'\n");
+		write(1, "minishell: syntax error near unexpected token '<<'", 51); // '\n'
+		return (-1);
+	}
+	if (i >= 6)
+	{
+		// printf("minishell: syntax error near unexpected token '<<<'\n");
+		write(1, "minishell: syntax error near unexpected token '<<<'", 51); // '\n'
+		return (-1);
 	}
 	return (0);
 }
@@ -658,37 +653,11 @@ int	check_syntax_of_redirect_infile(char *string)
 		{
 			i = 0;
 			while (string[i] == '<')
-			{
 				i += 1;
-			}
 			if (check_fd_redirect_infile(string + i) == TRUE)
-			{
 				return (-1);
-			}
-			if (check_newline(string + i) == TRUE)
-			{
-				// printf("minishell: syntax error near unexpected token 'newline'\n");
-				write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+			if (check_error_infile(string, i) == -1)
 				return (-1);
-			}
-			if (i == 4)
-			{
-				// printf("minishell: syntax error near unexpected token '<'\n");
-				write(1, "minishell: syntax error near unexpected token '<'", 50); // '\n'
-				return (-1);
-			}
-			if (i == 5)
-			{
-				// printf("minishell: syntax error near unexpected token '<<'\n");
-				write(1, "minishell: syntax error near unexpected token '<<'", 51); // '\n'
-				return (-1);
-			}
-			if (i >= 6)
-			{
-				// printf("minishell: syntax error near unexpected token '<<<'\n");
-				write(1, "minishell: syntax error near unexpected token '<<<'", 51); // '\n'
-				return (-1);
-			}
 			string += i;
 		}
 		string += 1;

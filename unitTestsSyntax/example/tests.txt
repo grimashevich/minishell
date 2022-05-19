@@ -110,3 +110,4 @@
 : TEST : "109" : STRING : "echo '5 ' > file echo 6"          : RETURNED : "0"  : OUTPUT : ""
 : TEST : "110" : STRING : "\"echo\"\""                       : RETURNED : "-1" : OUTPUT : "minishell: syntax error near unexpected token '\"'"
 : TEST : "110" : STRING : "'echo''"                          : RETURNED : "-1" : OUTPUT : "minishell: syntax error near unexpected token '''"
+: TEST : "111" : STRING : "test"                             : RETURNED : "0"  : OUTPUT : ""
