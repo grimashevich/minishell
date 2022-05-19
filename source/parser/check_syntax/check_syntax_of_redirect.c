@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_syntax_of_the_redirect.c                     :+:      :+:    :+:   */
+/*   check_syntax_of_redirect.c                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:16:32 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 19:11:47 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 22:11:09 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ int	check_fd_redirect_outfile(char *string)
 	}
 	if (*string == '>' && i != 0)
 	{
-		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
-		write(1, num, i); // '\n'
-		write(1, "'", 1); // '\n'
+		write(1, "minishell: syntax error near unexpected token '", 47);
+		write(1, num, i);
+		write(1, "'\n", 2);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -68,12 +68,12 @@ int	check_fd_redirect_infile(char *string)
 	}
 	if (*string == '>' && i != 0)
 	{
-		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
+		write(1, "minishell: syntax error near unexpected token '", 47);
 		if (ft_atol(num) > 2147483647)
-			write(1, "-1", 2);	
+			write(1, "-1\n", 3);	
 		else
-			write(1, num, i); // '\n'
-		write(1, "'", 1); // '\n'
+			write(1, num, i);
+		write(1, "'\n", 2);
 		return (TRUE);
 	}
 	return (FALSE);
@@ -83,20 +83,18 @@ int	print_error_redirect_outfile(char *string)
 {
 	if (check_newline(string) == TRUE)
 	{
-		// printf("minishell: syntax error near unexpected token 'newline'\n");
-		write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+		write(1, "minishell: syntax error near unexpected token 'newline'", 56);
 		return (-1);
 	}
 	if (*(string + 1) == '>')
 	{
-		// printf("minishell: syntax error near unexpected token '>>'\n");
-		write(1, "minishell: syntax error near unexpected token '>>'", 50); // '\n'
+		write(1, "minishell: syntax error near unexpected token '>>'", 51);
 		return (-1);
 	}
 	else
 	{
 		// printf("minishell: syntax error near unexpected token '>'\n");
-		write(1, "minishell: syntax error near unexpected token '>'", 49); // '\n'
+		write(1, "minishell: syntax error near unexpected token '>'", 50);
 		return (-1);
 	}
 	return (0);
@@ -130,26 +128,22 @@ int	check_error_infile(char *string, int i)
 {
 	if (check_newline(string + i) == TRUE)
 	{
-		// printf("minishell: syntax error near unexpected token 'newline'\n");
-		write(1, "minishell: syntax error near unexpected token 'newline'", 55); // '\n'
+		write(1, "minishell: syntax error near unexpected token 'newline'\n", 56);
 		return (-1);
 	}
 	if (i == 4)
 	{
-		// printf("minishell: syntax error near unexpected token '<'\n");
-		write(1, "minishell: syntax error near unexpected token '<'", 50); // '\n'
+		write(1, "minishell: syntax error near unexpected token '<'\n", 51);
 		return (-1);
 	}
 	if (i == 5)
 	{
-		// printf("minishell: syntax error near unexpected token '<<'\n");
-		write(1, "minishell: syntax error near unexpected token '<<'", 51); // '\n'
+		write(1, "minishell: syntax error near unexpected token '<<'\n", 52);
 		return (-1);
 	}
 	if (i >= 6)
 	{
-		// printf("minishell: syntax error near unexpected token '<<<'\n");
-		write(1, "minishell: syntax error near unexpected token '<<<'", 51); // '\n'
+		write(1, "minishell: syntax error near unexpected token '<<<'\n", 52);
 		return (-1);
 	}
 	return (0);

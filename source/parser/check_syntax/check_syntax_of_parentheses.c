@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 19:57:18 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 22:13:34 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,12 @@ int	check_open_close_parentheses(int number_of_open_parenthesis)
 {
 	if (number_of_open_parenthesis > 0)
 	{
-		// printf("minishell: syntax error near unexpected token '('\n");
-		write(1, "minishell: syntax error near unexpected token '('", 49); // '\n'
+		write(1, "minishell: syntax error near unexpected token '('\n", 51);
 		return (-1);
 	}
 	if (number_of_open_parenthesis < 0)
 	{
-		// printf("minishell: syntax error near unexpected token ')'\n");
-		write(1, "minishell: syntax error near unexpected token ')'", 49); // '\n'
+		write(1, "minishell: syntax error near unexpected token ')'\n", 51);
 		return (-1);
 	}
 	return (0);
@@ -97,8 +95,7 @@ int	check_parentheses_befor_operator(char *string)
 			iscommand = TRUE;
 		if (*string == '(' && iscommand == TRUE)
 		{
-			// printf("minishell: syntax error near unexpected token '('\n");
-			write(1, "minishell: syntax error near unexpected token '('", 49); // '\n'
+			write(1, "minishell: syntax error near unexpected token '('\n", 51);
 			return (-1);
 		}
 		operator = is_this_operator(&string);
@@ -138,8 +135,7 @@ int	check_parentheses_all_t(char **string, int *operator)
 	}
 	if (ft_isalnum(**string) == TRUE)
 	{
-		// printf("minishell: syntax error near unexpected token '('\n");
-		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
+		write(1, "minishell: syntax error near unexpected token '", 47);
 		write(1, *string, get_lenght(*string));
 		write(1, "''", 1);
 		return (-1);
