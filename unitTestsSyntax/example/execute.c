@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ivnvtosh <ivnvtosh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:00:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/18 17:23:08 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 16:48:30 by ivnvtosh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,56 +92,84 @@ int	is_this_operator(char **string)
 
 
 
+int	skip_single_quotation_mark(char *string)
+{
+	int	i;
 
+	i = 0;
+	while (string[i] != '\'' && string[i] != '\0')
+	{
+		i += 1;
+	}
+	return (i);
+}
 
+int	skip_double_quotation_mark(char *string)
+{
+	int	i;
 
-
+	i = 0;
+	while (string[i] != '\"' && string[i] != '\0')
+	{
+		i += 1;
+	}
+	return (i);
+}
 
 
 int	check_single_quotation_mark(char *string)
 {
-	int	number_of_single_quotation_mark;
-
-	number_of_single_quotation_mark = 0;
-	while (*string !='\0')
+	while (*string != '\0')
 	{
+		if (*string == '\"')
+		{
+			string += 1;
+			string += skip_double_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+			{
+				return (0);
+			}
+		}
 		if (*string == '\'')
 		{
-			number_of_single_quotation_mark += 1;
+			string += 1;
+
+			string += skip_single_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+			{
+				return (-1);
+			}
 		}
 		string += 1;
 	}
-	if (number_of_single_quotation_mark % 2 == 0)
-	{
-		return (0);
-	}
-	else
-	{
-		return (-1);
-	}
+	return (0);
 }
 
 int	check_double_quotation_mark(char *string)
 {
-	int	number_of_double_quotation_mark;
-
-	number_of_double_quotation_mark = 0;
-	while (*string !='\0')
+	while (*string != '\0')
 	{
 		if (*string == '\"')
 		{
-			number_of_double_quotation_mark += 1;
+			string += 1;
+			string += skip_double_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+			{
+				return (-1);
+			}
+		}
+		if (*string == '\'')
+		{
+			string += 1;
+			string += skip_single_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+			{
+				return (0);
+			}
 		}
 		string += 1;
 	}
-	if (number_of_double_quotation_mark % 2 == 0)
-	{
-		return (0);
-	}
-	else
-	{
-		return (-1);
-	}
+	return (0);
 }
 
 int	check_quotation_mark_syntax(char *string)
@@ -181,29 +209,6 @@ int	check_quotation_mark_syntax(char *string)
 
 
 
-int	skip_single_quotation_mark(char *string)
-{
-	int	i;
-
-	i = 1;
-	while (string[i] != '\'')
-	{
-		i += 1;
-	}
-	return (i);
-}
-
-int	skip_double_quotation_mark(char *string)
-{
-	int	i;
-
-	i = 1;
-	while (string[i] != '\"')
-	{
-		i += 1;
-	}
-	return (i);
-}
 
 int	check_open_and_close(char *string)
 {
@@ -214,10 +219,12 @@ int	check_open_and_close(char *string)
 	{
 		if (*string == '\'')
 		{
+			string += 1;
 			string += skip_single_quotation_mark(string);
 		}
 		if (*string == '\"')
 		{
+			string += 1;
 			string += skip_double_quotation_mark(string);
 		}
 		if (*string == '(')
@@ -249,19 +256,19 @@ int	check_parentheses_befor_operator(char *string)
 {
 	int	iscommand;
 	int	operator;
-	int	was_operator;
 
 	iscommand = FALSE;
 	operator = EMPTY;
-	was_operator = EMPTY;
 	while (*string != '\0')
 	{
 		if (*string == '\'')
 		{
+			string += 1;
 			string += skip_single_quotation_mark(string);
 		}
 		if (*string == '\"')
 		{
+			string += 1;
 			string += skip_double_quotation_mark(string);
 		}
 		if (ft_isalnum(*string) == TRUE)
@@ -277,7 +284,6 @@ int	check_parentheses_befor_operator(char *string)
 		operator = is_this_operator(&string);
 		if (operator != EMPTY)
 		{
-			was_operator = operator;
 			iscommand = FALSE;
 		}
 	}
@@ -298,23 +304,21 @@ int	get_lenght(char *string)
 
 int	check_parentheses_after_operator(char *string)
 {
-	int	iscommand;
 	int	operator;
-	int	was_operator;
 
-	iscommand = FALSE;
 	operator = EMPTY;
-	was_operator = EMPTY;
 	while (*string != '\0')
 	{
 		while (*string != ')' && *string != '\0')
 		{
 			if (*string == '\'')
 			{
+				string += 1;
 				string += skip_single_quotation_mark(string);
 			}
 			if (*string == '\"')
 			{
+				string += 1;
 				string += skip_double_quotation_mark(string);
 			}
 			string += 1;
@@ -323,18 +327,16 @@ int	check_parentheses_after_operator(char *string)
 		{
 			return (0);
 		}
-		else
-		{
-			iscommand = FALSE;
-		}
 		while (operator == EMPTY && *string != '\0')
 		{
 			if (*string == '\'')
 			{
+				string += 1;
 				string += skip_single_quotation_mark(string);
 			}
 			if (*string == '\"')
 			{
+				string += 1;
 				string += skip_double_quotation_mark(string);
 			}
 			while (*string == '>' || *string == '<')
@@ -449,11 +451,21 @@ int	check_syntax_of_operators(char *string)
 	{
 		if (*string == '\'')
 		{
+			string += 1;
 			string += skip_single_quotation_mark(string);
+			if (*(string + 1) == '\0')
+			{
+				return (0);
+			}
 		}
 		if (*string == '\"')
 		{
+			string += 1;
 			string += skip_double_quotation_mark(string);
+			if (*(string + 1) == '\0')
+			{
+				return (0);
+			}
 		}
 		if (ft_isalnum(*string) == TRUE)
 		{

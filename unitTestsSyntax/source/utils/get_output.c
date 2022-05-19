@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/15 23:59:41 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/18 01:17:23 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/18 13:39:29 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,17 @@ char	*get_value_output(void)
 	char	buffer[1024];
 	char	*output;
 	int		fd;
+	t_list	*element;
 
 	fd = file_open("output.tmp", O_RDONLY);
 	read_from_file(fd, buffer);
 	file_close(fd);
 	output = strdup(buffer);
-	t_list	*element = ft_list_init(output);
+	element = ft_list_init(output);
+	if (element == LIST_FAILED)
+	{
+		exit(ERROR);
+	}
 	ft_list_append(&g_local.allocated, element);
 	if (output == NULL)
 	{
