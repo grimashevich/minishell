@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/18 19:16:03 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/19 19:44:58 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,9 @@ t_rdr_fls *eject_redirect(char **str, char *c, int rdr_type);
 t_rdr_fls *extract_all_rdrs(char **str);
 void free_rdr_list(t_rdr_fls *item);
 void encode_spec_chars_quotes_str(char *str);
+char **add_str_to_text(char *str, char **text);
+char	**expand_wildcard_arr(char *wildcard);
+char	**add_text_to_text(char **dest, char **added, int need_free);
 
 void print_text(char **text)
 {
@@ -59,17 +62,34 @@ int	main(int argc, char **argv, char **envp)
 	
 	char *answer = malloc(256);
 
+	char **text = NULL;
+
 	while (answer)
 	{
 		answer = readline("Enter str: ");
 		add_history(answer);
-		char **result = ft_split_new(answer, '\'');
-		print_text(result);
-		char *asp = ft_anti_split(result, "\\\'");
-		printf("\n\n%s\n", asp);
+		text = add_to_text(answer, text);
+		print_text(text);
+		printf("\n\n");
+		//free(answer);
+	}
+	ft_free_text(text); */
+
+// TEST CASE  char	**expand_wildcard_arr(char *wildcard)
+	
+	char *answer = malloc(256);
+
+	char **text = NULL;
+	while (answer)
+	{
+		answer = readline("Enter str: ");
+		add_history(answer);
+		text = expand_wildcard_arr(answer);
+		print_text(text);
+		printf("\n\n");
 		free(answer);
-		ft_free_text(result);
-	} */
+		ft_free_text(text);
+	}
 
 
 /* // CASE extract_all_rdrs
@@ -94,7 +114,7 @@ int	main(int argc, char **argv, char **envp)
 	free_rdr_list(rdr);
  */
 	
-// TEST CASE FOR expand_wildcard_in_str
+/* // TEST CASE FOR expand_wildcard_in_str
 	char *answer = malloc(256);
 
 	while (answer)
@@ -106,7 +126,7 @@ int	main(int argc, char **argv, char **envp)
 		free(answer);
 		printf("---\n=> %s\n\n", files);
 		free(files);
-	}
+	} */
 
 /* 	// TEST CASE FOR change_directory
 	char *answer = malloc(256);

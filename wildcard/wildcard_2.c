@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:36:31 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/18 20:06:45 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/19 19:52:14 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,19 +214,20 @@ char *escape_single_quotes(char *str, int need_free)
 {
 	char	**splits;
 	char	*result;
-	int		i;
+	//int		i;
 
 	if (str == NULL)
 		return (NULL);
 	splits = ft_split_new(str, '\'');
-	i = 0;
+/* 	i = 0;
 	while (splits[i])
 	{
 		splits[i] = put_str_in_quotes(splits[i], '\'', 1);\
 		i++;
-	}
-	result = ft_anti_split(splits, "\\\'");
+	} */
+	result = ft_anti_split(splits, "'\\''");
 	ft_free_text(splits);
+	result = put_str_in_quotes(result, '\'', 1);
 	if (need_free)
 		free(str);
 	return (result);
@@ -239,16 +240,16 @@ char **quote_str_with_spec(char **text)
 	i = 0;
 	while (text[i])
 	{
-		if (is_spec_in_string(text[i]))
-			text[i] = put_str_in_quotes(text[i], '\'', 1);
-		else if (ft_strchr(text[i], '\''))
+		if (ft_strchr(text[i], '\''))
 			text[i] = escape_single_quotes(text[i], 1);
+		else if (is_spec_in_string(text[i]))
+			text[i] = put_str_in_quotes(text[i], '\'', 1);
 		i++;
 	}
 	return (text);
 }
 
-char	*expand_wildcard_cwd(char *wildcard)
+/* char	*expand_wildcard_cwd(char *wildcard)
 {
 	char	*cwd;
 	char	**files;
@@ -275,9 +276,112 @@ char	*expand_wildcard_cwd(char *wildcard)
 	result = ft_anti_split(quote_str_with_spec(result_files), " ");
 	ft_free_text(result_files);
 	return (result);
+} */
+
+int text_len(char **text)
+{
+	int	result;
+
+	result = 0;
+	while (*(text++))
+		result++;
+	return (result);
 }
 
-// TODO fix for case te"*"t
+char	**add_str_to_text(char *str, char **text)
+{
+	int		textlen;
+	char	**new_text;
+	int		i;
+
+	if (text == NULL)
+	{
+		new_text = malloc(sizeof(char *) * 2);
+		if (! new_text)
+			return (NULL);
+		new_text[0] = str;
+		new_text[1] = NULL;
+		return (new_text);
+	}
+	textlen = text_len(text);
+	new_text = malloc(sizeof(char *) * (textlen + 2));
+	i = 0;
+	while (text[i])
+	{
+		new_text[i] = text[i];
+		i++;
+	}
+	new_text[i++] = str;
+	new_text[i] =  NULL;
+	free(text);
+	return(new_text);
+}
+
+char	**add_text_to_text(char **dest, char **added, int need_free)
+{
+	int		total_len;
+	char	**new_text;
+	int		i;
+
+	if (dest == NULL && added == NULL)
+		return (NULL);
+	total_len = text_len(dest) + text_len(added);
+	new_text = malloc(sizeof(char *) * (total_len + 1));
+	if (! new_text)
+		return (NULL);
+	i = 0;
+	while (*dest)
+		new_text[i++] = *(dest++);
+	while (*added)
+		new_text[i++] = *(added++);
+	new_text[i] = NULL;
+	if (need_free)
+	{
+		free(dest);
+		free(added);
+	}
+	return (new_text);
+}
+
+/*
+return text with files matching with wildcard
+*/
+char	**expand_wildcard_arr(char *wildcard)
+{
+	char	*cwd;
+	char	**files;
+	char	**result_files;
+
+	if (wildcard == NULL)
+		return (NULL);
+	if (*wildcard == 0)
+		return (NULL);
+	cwd = malloc(MAX_PATH_LEN);
+	if (! cwd)
+		return (NULL);
+	getcwd(cwd, MAX_PATH_LEN); //TODO Заменить на нашу переменную cwd когда она заработает
+	files = ls_cwd(cwd);		//TODO Возвращает массив с освобожденной памятью
+	free(cwd);
+	if (! files)
+		return (NULL);
+	hide_hidden_fles(files, wildcard);	
+	result_files = apply_wildcard(wildcard, files);
+	if (!result_files || !result_files[0])
+		return (add_str_to_text(ft_strjoin3("'", wildcard, "'"), NULL));
+	return (result_files);
+}
+
+char	*expand_wildcard_cwd_str(char *wildcard)
+{
+	char	*result;
+	char	**files;
+
+	files = expand_wildcard_arr(wildcard);
+	result = ft_anti_split(quote_str_with_spec(files), " ");
+	ft_free_text(files);
+	return (result);
+}
+
 static int skip_word(char *word)
 {
 	if (word[0] == '-' || find_first_char(word, '*') == -1)
@@ -311,13 +415,12 @@ char	*expand_wildcard_in_str(char *str)
 		if (skip_word(words[i++]))
 			continue;
 		tmp_word = words[i - 1];
-		words[i - 1] = expand_wildcard_cwd(tmp_word);
+		words[i - 1] = expand_wildcard_cwd_str(tmp_word);
 		free(tmp_word);
 	}
 	tmp_word = ft_anti_split(words, " ");
 	ft_free_text(words);
 	if (! tmp_word)
 		return (NULL);
-	//return (encode_spec_chars_quotes_str(tmp_word));
 	return (tmp_word);
 } 
