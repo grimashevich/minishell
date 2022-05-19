@@ -6,103 +6,190 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/13 23:43:14 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 19:57:18 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static int	is_this_an_operator(char **line)
+int	is_this_operator(char **string)
 {
-	if (ft_strncmp(*line, "&&", 2) == 0)
+	if (**string == '&' && *(*string + 1) == '&')
 	{
-		*line += 2;
+		*string += 2;
 		return (AND);
 	}
-	else if (ft_strncmp(*line, "||", 2) == 0)
+	else if (**string == '|' && *(*string + 1) == '|')
 	{
-		*line += 2;
+		*string += 2;
 		return (OR);
 	}
-	else if (**line == '|')
+	else if (**string == '|')
 	{
-		*line += 1;
+		*string += 1;
 		return (PIPE);
 	}
-	else if (**line == ';')	
+	else if (**string == ';')	
 	{
-		*line += 1;
+		*string += 1;
 		return (SEQUENCE);
 	}
 	else
 	{
-		*line += 1;
+		*string += 1;
 		return (EMPTY);
 	}
 }
 
-// static void	is_this_a_single_quotation_mark(char **line)
-// {
-// 	if (**line != '\'')
-// 		return ;
-// 	*line += 1;
-// 	while (**line != '\'')
-// 	{
-// 		*line += 1;
-// 	}
-// 	*line += 1;
-// }
+int	check_open_close_parentheses(int number_of_open_parenthesis)
+{
+	if (number_of_open_parenthesis > 0)
+	{
+		// printf("minishell: syntax error near unexpected token '('\n");
+		write(1, "minishell: syntax error near unexpected token '('", 49); // '\n'
+		return (-1);
+	}
+	if (number_of_open_parenthesis < 0)
+	{
+		// printf("minishell: syntax error near unexpected token ')'\n");
+		write(1, "minishell: syntax error near unexpected token ')'", 49); // '\n'
+		return (-1);
+	}
+	return (0);
+}
 
-// static void	is_this_a_double_quotation_mark(char **line)
-// {
-// 	if (**line != '\"')
-// 		return ;
-// 	*line += 1;
-// 	while (**line != '\"')
-// 	{
-// 		*line += 1;
-// 	}
-// 	*line += 1;
-// }
+int	check_open_and_close(char *string)
+{
+	int	number_of_open_parenthesis;
 
-// static void	is_this_a_brace(char **line)
-// {
-// 	int	number_of_open_brackets;
+	number_of_open_parenthesis = 0;
+	while (*string != '\0')
+	{
+		if (*string == '\'')
+			string += skip_single_quotation_mark(string + 1) + 1;
+		if (*string == '\"')
+			string += skip_double_quotation_mark(string + 1) + 1;
+		if (*string == '(')
+			number_of_open_parenthesis += 1;
+		else if (*string == ')')
+			number_of_open_parenthesis -= 1;
+		string += 1;
+	}
+	if (check_open_close_parentheses(number_of_open_parenthesis) == -1)
+		return (-1);
+	return (0);
+}
 
-// 	if (**line != '(')
-// 		return ;
-// 	*line += 1;
-// 	number_of_open_brackets = 1;
-// 	while (number_of_open_brackets != 0) 
-// 	{
-// 		if (**line == '(')
-// 		{
-// 			number_of_open_brackets += 1;
-// 		}
-// 		if (**line == ')')
-// 		{
-// 			number_of_open_brackets -= 1;
-// 		}
-// 		*line += 1;
-// 	}
-// }
+int	check_parentheses_befor_operator(char *string)
+{
+	int	iscommand;
+	int	operator;
 
-int	check_syntax_of_parentheses(char *line)
+	iscommand = FALSE;
+	operator = EMPTY;
+	while (*string != '\0')
+	{
+		if (*string == '\'')
+			string += skip_single_quotation_mark(string + 1) + 1;
+		if (*string == '\"')
+			string += skip_double_quotation_mark(string + 1) + 1;
+		if (ft_isalnum(*string) == TRUE)
+			iscommand = TRUE;
+		if (*string == '(' && iscommand == TRUE)
+		{
+			// printf("minishell: syntax error near unexpected token '('\n");
+			write(1, "minishell: syntax error near unexpected token '('", 49); // '\n'
+			return (-1);
+		}
+		operator = is_this_operator(&string);
+		if (operator != EMPTY)
+			iscommand = FALSE;
+	}
+	return (0);
+}
+
+int	get_lenght(char *string)
+{
+	int	i;
+
+	i = 0;
+	while (ft_isalnum(string[i]) == TRUE)
+	{
+		i += 1;
+	}
+	return (i);
+}
+
+int	check_parentheses_all_t(char **string, int *operator)
+{
+	if (**string == '\'')
+		*string += skip_single_quotation_mark(*string + 1) + 1;
+	if (**string == '\"')
+		*string += skip_double_quotation_mark(*string + 1) + 1;
+	while (**string == '>' || **string == '<')
+	{
+		*string += 1;
+		while (ft_isspace(**string) == TRUE)
+			*string += 1;
+		while (ft_isalnum(**string) == TRUE)
+			*string += 1;
+		while (ft_isspace(**string) == TRUE)
+			*string += 1;
+	}
+	if (ft_isalnum(**string) == TRUE)
+	{
+		// printf("minishell: syntax error near unexpected token '('\n");
+		write(1, "minishell: syntax error near unexpected token '", 47); // '\n'
+		write(1, *string, get_lenght(*string));
+		write(1, "''", 1);
+		return (-1);
+	}
+	*operator = is_this_operator(string);
+	return (0);
+}
+
+int	check_parentheses_after_operator(char *string)
 {
 	int	operator;
-	int	was_operator;
 
 	operator = EMPTY;
-	while (*line != '\0')
+	while (*string != '\0')
 	{
-		was_operator = is_this_an_operator(&line);
-		if (was_operator != EMPTY)
-			operator = was_operator;
-		if (*line == '(' && operator == EMPTY)
+		while (*string != ')' && *string != '\0')
 		{
-			printf("minishell: syntax error near unexpected token '('\n");
-			return (-1);
+			if (*string == '\'')
+				string += skip_single_quotation_mark(string + 1) + 1;
+			if (*string == '\"')
+				string += skip_double_quotation_mark(string + 1) + 1;
+			string += 1;
+		}
+		if (*string == '\0')
+			return (0);
+		while (operator == EMPTY && *string != '\0')
+		{
+			if (check_parentheses_all_t(&string, &operator) == -1)
+			{
+				return (-1);
+			}
 		}
 	}
 	return (0);
 }
+
+int	check_syntax_of_parentheses(char *string)
+{
+	if (check_open_and_close(string) != 0)
+	{
+		return (-1);
+	}
+	if (check_parentheses_befor_operator(string) != 0)
+	{
+		return (-1);
+	}
+	if (check_parentheses_after_operator(string) != 0)
+	{
+		return (-1);
+	}
+	return (0);
+}
+

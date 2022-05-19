@@ -32,9 +32,9 @@ HEADER		=	libft/include/libft.h	\
 FUNCTIONS	=	$(addprefix parser/,				\
 				$(addprefix check_syntax/,			\
 					check_quotation_mark_syntax.c	\
+					check_syntax_of_operators.c		\
 					check_syntax_of_parentheses.c	\
-					check_syntax_of_the_operators.c	\
-					check_syntax_of_the_redirect.c	\
+					check_syntax_of_redirect.c		\
 					check_syntax.c					\
 					)								\
 				$(addprefix print/,					\

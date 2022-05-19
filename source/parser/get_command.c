@@ -6,44 +6,28 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/13 17:56:11 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 21:47:41 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static int	is_this_an_operator(char *line, char *string)
+static int	is_this_an_operator(char *line)
 {
 	if (ft_strncmp(line, "&&", 2) == 0)
 	{
-	printf("\x1b[32mThe %s operator:\x1b[0m &&\n", string);
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", line);
-	printf("+------------------------------------------------------------------------------+\n");
 		return (AND);
 	}
 	else if (ft_strncmp(line, "||", 2) == 0)
 	{
-	printf("\x1b[32mThe %s operator:\x1b[0m ||\n", string);
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", line);
-	printf("+------------------------------------------------------------------------------+\n");
 		return (OR);
 	}
 	else if (*line == '|')
 	{
-	printf("\x1b[32mThe %s operator:\x1b[0m |\n", string);
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", line);
-	printf("+------------------------------------------------------------------------------+\n");
 		return (PIPE);
 	}
 	else if (*line == ';')	
 	{
-	printf("\x1b[32mThe %s operator:\x1b[0m ;\n", string);
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", line);
-	printf("+------------------------------------------------------------------------------+\n");
 		return (SEQUENCE);
 	}
 	else
@@ -60,13 +44,9 @@ static int	get_prev_operator(char *line)
 	{
 		if (ft_isalnum(*line) == TRUE)
 		{
-			printf("\x1b[32mThe previous operator: \x1b[31mWas not found\x1b[0m\n");
-			printf("+------------------------------------------------------------------------------+\n");
-			printf("| %-77s|\n", line);
-			printf("+------------------------------------------------------------------------------+\n");
 			break ;
 		}
-		operator = is_this_an_operator(line, "previous");
+		operator = is_this_an_operator(line);
 		if (operator != EMPTY)
 		{
 			return (operator);
@@ -89,13 +69,9 @@ static int	get_next_operator(char *line)
 	{
 		if (ft_isalnum(line[i]) == TRUE)
 		{
-			printf("\x1b[32mThe next operator was not found:\x1b[0m\n");
-			printf("+------------------------------------------------------------------------------+\n");
-			printf("| %-77s|\n", line);
-			printf("+------------------------------------------------------------------------------+\n");
 			break ;
 		}
-		operator = is_this_an_operator(line + i, "next");
+		operator = is_this_an_operator(line + i);
 		if (operator != EMPTY)
 		{
 			return (operator);
@@ -134,10 +110,6 @@ char	*new_line_after_operator(char *line, t_cmd *commamd)
 		exit(1);
 	}
 	remove_insignificant_spases(&new);
-	printf("\x1b[32mNew line after operator:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", new);
-	printf("+------------------------------------------------------------------------------+\n");
 	return (new);
 }
 

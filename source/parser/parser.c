@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/18 19:31:17 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 21:41:28 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,12 @@ void	fill_the_current_level(char *line, t_tag *head, int number_of_commands)
 		if (iscommand(part) == TRUE)
 		{
 			remove_insignificant_spases(&part);
-			print_this_is_something(part, "Command");	// ban
 			head[i].type = COMMAND;
 			head[i].data = get_command(part);
 		}
 		else
 		{
 			remove_insignificant_spases(&part);
-			print_this_is_something(part, "Container");	// ban
 			head[i].type = CONTAINER;
 			head[i].data = get_container(part);
 		}
@@ -84,7 +82,6 @@ t_tag	*create_tree(char *line)
 
 	remove_insignificant_spases(&line);
 	remove_insignificant_brackets(&line);
-	print_result(line);	// ban
 	head = create_the_current_level(line);
 	free(line);
 	return (head);
@@ -105,6 +102,5 @@ t_tag	*parser(char *line)
 		return (NULL);
 	}
 	head = create_tree(line);
-	print_end(); // ban
 	return (head);
 }

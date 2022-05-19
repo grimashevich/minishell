@@ -6,56 +6,97 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:23 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/13 22:19:02 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 19:56:30 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-int	check_a_single_quotation_mark(char *line)
+int	skip_single_quotation_mark(char *string)
 {
-	int	number_of_single_quotation_mark;
+	int	i;
 
-	number_of_single_quotation_mark = 0;
-	while (*line !='\0')
+	i = 0;
+	while (string[i] != '\'' && string[i] != '\0')
 	{
-		if (*line == '\'')
-			number_of_single_quotation_mark += 1;
-		line += 1;
+		i += 1;
 	}
-	if (number_of_single_quotation_mark % 2 == 0)
-		return (0);
-	else
-		return (-1);
+	return (i);
 }
 
-int	check_a_double_quotation_mark(char *line)
+int	skip_double_quotation_mark(char *string)
 {
-	int	number_of_double_quotation_mark;
+	int	i;
 
-	number_of_double_quotation_mark = 0;
-	while (*line !='\0')
+	i = 0;
+	while (string[i] != '\"' && string[i] != '\0')
 	{
-		if (*line == '\"')
-			number_of_double_quotation_mark += 1;
-		line += 1;
+		i += 1;
 	}
-	if (number_of_double_quotation_mark % 2 == 0)
-		return (0);
-	else
-		return (-1);
+	return (i);
 }
 
-int	check_quotation_mark_syntax(char *line)
+int	check_single_quotation_mark(char *string)
 {
-	if (check_a_single_quotation_mark(line) != 0)
+	while (*string != '\0')
 	{
-		printf("bash: syntax error near unexpected token '\''\n");
+		if (*string == '\"')
+		{
+			string += 1;
+			string += skip_double_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+				return (0);
+		}
+		if (*string == '\'')
+		{
+			string += 1;
+
+			string += skip_single_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+				return (-1);
+		}
+		string += 1;
+	}
+	return (0);
+}
+
+int	check_double_quotation_mark(char *string)
+{
+	while (*string != '\0')
+	{
+		if (*string == '\"')
+		{
+			string += 1;
+			string += skip_double_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+				return (-1);
+		}
+		if (*string == '\'')
+		{
+			string += 1;
+			string += skip_single_quotation_mark(string);
+			if (*string == '\0' && *(string + 1) == '\0')
+			{
+				return (0);
+			}
+		}
+		string += 1;
+	}
+	return (0);
+}
+
+int	check_quotation_mark_syntax(char *string)
+{
+	if (check_single_quotation_mark(string) != 0)
+	{
+		// printf("minishell: syntax error near unexpected token '\''\n");
+		write(1, "minishell: syntax error near unexpected token '\''", 49);	// '\n'
 		return (-1);
 	}
-	if (check_a_double_quotation_mark(line) != 0)
+	if (check_double_quotation_mark(string) != 0)
 	{
-		printf("bash: syntax error near unexpected token '\"'\n");
+		// printf("minishell: syntax error near unexpected token '\"'\n");
+		write(1, "minishell: syntax error near unexpected token '\"'", 49); // '\n'
 		return (-1);
 	}
 	return (0);

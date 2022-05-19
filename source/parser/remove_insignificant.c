@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:39 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/18 19:17:15 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 21:45:28 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ static int	last_character(char *string)
 	{
 		return (-1);
 	}
-	print_last_character(string[ft_strlen(string) - 1]); // ban
 	return (string[ft_strlen(string) - 1]);
 }
 
@@ -49,7 +48,6 @@ void	remove_insignificant_spases(char **line)
 		exit(1);
 	}
 	free(temporary);
-	print_substr(*line, start, lenght); // ban
 }
 
 void	remove_insignificant_brackets(char **line)
@@ -66,6 +64,5 @@ void	remove_insignificant_brackets(char **line)
 		exit(1);
 	}
 	free(temporary);
-	print_remove_insignificant_brackets(*line);	// ban
 	remove_insignificant_spases(line);
 }

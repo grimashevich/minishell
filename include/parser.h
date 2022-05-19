@@ -26,4 +26,8 @@ void	print_last_character(int character);
 void	print_substr(char *line, int start, int lenght);
 void	print_remove_insignificant_brackets(char *line);
 
+int		is_this_operator(char **string);
+int		skip_single_quotation_mark(char *string);
+int		skip_double_quotation_mark(char *string);
+
 #endif // PARSR_H

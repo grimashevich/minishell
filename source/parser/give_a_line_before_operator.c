@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:33 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/18 18:57:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/19 21:42:10 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,27 +48,15 @@ static void	is_this_a_brace(char *line, int *i)
 	if (*line != '(')
 		return ;
 	j = 1;
-	printf("\x1b[33mThe opening bracket is found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", line);
-	printf("+------------------------------------------------------------------------------+\n");
 	number_of_open_brackets = 1;
 	while (number_of_open_brackets != 0) 
 	{
 		if (line[j] == '(')
 		{
-	printf("\x1b[33mThe opening bracket is found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", &line[j] - 1);
-	printf("+------------------------------------------------------------------------------+\n");
 			number_of_open_brackets += 1;
 		}
 		if (line[j] == ')')
 		{
-	printf("\x1b[33mThe closing bracket is found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", &line[j]);
-	printf("+------------------------------------------------------------------------------+\n");
 			number_of_open_brackets -= 1;
 		}
 		j += 1;
@@ -83,19 +71,11 @@ static void	is_this_a_single_quotation_mark(char *line, int *i)
 	if (*line != '\'')
 		return ;
 	j = 1;
-	printf("\x1b[33mThe opening single quotation mark is found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", line);
-	printf("+------------------------------------------------------------------------------+\n");
 	while (line[j] != '\'')
 	{
 		j += 1;
 	}
 	j += 1;
-	printf("\x1b[33mThe opening single quotation mark is found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", &line[j] - 1);
-	printf("+------------------------------------------------------------------------------+\n");
 	*i += j;
 }
 
@@ -106,19 +86,11 @@ static void	is_this_a_double_quotation_mark(char *line, int *i)
 	if (*line != '\"')
 		return ;
 	j = 1;
-	printf("\x1b[33mThe opening double quotation mark is found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", line);
-	printf("+------------------------------------------------------------------------------+\n");
 	while (line[j] != '\"')
 	{
 		j += 1;
 	}
 	j += 1;
-	printf("\x1b[33mThe opening double quotation mark is found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", &line[j] - 1);
-	printf("+------------------------------------------------------------------------------+\n");
 	*i += j;
 }
 
@@ -139,23 +111,11 @@ char	*give_a_line_before_operator(char **line, int *prev_op_int)
 		if (is_this_an_operator(temporary + i, &j) == TRUE)
 		{
 			temporary = ft_substr(temporary - *prev_op_int, 0, i + *prev_op_int + j);
-	printf("\x1b[33mStart:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77d|\n", -*prev_op_int);
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("\x1b[33mLenght:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77d|\n", i + *prev_op_int + j);
-	printf("+------------------------------------------------------------------------------+\n");
 			if (temporary == NULL)
 			{
 				perror("minishell");
 				exit(1);
 			}
-	printf("\x1b[33mGive a line before the operator:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", temporary);
-	printf("+------------------------------------------------------------------------------+\n");
 			i += j;
 			*line += i;
 			*prev_op_int = j;
@@ -171,23 +131,11 @@ char	*give_a_line_before_operator(char **line, int *prev_op_int)
 		}
 	}
 	temporary = ft_substr(temporary - *prev_op_int, 0, i + *prev_op_int);
-	printf("\x1b[33mStart:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77d|\n", -*prev_op_int);
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("\x1b[33mLenght:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77d|\n", i + *prev_op_int );
-	printf("+------------------------------------------------------------------------------+\n");
 	if (temporary == NULL)
 	{
 		perror("minishell");
 		exit(1);
 	}
-	printf("\x1b[33mGive a line before the operator: \x1b[31mOperator was not found:\x1b[0m\n");
-	printf("+------------------------------------------------------------------------------+\n");
-	printf("| %-77s|\n", temporary);
-	printf("+------------------------------------------------------------------------------+\n");
 	*line += i;
 	return (temporary);
 }
