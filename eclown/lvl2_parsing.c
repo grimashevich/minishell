@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/23 18:47:04 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 19:44:07 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -416,9 +416,10 @@ void	extract_wldcrd_rdrs(t_rdr_fls *rdr_start)
 		{
 			rdr_start->out_files = add_text_to_text(
 				rdr_start->out_files,
-				expand_wildcard_arr(splits[i++]),
+				expand_wildcard_arr(open_quotes(splits[i++])),
 				1);
 		}
+		//open_quotes_text(rdr_start->out_files);
 		decode_quotes_str(rdr_start->path);
 		rdr_start = rdr_start->next;
 	}
@@ -439,7 +440,7 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 		return ;
 	cmd_struct->redirects = extract_all_rdrs(&cmd);
 	extract_wldcrd_rdrs(cmd_struct->redirects);
-	// TODO пп. 1.1-1.3
+	// TODO пп. 1.1
 	
 	encode_quotes_str(cmd, " ");
 	tmp = ft_split(cmd, ' ');
@@ -450,10 +451,12 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 	}
 	free(cmd);
 	args = NULL;
+	decode_text(tmp);
 	while (*tmp)
-		args = add_text_to_text(args, expand_wildcard_arr(*(tmp++)), 1);
-	decode_text(args);
-	open_quotes_text(args);
+		args = add_text_to_text(args,
+			expand_wildcard_arr(open_quotes(*(tmp++))),
+			1);
+	//open_quotes_text(args);
 	cmd_struct->command = args;
 }
 
@@ -481,5 +484,9 @@ var1="*file0*"
 3.	echo "1 2 3" *.txt *.c *.h			($cFiles => *.c *.h)
 2.	echo "1_2_3" *.txt *.c *.h
  
+
+КАВЫЧКИ:
+Пользователь может ввести кавычки со строки - НАДО РАСКРЫТЬ
+Имя файла может содержать кавычки			- НЕ НАДО РАСКРЫВАТЬ
 
  */
