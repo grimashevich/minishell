@@ -1,26 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   ft_is_str_equal.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/16 18:12:54 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/12 19:02:06 by EClown           ###   ########.fr       */
+/*   Created: 2022/04/08 16:44:49 by EClown            #+#    #+#             */
+/*   Updated: 2022/05/06 18:07:52 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
-#include "ft_string.h"
+#include "eclown_utils.h"
 
-char	*ft_strtrim(char *string, char *set)
+/* 
+Compare 2 strings
+Return 1: if str1 == str2 (by symbols, not by memory)
+Return 0: if not. If any error has occured. If any str is NULL
+ */
+
+int	ft_is_str_equal(char *str1, char *str2)
 {
-	size_t	lenght;
-
-	while (*string && ft_strchr(set, *string))
-		string += 1;
-	lenght = ft_strlen(string);
-	while (lenght != 0 && ft_strchr(set, string[lenght]) != NULL)
-		lenght -= 1;
-	return (ft_substr(string, 0, lenght + 1));
+	int	result;
+	
+	if (str1 == NULL || str2 == NULL)
+		return (0);
+	result = ft_strcmp(str1, str2);
+	if (result == 0)
+		return (1);
+	return (0);
 }

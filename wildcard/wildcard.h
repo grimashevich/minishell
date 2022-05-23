@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/06 13:33:15 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/12 16:35:46 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 # include <readline/history.h>
 # include <signal.h>
 # include "../libft/libft.h"
-# include "utils/eclown_utils.h"
+# include "../eclown/utils/eclown_utils.h"
 
 typedef struct s_str
 {
@@ -41,7 +41,7 @@ typedef struct s_dict
 	char			*value;
 	struct s_str	*next;
 }	t_dict;
-
+/*
 enum Exec_condition
 {
 	ANY_CASE,
@@ -71,14 +71,7 @@ typedef struct s_cmd_cntr
 
 }	t_cmd_c;
 
-typedef struct s_ms
-{
-	char	**envp;
-	t_cmd	*commands;		// Указатель на начало списка текущих команд
-	t_str	*funcs;			// Список валидных функций minishell
-	t_dict	*vars;			// Список переменных типа  $var
-	int		exit_code;		// Exit code последней исполненной команды
-}   t_ms;
+*/
 
 typedef struct s_2int2
 {

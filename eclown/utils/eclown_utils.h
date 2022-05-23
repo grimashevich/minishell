@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtrim.c                                       :+:      :+:    :+:   */
+/*   eclown_utils.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/10/16 18:12:54 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/12 19:02:06 by EClown           ###   ########.fr       */
+/*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
+/*   Updated: 2022/05/06 18:57:07 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../libft.h"
-#include "ft_string.h"
+#ifndef ECLOWN_UTILS_H
+# define ECLOWN_UTILS_H
 
-char	*ft_strtrim(char *string, char *set)
-{
-	size_t	lenght;
+# include "../../minishell.h"
 
-	while (*string && ft_strchr(set, *string))
-		string += 1;
-	lenght = ft_strlen(string);
-	while (lenght != 0 && ft_strchr(set, string[lenght]) != NULL)
-		lenght -= 1;
-	return (ft_substr(string, 0, lenght + 1));
-}
+void	ft_free_text(char **text);
+int		ft_max_int(int n1, int n2);
+int		ft_min_int(int n1, int n2);
+char	**ft_split_new(char *str, char sep);
+char	*ft_strjoin3(char *str1, char *str2, char *str3);
+int		ft_is_str_equal(char *str1, char *str2);
+
+#endif  /* ECLOWN_UTILS_H */

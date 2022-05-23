@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/05 21:18:16 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/06 19:47:46 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,14 @@ enum e_boolean
 enum e_type
 {
 	COMMAND,
-	CONTAINER
+	CONTAINER,
+	END
 };
 
 typedef struct s_tag
 {
 	void			*data;		// Содержит указатель либо на команду, либо на контейнер
 	int				type;		// Содержит информацию о типе указатель
-	struct s_tag	*next;		// Содержит указатель на следующий элемент
 }	t_tag;
 
 typedef struct s_cont
