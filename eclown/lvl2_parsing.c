@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/23 19:44:07 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 20:23:42 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -410,6 +410,8 @@ void	extract_wldcrd_rdrs(t_rdr_fls *rdr_start)
 	{
 		encode_spcs_quotes_str(rdr_start->path);
 		splits = ft_split(rdr_start->path, ' ');
+		if (! splits)
+			return ;
 		decode_text(splits);
 		i = 0;
 		while (splits[i])
@@ -419,6 +421,7 @@ void	extract_wldcrd_rdrs(t_rdr_fls *rdr_start)
 				expand_wildcard_arr(open_quotes(splits[i++])),
 				1);
 		}
+		ft_free_text(splits);
 		//open_quotes_text(rdr_start->out_files);
 		decode_quotes_str(rdr_start->path);
 		rdr_start = rdr_start->next;
@@ -434,6 +437,8 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 	char	*cmd;
 	char	**args;
 	char	**tmp;
+	int		i;
+	char	*str_tmp;
 
 	cmd = ft_strdup(cmd_str);
 	if (! cmd)
@@ -452,16 +457,30 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 	free(cmd);
 	args = NULL;
 	decode_text(tmp);
-	while (*tmp)
-		args = add_text_to_text(args,
-			expand_wildcard_arr(open_quotes(*(tmp++))),
-			1);
+	i = 0;
+	while (tmp[i])
+	{
+		str_tmp = open_quotes(tmp[i++]);
+		args = add_text_to_text(args, expand_wildcard_arr(str_tmp),1);
+		//free(str_tmp);
+	}
+	ft_free_text(tmp);
 	//open_quotes_text(args);
 	cmd_struct->command = args;
 }
 
 
 
+void free_t_cmd (t_cmd *cmd)
+{
+	if (cmd == NULL)
+		return ;
+	if (cmd->command)
+		ft_free_text(cmd->command);
+	if (cmd->redirects)
+		free_rdr_list(cmd->redirects);
+	free(cmd);
+}
 
 /* 
 

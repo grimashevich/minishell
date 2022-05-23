@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/23 18:45:17 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 20:27:31 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ char **add_str_to_text(char *str, char **text);
 char	**expand_wildcard_arr(char *wildcard);
 char	**add_text_to_text(char **dest, char **added, int need_free);
 void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct);
+void free_t_cmd (t_cmd *cmd);
 
 void print_text(char **text)
 {
@@ -113,18 +114,20 @@ int	main(int argc, char **argv, char **envp)
 // TEST CASE lvl2_parsing
 
 
-	char *answer = malloc(256);
-	//char *answer = ft_strdup("\"echo\" 1 \"two words \"");
+	//char *answer = malloc(256);
+	char *answer = ft_strdup("<infile.txt echo 1 > outfile.txt 2> error.log *m* 3>*o*");
 
 	t_cmd *command = malloc(sizeof(t_cmd));
 
 	while (answer)
 	{
-		answer = readline("Enter str: ");
+		//answer = readline("Enter str: ");
 		add_history(answer);
 		lvl2_parsing(answer, command);
 		print_tcmd(command);
 		free(answer);
+		free_t_cmd(command);
+		return (0);
 	}
 
 /* // TEST CASE  char	**expand_wildcard_arr(char *wildcard)

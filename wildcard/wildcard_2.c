@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:36:31 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/23 17:20:22 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 20:29:45 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -376,6 +376,8 @@ char	**expand_wildcard_arr(char *wildcard)
 		return (NULL);
 	hide_hidden_fles(files, wildcard);	
 	result_files = apply_wildcard(wildcard, files);
+	ft_free_text(files);
+	free(wildcard);
 	if (!result_files || !result_files[0])
 		return (add_str_to_text(wildcard, NULL));
 	return (result_files);
