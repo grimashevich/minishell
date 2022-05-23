@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/16 19:54:04 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 18:26:06 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ typedef struct s_rdr_fls
 	int					type;
 	int					fd;
 	char				*path;
+	char				**out_files;
 	struct s_rdr_fls	*next;
 } t_rdr_fls;
 

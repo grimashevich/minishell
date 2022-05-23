@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:36:31 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/19 19:52:14 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 17:20:22 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,6 +282,8 @@ int text_len(char **text)
 {
 	int	result;
 
+	if (text == NULL)
+		return (0);
 	result = 0;
 	while (*(text++))
 		result++;
@@ -322,6 +324,7 @@ char	**add_text_to_text(char **dest, char **added, int need_free)
 	int		total_len;
 	char	**new_text;
 	int		i;
+	int		j;
 
 	if (dest == NULL && added == NULL)
 		return (NULL);
@@ -330,14 +333,19 @@ char	**add_text_to_text(char **dest, char **added, int need_free)
 	if (! new_text)
 		return (NULL);
 	i = 0;
-	while (*dest)
-		new_text[i++] = *(dest++);
-	while (*added)
-		new_text[i++] = *(added++);
+	while (dest && dest[i])
+	{	
+		new_text[i] = dest[i];
+		i++;
+	}
+	j = 0;
+	while (added[j])
+		new_text[i++] = added[j++];
 	new_text[i] = NULL;
 	if (need_free)
 	{
-		free(dest);
+		if (dest != NULL)
+			free(dest);
 		free(added);
 	}
 	return (new_text);
@@ -356,6 +364,8 @@ char	**expand_wildcard_arr(char *wildcard)
 		return (NULL);
 	if (*wildcard == 0)
 		return (NULL);
+	if (! strchr(wildcard, '*'))
+		return (add_str_to_text(wildcard, NULL));
 	cwd = malloc(MAX_PATH_LEN);
 	if (! cwd)
 		return (NULL);
@@ -367,7 +377,7 @@ char	**expand_wildcard_arr(char *wildcard)
 	hide_hidden_fles(files, wildcard);	
 	result_files = apply_wildcard(wildcard, files);
 	if (!result_files || !result_files[0])
-		return (add_str_to_text(ft_strjoin3("'", wildcard, "'"), NULL));
+		return (add_str_to_text(wildcard, NULL));
 	return (result_files);
 }
 

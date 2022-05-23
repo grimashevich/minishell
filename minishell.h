@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/16 19:53:03 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 15:53:36 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,10 @@ typedef struct s_cmd
 	char	*infile;			// Путь до файла						|
 	char	*outfile;			// Путь до файла						|
 	int		append_outfile;		// Создать или добававить в файл		|	отдельная структура???
-	int		here_doc;			// TODO добавлено eClown
 	int		isheredoc;			// Создать временый файл				|
 	char	**command;			// Команда с флагами
 	t_cont	*container;			// Проверка на глобальные оператоы перенаправления 
-	t_rdr_fls		*redirects;	// Содержит относвязный список редиректов //TODO добавлено eClown
+	t_rdr_fls		*redirects;	// Содержит односвязный список редиректов //TODO добавлено eClown
 }	t_cmd;
 
 typedef struct s_ms

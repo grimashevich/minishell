@@ -6,13 +6,16 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/19 21:11:09 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 18:47:04 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minishell.h"
 
-int	is_char_in_quotes(char *str, char *c);
+int		is_char_in_quotes(char *str, char *c);
+void	encode_quotes_str(char *str, char *char2encode);
+char	**add_text_to_text(char **dest, char **added, int need_free);
+char	**expand_wildcard_arr(char *wildcard);
 
 int str_is_numeric(char *str)
 {
@@ -36,6 +39,7 @@ t_rdr_fls	*create_rdr_fls(char *path, int fd)
 	if (! result)
 		return (NULL);
 	result->path = path;
+	result->out_files =  NULL;
 	if (! result->path)
 	{
 		free(result);
@@ -67,6 +71,8 @@ void free_rdr(t_rdr_fls *item)
 {
 	if (item->path)
 		free(item->path);
+	if (item->out_files)
+		ft_free_text(item->out_files);
 	free(item);
 }
 
@@ -112,7 +118,7 @@ int is_char_in_str(char c, char *str)
 {
 	while (*str)
 	{
-		if (*str == c)
+		if (*(str++) == c)
 			return (1);
 	}
 	return (0);
@@ -396,6 +402,28 @@ void open_quotes_text(char **text)
 	}
 }
 
+void	extract_wldcrd_rdrs(t_rdr_fls *rdr_start)
+{
+	char		**splits;
+	int			i;
+	while (rdr_start)
+	{
+		encode_spcs_quotes_str(rdr_start->path);
+		splits = ft_split(rdr_start->path, ' ');
+		decode_text(splits);
+		i = 0;
+		while (splits[i])
+		{
+			rdr_start->out_files = add_text_to_text(
+				rdr_start->out_files,
+				expand_wildcard_arr(splits[i++]),
+				1);
+		}
+		decode_quotes_str(rdr_start->path);
+		rdr_start = rdr_start->next;
+	}
+}
+
 /*
 INPUT:
 malloced t_cmd *cmd_struct
@@ -404,23 +432,29 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 {
 	char	*cmd;
 	char	**args;
+	char	**tmp;
 
 	cmd = ft_strdup(cmd_str);
 	if (! cmd)
 		return ;
-
-	//TODO  работа с переменными
-	
 	cmd_struct->redirects = extract_all_rdrs(&cmd);
-	args = ft_split(cmd, ' ');
-	if (args == NULL)
+	extract_wldcrd_rdrs(cmd_struct->redirects);
+	// TODO пп. 1.1-1.3
+	
+	encode_quotes_str(cmd, " ");
+	tmp = ft_split(cmd, ' ');
+	if (tmp == NULL)
 	{
 		free_rdr_list(cmd_struct->redirects);
 		return ;
 	}
 	free(cmd);
+	args = NULL;
+	while (*tmp)
+		args = add_text_to_text(args, expand_wildcard_arr(*(tmp++)), 1);
 	decode_text(args);
 	open_quotes_text(args);
+	cmd_struct->command = args;
 }
 
 
@@ -428,23 +462,24 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 
 /* 
 
-//TODO Раскрывать шаблоны в редиректах
-
 1. Извлекаем редиректы (переменные и файлы не могут содержать непосредственно редиректы)
+	1.1. В именах файлов редиректов расркрываем переменные
+	1.2. В именах файлов редиректов расркрываем * (применяем как к строке, где пробелы - разделители аргументов)
+	1.3. В именах файлов редиректов расркрываем кавычки
 2. Раскрываем переменные
+3. Минусим все пробелы, находящиеся внутри кавычек
+5. Сплитим команду на бинарник и агргумены
 3. Раскрываем *
-4. Минусим все пробелы, находящиеся внутри кавычек
-5. Бъем команду на бинарник и агргумены сплитом
 6. Возвращаем пробелы обратно
 7. Раскрываем кавычки
 
 files = file0 file1 file2 file08
 var1="*file0*"
-0. < infile.txt echo "1 2 3" * > outfile.txt 
-1.  echo "1 2 3" *
 
+0. < infile.txt echo "THE FILES:" *.txt $cFiles > outfile.txt 
+1.  echo "1 2 3" *.txt $cFiles
+3.	echo "1 2 3" *.txt *.c *.h			($cFiles => *.c *.h)
+2.	echo "1_2_3" *.txt *.c *.h
  
- 
- '     '  \' '    file1   ' '   file2 '  \' '    '
- + 'file1 'file2'\'''
+
  */
