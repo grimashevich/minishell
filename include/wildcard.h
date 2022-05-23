@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/12 16:35:46 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/23 21:17:52 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
-# include "../libft/libft.h"
-# include "../eclown/utils/eclown_utils.h"
+# include "libft.h"
+# include "eclown_utils.h"
 
 typedef struct s_str
 {

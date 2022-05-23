@@ -1,8 +1,18 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
+#    Updated: 2022/05/23 21:21:08 by EClown           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 SHELL		=	/bin/sh
 
 NAME		=	minishell
-
-LIBPARSER	=	library/libparser.a
 
 LIBFT		=	libft/library/libft.a
 
@@ -13,7 +23,15 @@ CFLAGS		=	-Wall -Wextra -Werror -g
 LDFLAGS 	=	-lreadline
 RM			=	rm -f
 
-SOURCE		=	main.c															\
+HEADER		=	$(addprefix include/,			\
+				cd_function.h					\
+				eclown_utils.h					\
+				minishell.h						\
+				parser.h						\
+				wildcard.h						\
+				)
+
+FUNCTIONS	=	main.c															\
 				$(wildcard eclown/*.c)											\
 				$(wildcard eclown/utils/*.c)									\
 				$(wildcard utils/*.c)											\
@@ -55,10 +73,6 @@ all			:	libft $(FOLDER) $(NAME)
 
 $(NAME)		:	$(OBJECT) 
 				$(CC) $(LDFLAGS) $(CFLAGS) $(OBJECT) $(LIBFT) -o $(NAME)
-
-$(LIBPARSER):	$(OBJECT) $(LIBFT)
-				$(CP) $(LIBFT) $(LIBPARSER)
-				$(AR) $(ARFLAGS) $(LIBPARSER) $?
 
 $(FOLDER)	:
 				$(MKDIR) $@

@@ -3,22 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/13 23:01:39 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/23 21:17:01 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include "wildcard.h"
+# include "cd_function.h"
+# include "lvl2_parsing.h"
+# include "envp.h"
+
 # include "libft.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
-
-# define PARSER_DEBAG	1
+# include <string.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <errno.h>
 
 enum e_type
 {
@@ -34,6 +41,14 @@ enum e_operator
 	OR,
 	PIPE,
 	SEQUENCE
+};
+
+enum Rdr_type
+{
+	WRITE,
+	APPEND,
+	READ,
+	HERE_DOC
 };
 
 typedef struct s_tag
@@ -59,12 +74,9 @@ typedef struct s_cmd
 {
 	int		prev_operator;		// Локальный оператор
 	int		next_operator;		// Локальный оператор
-	char	*infile;			// Путь до файла						|
-	char	*outfile;			// Путь до файла						|
-	int		append_outfile;		// Создать или добававить в файл		|	отдельная структура???
-	int		isheredoc;			// Создать временый файл				|
 	char	**command;			// Команда с флагами
 	t_cont	*container;			// Проверка на глобальные оператоы перенаправления 
+	t_rdr_fls		*redirects;	// Содержит односвязный список редиректов //TODO добавлено eClown
 }	t_cmd;
 
 typedef struct s_pipe
@@ -73,28 +85,6 @@ typedef struct s_pipe
 	int current[2];				// Веременый текущий канал
 }	t_pipe;
 
-// ban
-// ban
-// ban
-// ban
-// ban	- это значит: что это надо удалить!!!!!!!! 	// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-// ban
-
 typedef struct s_ms
 {
 	char	**envp;				// Список переменных окружения
@@ -102,11 +92,16 @@ typedef struct s_ms
 	// t_tag	*commands;			// Указатель на начало списка текущих команд
 }   t_ms;
 
-t_ms	g_ms;
+typedef struct s_rdr_fls
+{
+	int					type;
+	int					fd;
+	char				*path;
+	char				**out_files;
+	struct s_rdr_fls	*next;
+} t_rdr_fls;
 
-t_tag	*tag_init(void *data, int type);	// struct
-t_tag	*tag_last(t_tag *head);	// struct
-t_tag	*tag_add_back(t_tag **head, t_tag *new);	// struct
+t_ms	g_ms;
 
 #endif // MINISHELL_H
 
