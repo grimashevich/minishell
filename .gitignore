@@ -51,6 +51,18 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# Visual Studio Code
 .vscode
+
+# CLion
+.idea
+
+# Other
+.DS_Store
+library
+object
 minishell
 .DS_Store
+a*test
+abtest
+te*st

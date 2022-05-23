@@ -3,123 +3,162 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+         #
+#    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/10 22:56:37 by ccamie            #+#    #+#              #
-#    Updated: 2022/05/05 21:00:10 by EClown           ###   ########.fr        #
+#    Updated: 2022/05/11 22:04:29 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		=	libft.a
+SHELL		=	/bin/sh
 
-HEADER		=	libft.h
+NAME		=	library/libft.a
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror
-# CFLAGS		+=	-fsanitize=address
-# CFLAGS		+=	-fsanitize=undefined
+
+CPPFLAGS	=	-Wall -Wextra -Werror	\
+				-I include
+
 AR			=	ar
 ARFLAGS		=	crs
+
+MKDIR		=	mkdir -p
+RMDIR		=	rm -rf
 RM			=	rm -f
 
-SOURCE		=	ctype/ft_digittoint.c	\
-				ctype/ft_isalnum.c		\
-				ctype/ft_isalpha.c		\
-				ctype/ft_isascii.c		\
-				ctype/ft_isblank.c		\
-				ctype/ft_iscntrl.c		\
-				ctype/ft_isdigit.c		\
-				ctype/ft_isgraph.c		\
-				ctype/ft_islower.c		\
-				ctype/ft_isprint.c		\
-				ctype/ft_ispunct.c		\
-				ctype/ft_isspace.c		\
-				ctype/ft_isupper.c		\
-				ctype/ft_isxdigit.c		\
-				ctype/ft_toascii.c		\
-				ctype/ft_toupper.c		\
-				ctype/ft_tolower.c		\
-				list/ft_list_add_back.c			\
-				list/ft_list_add_front.c		\
-				list/ft_list_count.c			\
-				list/ft_list_iter.c				\
-				list/ft_list_last.c				\
-				list/ft_list_map.c				\
-				list/ft_list_new.c				\
-				list/ft_list_prev.c				\
-				list/ft_list_print.c			\
-				list/ft_list_remove_all.c		\
-				list/ft_list_remove_current.c	\
-				list/ft_list_remove.c			\
-				list/ft_list_to_strings.c		\
-				list/ft_strings_to_list.c		\
-				memory/ft_calloc.c		\
-				memory/ft_memccpy.c		\
-				memory/ft_memchr.c		\
-				memory/ft_memcmp.c		\
-				memory/ft_memcpy.c		\
-				memory/ft_memmove.c		\
-				memory/ft_memset.c		\
-				string/ft_atoi.c			\
-				string/ft_atol.c			\
-				string/ft_itoa.c			\
-				string/ft_putchar_fd.c		\
-				string/ft_putendl_fd.c		\
-				string/ft_putnum_fd.c		\
-				string/ft_putstr_fd.c		\
-				string/ft_split.c			\
-				string/ft_strchr.c			\
-				string/ft_strcmp.c			\
-				string/ft_strcpy.c			\
-				string/ft_strdup.c			\
-				string/ft_strend.c			\
-				string/ft_striteri.c		\
-				string/ft_strjoin.c			\
-				string/ft_strlcat.c			\
-				string/ft_strlcpy.c			\
-				string/ft_strlen.c			\
-				string/ft_strmapi.c			\
-				string/ft_strncmp.c			\
-				string/ft_strnstr.c			\
-				string/ft_strrchr.c			\
-				string/ft_strstr.c			\
-				string/ft_strtrim.c			\
-				string/ft_substr.c			\
-				strings/ft_string_to_strings.c			\
-				strings/ft_strings_append.c				\
-				strings/ft_strings_count.c				\
-				strings/ft_strings_dup.c				\
-				strings/ft_strings_get_index.c			\
-				strings/ft_strings_get_string.c			\
-				strings/ft_strings_insert.c				\
-				strings/ft_strings_map.c				\
-				strings/ft_strings_print.c				\
-				strings/ft_strings_remove_all.c			\
-				strings/ft_strings_remove_by_part.c		\
-				strings/ft_strings_remove_first.c		\
-				strings/ft_strings_remove_last.c		\
-				strings/ft_strings_remove.c				\
-				strings/ft_strings_replace_by_part.c	\
-				strings/ft_strings_replace.c			\
-				strings/ft_strings_to_string.c			\
+HEADER		=	$(addprefix include/,	\
+				ft_ctype.h				\
+				ft_list.h				\
+				ft_memory.h				\
+				ft_string.h				\
+				ft_strings.h			\
+				libft.h					\
+				)
 
-OBJECT		=	$(SOURCE:.c=.o)
+FUNCTIONS	=	$(addprefix ctype/,			\
+				ft_digittoint.c				\
+				ft_isalnum.c				\
+				ft_isalpha.c				\
+				ft_isascii.c				\
+				ft_isblank.c				\
+				ft_iscntrl.c				\
+				ft_isdigit.c				\
+				ft_isgraph.c				\
+				ft_islower.c				\
+				ft_isprint.c				\
+				ft_ispunct.c				\
+				ft_isspace.c				\
+				ft_isupper.c				\
+				ft_isxdigit.c				\
+				ft_toascii.c				\
+				ft_toupper.c				\
+				ft_tolower.c				\
+				)
+
+FUNCTIONS	+=	$(addprefix list/,			\
+				ft_list_append_front.c		\
+				ft_list_append.c			\
+				ft_list_count.c				\
+				ft_list_init.c				\
+				ft_list_iter.c				\
+				ft_list_last.c				\
+				ft_list_map.c				\
+				ft_list_prev.c				\
+				ft_list_print.c				\
+				ft_list_remove_all.c		\
+				ft_list_remove_first.c		\
+				ft_list_remove_from_list.c	\
+				ft_list_remove_last.c		\
+				ft_list_remove.c			\
+				ft_list_to_strings.c		\
+				ft_strings_to_list.c		\
+				)
+
+FUNCTIONS	+=	$(addprefix memory/,		\
+				ft_calloc.c					\
+				ft_memccpy.c				\
+				ft_memchr.c					\
+				ft_memcmp.c					\
+				ft_memcpy.c					\
+				ft_memmove.c				\
+				ft_memset.c					\
+				)
+
+FUNCTIONS	+=	$(addprefix string/,		\
+				ft_atoi.c					\
+				ft_atol.c					\
+				ft_itoa.c					\
+				ft_putchar_fd.c				\
+				ft_putendl_fd.c				\
+				ft_putnum_fd.c				\
+				ft_putstr_fd.c				\
+				ft_split.c					\
+				ft_strchr.c					\
+				ft_strcmp.c					\
+				ft_strcpy.c					\
+				ft_strdup.c					\
+				ft_strend.c					\
+				ft_striteri.c				\
+				ft_strjoin.c				\
+				ft_strlcat.c				\
+				ft_strlcpy.c				\
+				ft_strlen.c					\
+				ft_strmapi.c				\
+				ft_strncmp.c				\
+				ft_strnstr.c				\
+				ft_strrchr.c				\
+				ft_strstr.c					\
+				ft_strtrim.c				\
+				ft_substr.c					\
+				)
+
+FUNCTIONS	+=	$(addprefix strings/,		\
+				ft_string_to_strings.c		\
+				ft_strings_append.c			\
+				ft_strings_count.c			\
+				ft_strings_dup.c			\
+				ft_strings_get_index.c		\
+				ft_strings_get_string.c		\
+				ft_strings_insert.c			\
+				ft_strings_map.c			\
+				ft_strings_print.c			\
+				ft_strings_remove_all.c		\
+				ft_strings_remove_by_part.c	\
+				ft_strings_remove_first.c	\
+				ft_strings_remove_last.c	\
+				ft_strings_remove.c			\
+				ft_strings_replace_by_part.c\
+				ft_strings_replace.c		\
+				ft_strings_to_string.c		\
+				)
+
+SOURCE		=	$(addprefix source/, $(FUNCTIONS))
+OBJECT		=	$(addprefix object/, $(FUNCTIONS:.c=.o))
+FOLDER		=	$(sort $(dir object/ $(OBJECT) $(NAME)))
+
+.SUFFIXES	:
+.SUFFIXES	:	.c .o
 
 .PHONY		:	all clean fclean re
 
-all			:	$(NAME)
+all			:	$(FOLDER) $(NAME)
 
-$(NAME)		:	$(OBJECT) 
+$(NAME)		:	$(OBJECT)
 				$(AR) $(ARFLAGS) $(NAME) $?
 
-%.o			:	%.c
-				$(CC) $(CFLAGS) -c $< -o $@
+$(FOLDER)	:
+				$(MKDIR) $@
+
+object/%.o	:	source/%.c $(HEADER)
+				$(CC) $(CPPFLAGS) -c $< -o $@
 
 clean		:
 				$(RM) $(OBJECT)
+				$(RMDIR) $(FOLDER)
 
 fclean		:
 				$(RM) $(OBJECT)
 				$(RM) $(NAME)
+				$(RMDIR) $(FOLDER)
 
 re			:	fclean all

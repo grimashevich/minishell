@@ -6,14 +6,14 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:17:30 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/06 13:35:54 by EClown           ###   ########.fr       */
+/*   Updated: 2022/04/10 23:49:31 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <dirent.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include "../minishell.h"
+#include "minishell.h"
 
 DIR				*dir;
 struct dirent	*dp;

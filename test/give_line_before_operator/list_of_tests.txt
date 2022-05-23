@@ -1,0 +1,14 @@
+TEST:01:LINE:	echo1	&&	echo2	:EXPECTED:	echo1	&&.&&	echo2	
+TEST:02:LINE:	echo1	&&	(echo2	||	echo3)	:EXPECTED:	echo1	&&.&&	(echo2	||	echo3)	
+TEST:03:LINE:	echo1	&&	echo2	||	echo3	:EXPECTED:	echo1	&&.&&	echo2	||.||	echo3	
+TEST:04:LINE:	echo1	:EXPECTED:	echo1	
+TEST:05:LINE:echo1&&echo2:EXPECTED:echo1&&.&&echo2
+TEST:06:LINE:echo1&&(echo2||echo3):EXPECTED:echo1&&.&&(echo2||echo3)
+TEST:07:LINE:echo1&&echo2||echo3:EXPECTED:echo1&&.&&echo2||.||echo3
+TEST:08:LINE:echo1:EXPECTED:echo1
+TEST:09:LINE:((echo	1	&&	echo	2	'	&&	echo	4'	)	||	echo	5	|	echo	'6	|	echo	7	)')	&&	echo	2	:EXPECTED:((echo	1	&&	echo	2	'	&&	echo	4'	)	||	echo	5	|	echo	'6	|	echo	7	)')	&&.&&	echo	2	
+TEST:10:LINE:<	file	echo	1	&&	echo	3	>	file	<	file:EXPECTED:<	file	echo	1	&&.&&	echo	3	>	file	<	file
+TEST:11:LINE:<	file	echo	1	2	3	>	file:EXPECTED:<	file	echo	1	2	3	>	file
+TEST:12:LINE:"echo	1	&&	echo	2":EXPECTED:"echo	1	&&	echo	2"
+TEST:13:LINE:123:EXPECTED:123
+TEST:14:LINE:123&&123&&123&&123:EXPECTED:123&&.&&123&&.&&123&&.&&123

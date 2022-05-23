@@ -1,9 +1,10 @@
+SHELL		=	/bin/sh
 
 NAME		=	minishell
 
-HEADER		=	libft.h
+LIBPARSER	=	library/libparser.a
 
-LIBFT		=	libft/libft.a
+LIBFT		=	libft/library/libft.a
 
 CC			=	cc
 CFLAGS		=	-Wall -Wextra -Werror -g
@@ -20,29 +21,64 @@ SOURCE		=	main.c															\
 				$(wildcard wildcard/utils/*.c)									\
 				$(wildcard envp/*.c)									\
 
-OBJECT		=	$(SOURCE:.c=.o)
+FUNCTIONS	=	$(addprefix parser/,				\
+				$(addprefix check_syntax/,			\
+					check_quotation_mark_syntax.c	\
+					check_syntax_of_operators.c		\
+					check_syntax_of_parentheses.c	\
+					check_syntax_of_redirect.c		\
+					check_syntax.c					\
+					)								\
+				$(addprefix print/,					\
+					print_diagram.c					\
+					print_tree.c					\
+					)								\
+				count_the_number_of_operators.c		\
+				get_command.c						\
+				get_container.c						\
+				give_a_line_before_operator.c		\
+				parser.c							\
+				remove_insignificant.c				\
+				just_print.c						\
+				)
+
+SOURCE		=	$(addprefix source/, $(FUNCTIONS))
+OBJECT		=	$(addprefix object/, $(FUNCTIONS:.c=.o))
+FOLDER		=	$(sort $(dir object/ $(OBJECT) $(LIBPARSER)))
+
+.SUFFIXES	:
+.SUFFIXES	:	.c .o
 
 .PHONY		:	all clean fclean re libft
 
-all			:	libft $(NAME)
+all			:	libft $(FOLDER) $(NAME)
 
 $(NAME)		:	$(OBJECT) 
 				$(CC) $(LDFLAGS) $(CFLAGS) $(OBJECT) $(LIBFT) -o $(NAME)
 
-%.o			:	%.c $(LIBFT)
-				$(CC) $(CFLAGS) -c $< -o $@
+$(LIBPARSER):	$(OBJECT) $(LIBFT)
+				$(CP) $(LIBFT) $(LIBPARSER)
+				$(AR) $(ARFLAGS) $(LIBPARSER) $?
+
+$(FOLDER)	:
+				$(MKDIR) $@
+
+object/%.o	:	source/%.c $(HEADER)
+				$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
 
 libft		:
 				make -C libft
 
 clean		:
 				$(RM) $(OBJECT)
-				make -C libft clean
+				$(RMDIR) $(FOLDER)
+				make clean -C libft
 
 fclean		:
 				$(RM) $(OBJECT)
 				$(RM) $(NAME)
-				make -C fclean
+				$(RMDIR) $(FOLDER)
+				make fclean -C libft
 
 re			:	fclean all
 
