@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:36:31 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/23 20:29:45 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/24 14:41:01 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,9 +377,9 @@ char	**expand_wildcard_arr(char *wildcard)
 	hide_hidden_fles(files, wildcard);	
 	result_files = apply_wildcard(wildcard, files);
 	ft_free_text(files);
-	free(wildcard);
 	if (!result_files || !result_files[0])
 		return (add_str_to_text(wildcard, NULL));
+	free(wildcard);
 	return (result_files);
 }
 

@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/24 11:12:00 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/24 18:11:53 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,9 +17,10 @@ NAME		=	minishell
 LIBFT		=	libft/library/libft.a
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -g	\
+CPPFLAGS	=	-Wall -Wextra -Werror -g	\
 				-I libft/include			\
 				-I include
+
 # CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 LDFLAGS 	=	-lreadline
@@ -28,7 +29,7 @@ RM			=	rm -f
 MKDIR		=	mkdir -p
 RMDIR		=	rm -rf
 
-HEADER		=	libft/inlude/libft.h			\
+HEADER		=	libft/include/libft.h			\
 				$(addprefix include/,			\
 				cd_function.h					\
 				eclown_utils.h					\
@@ -41,7 +42,7 @@ FUNCTIONS	=	$(addprefix eclown/,				\
 				$(addprefix utils/,					\
 					ft_free_text.c					\
 					ft_is_str_equal.c				\
-					ft_max_mib_int.c				\
+					ft_max_min_int.c				\
 					ft_split_new.c					\
 					ft_strjoin3.c					\
 					)								\
@@ -49,9 +50,27 @@ FUNCTIONS	=	$(addprefix eclown/,				\
 				lvl2_parsing.c						\
 				)
 
+FUNCTIONS	+=	$(addprefix envp/,					\
+				envp_append.c						\
+				envp_count.c						\
+				envp_get_index.c					\
+				envp_get_value.c					\
+				envp_init.c							\
+				envp_insert.c						\
+				envp_print.c						\
+				envp_remove_all.c					\
+				envp_remove_by_index.c				\
+				envp_remove_first.c					\
+				envp_remove_last.c					\
+				envp_remove.c						\
+				envp_replace_by_index.c				\
+				envp_replace.c						\
+				envp_status.c						\
+				)
 
 FUNCTIONS	+=	$(addprefix parser/,				\
 				$(addprefix check_syntax/,			\
+					check_syntax_all.c				\
 					check_quotation_mark_syntax.c	\
 					check_syntax_of_operators.c		\
 					check_syntax_of_parentheses.c	\
@@ -83,6 +102,7 @@ FUNCTIONS	+=	$(addprefix wildcard/,				\
 				wildcard_2.c						\
 				)
 
+FUNCTIONS	+=	main.c
 
 SOURCE		=	$(addprefix source/, $(FUNCTIONS))
 OBJECT		=	$(addprefix object/, $(FUNCTIONS:.c=.o))
@@ -102,7 +122,7 @@ $(FOLDER)	:
 				$(MKDIR) $@
 
 object/%.o	:	source/%.c $(HEADER)
-				$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+				$(CC) $(CPPFLAGS) -c $< -o $@
 
 libft		:
 				make -C libft

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/23 21:17:01 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/24 12:21:30 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 
 # include "wildcard.h"
 # include "cd_function.h"
-# include "lvl2_parsing.h"
 # include "envp.h"
-
 # include "libft.h"
 # include <stdio.h>
 # include <unistd.h>
@@ -51,6 +49,15 @@ enum Rdr_type
 	HERE_DOC
 };
 
+typedef struct s_rdr_fls
+{
+	int					type;
+	int					fd;
+	char				*path;
+	char				**out_files;
+	struct s_rdr_fls	*next;
+} t_rdr_fls;
+
 typedef struct s_tag
 {
 	int		type;		// Содержит информацию о типе указатель
@@ -72,10 +79,10 @@ typedef struct s_cont
 
 typedef struct s_cmd
 {
-	int		prev_operator;		// Локальный оператор
-	int		next_operator;		// Локальный оператор
-	char	**command;			// Команда с флагами
-	t_cont	*container;			// Проверка на глобальные оператоы перенаправления 
+	int				prev_operator;		// Локальный оператор
+	int				next_operator;		// Локальный оператор
+	char			**command;			// Команда с флагами
+	t_cont			*container;			// Проверка на глобальные оператоы перенаправления 
 	t_rdr_fls		*redirects;	// Содержит односвязный список редиректов //TODO добавлено eClown
 }	t_cmd;
 
@@ -88,20 +95,14 @@ typedef struct s_pipe
 typedef struct s_ms
 {
 	char	**envp;				// Список переменных окружения
-	int		errno;				// Exit code последней исполненной команды
+	int		exit_code;				// Exit code последней исполненной команды
 	// t_tag	*commands;			// Указатель на начало списка текущих команд
 }   t_ms;
 
-typedef struct s_rdr_fls
-{
-	int					type;
-	int					fd;
-	char				*path;
-	char				**out_files;
-	struct s_rdr_fls	*next;
-} t_rdr_fls;
-
 t_ms	g_ms;
+
+void ms_error(char *func_name, char *str_error, int errn);
+t_tag	*parser(char *line);
 
 #endif // MINISHELL_H
 

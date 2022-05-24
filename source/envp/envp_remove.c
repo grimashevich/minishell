@@ -1,23 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   envp_remove.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:24 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 18:12:19 by ccamie           ###   ########.fr       */
+/*   Created: 2022/04/04 03:40:21 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/24 11:48:39 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
+#include "envp.h"
 
-//		
-char	*ft_strchr(char *string, char character)
+void	envp_remove(char *variable)
 {
-	while (*string != character && *string != '\0')
-		string += 1;
-	if (*string == character)
-		return ((char *)string);
-	return (NULL);
+	char	*postfix;
+
+	postfix = ft_strjoin(variable, "=");
+	if (postfix == NULL)
+	{
+		perror(NULL);
+		exit(1);
+	}
+	ft_strings_remove_by_part(&g_ms.envp, postfix);
+	envp_status();
+	free(postfix);
 }

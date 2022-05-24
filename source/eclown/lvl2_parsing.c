@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   lvl2_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/23 20:23:42 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/24 11:59:02 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../minishell.h"
+#include "minishell.h"
 
 int		is_char_in_quotes(char *str, char *c);
 void	encode_quotes_str(char *str, char *char2encode);

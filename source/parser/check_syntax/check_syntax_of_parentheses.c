@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 22:13:34 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 12:02:27 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	is_this_operator(char **string)
 	}
 }
 
-int	check_open_close_parentheses(int number_of_open_parenthesis)
+static int	check_open_close_parentheses(int number_of_open_parenthesis)
 {
 	if (number_of_open_parenthesis > 0)
 	{
@@ -56,7 +56,7 @@ int	check_open_close_parentheses(int number_of_open_parenthesis)
 	return (0);
 }
 
-int	check_open_and_close(char *string)
+static int	check_open_and_close(char *string)
 {
 	int	number_of_open_parenthesis;
 
@@ -78,7 +78,7 @@ int	check_open_and_close(char *string)
 	return (0);
 }
 
-int	check_parentheses_befor_operator(char *string)
+static int	check_parentheses_befor_operator(char *string)
 {
 	int	iscommand;
 	int	operator;
@@ -105,7 +105,7 @@ int	check_parentheses_befor_operator(char *string)
 	return (0);
 }
 
-int	get_lenght(char *string)
+static int	get_lenght(char *string)
 {
 	int	i;
 
@@ -117,7 +117,7 @@ int	get_lenght(char *string)
 	return (i);
 }
 
-int	check_parentheses_all_t(char **string, int *operator)
+static int	check_parentheses_all_t(char **string, int *operator)
 {
 	if (**string == '\'')
 		*string += skip_single_quotation_mark(*string + 1) + 1;
@@ -144,7 +144,7 @@ int	check_parentheses_all_t(char **string, int *operator)
 	return (0);
 }
 
-int	check_parentheses_after_operator(char *string)
+static int	check_parentheses_after_operator(char *string)
 {
 	int	operator;
 

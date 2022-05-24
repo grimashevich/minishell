@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ls_cwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 18:13:51 by ccamie            #+#    #+#             */
-/*   Updated: 2022/04/10 23:49:33 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/24 12:00:34 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_list	*get_list(DIR *dir)
 	while (dp != NULL)
 	{
 		data = ft_strdup(dp->d_name);
-		new = ft_list_new(data);
+		new = ft_list_init(data);
 		if (data == NULL || new == NULL)
 		{
 			free(data);
@@ -35,7 +35,7 @@ static t_list	*get_list(DIR *dir)
 			ft_list_remove_all(&list, free);
 			return (NULL);
 		}
-		ft_list_add_back(&list, new);
+		ft_list_append(&list, new);
 		dp = readdir(dir);
 	}
 	return (list);

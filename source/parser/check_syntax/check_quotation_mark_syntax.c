@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:23 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 22:14:33 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 18:08:40 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_single_quotation_mark(char *string)
 		{
 			string += 1;
 			string += skip_double_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 				return (0);
 		}
 		if (*string == '\'')
@@ -52,7 +52,7 @@ int	check_single_quotation_mark(char *string)
 			string += 1;
 
 			string += skip_single_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 				return (-1);
 		}
 		string += 1;
@@ -68,14 +68,14 @@ int	check_double_quotation_mark(char *string)
 		{
 			string += 1;
 			string += skip_double_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 				return (-1);
 		}
 		if (*string == '\'')
 		{
 			string += 1;
 			string += skip_single_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 			{
 				return (0);
 			}

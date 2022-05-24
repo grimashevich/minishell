@@ -1,23 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   envp_replace_by_index.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:24 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 18:12:19 by ccamie           ###   ########.fr       */
+/*   Created: 2022/04/04 03:58:56 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/24 11:48:41 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
+#include "envp.h"
 
-//		
-char	*ft_strchr(char *string, char character)
+void	envp_replace_by_index(char *variable, char *value, int index)
 {
-	while (*string != character && *string != '\0')
-		string += 1;
-	if (*string == character)
-		return ((char *)string);
-	return (NULL);
+	char	*postfix;
+	char	*data;
+
+	postfix = ft_strjoin(variable, "=");
+	if (postfix == NULL)
+	{
+		perror(NULL);
+		exit(1);
+	}
+	data = ft_strjoin(postfix, value);
+	free(postfix);
+	if (data == NULL)
+	{
+		perror(NULL);
+		exit(1);
+	}
+	ft_strings_replace(g_ms.envp, data, index);
 }

@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:16:32 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 22:11:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 18:10:13 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,18 +83,17 @@ int	print_error_redirect_outfile(char *string)
 {
 	if (check_newline(string) == TRUE)
 	{
-		write(1, "minishell: syntax error near unexpected token 'newline'", 56);
+		write(1, "minishell: syntax error near unexpected token 'newline'\n", 57);
 		return (-1);
 	}
 	if (*(string + 1) == '>')
 	{
-		write(1, "minishell: syntax error near unexpected token '>>'", 51);
+		write(1, "minishell: syntax error near unexpected token '>>'\n", 52);
 		return (-1);
 	}
 	else
 	{
-		// printf("minishell: syntax error near unexpected token '>'\n");
-		write(1, "minishell: syntax error near unexpected token '>'", 50);
+		write(1, "minishell: syntax error near unexpected token '>'\n", 51);
 		return (-1);
 	}
 	return (0);
@@ -113,7 +112,7 @@ int	check_syntax_of_redirect_outfile(char *string)
 				string += 1;
 			if (check_fd_redirect_outfile(string) == TRUE)
 				return (-1);
-			if (ft_isalnum(*string) == FALSE)
+			if (ft_isalnum(*string) == FALSE && *string != '\"' && *string != '*' && *string != '?')
 			{
 				if (print_error_redirect_outfile(string) == -1)
 					return (-1);

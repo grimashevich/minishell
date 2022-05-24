@@ -1,23 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   envp_remove_by_index.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:24 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 18:12:19 by ccamie           ###   ########.fr       */
+/*   Created: 2022/04/04 03:45:07 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/24 11:48:33 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
+#include "envp.h"
 
-//		
-char	*ft_strchr(char *string, char character)
+void	envp_remove_by_index(int index)
 {
-	while (*string != character && *string != '\0')
-		string += 1;
-	if (*string == character)
-		return ((char *)string);
-	return (NULL);
+	ft_strings_remove(&g_ms.envp, index);
+	envp_status();
 }

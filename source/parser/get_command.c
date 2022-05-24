@@ -6,11 +6,13 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 21:47:41 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 12:21:18 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
+
+void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct);
 
 static int	is_this_an_operator(char *line)
 {
@@ -126,9 +128,7 @@ t_cmd	*get_command(char *line)
 	commamd->prev_operator = get_prev_operator(line);
 	commamd->next_operator = get_next_operator(line);
 	line = new_line_after_operator(line, commamd);
-	commamd->command = (char **)malloc(2 * sizeof(char *));	// ban
-	commamd->command[0] = ft_strdup(line);
-	commamd->command[1] = NULL;
+	lvl2_parsing(line, commamd);
 	free(line);
 	return (commamd);
 }

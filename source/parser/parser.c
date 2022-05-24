@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 21:41:28 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 18:14:15 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,12 +90,21 @@ t_tag	*create_tree(char *line)
 t_tag	*parser(char *line)
 {
 	t_tag	*head;
-	
-	line = ft_strdup(line);
+	int		i;
+
+	i = 0;
+	while (line[i] != '#' && line[i] != '\0')
+		i += 1;
+	line = ft_substr(line, 0, i);
 	if (line == NULL)
 	{
 		perror("minishell)");
 		exit(1);
+	}
+	if (*line == '\0')
+	{
+		free(line);
+		return (NULL);
 	}
 	if (check_syntax(line) != 0)
 	{

@@ -1,23 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strchr.c                                        :+:      :+:    :+:   */
+/*   envp_get_value.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/12 15:11:24 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 18:12:19 by ccamie           ###   ########.fr       */
+/*   Created: 2022/04/04 13:31:07 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/24 11:48:24 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
+#include "envp.h"
 
-//		
-char	*ft_strchr(char *string, char character)
+char	*envp_get_value(char *variable)
 {
-	while (*string != character && *string != '\0')
-		string += 1;
-	if (*string == character)
-		return ((char *)string);
-	return (NULL);
+	char	*postfix;
+	char	*string;
+
+	postfix = ft_strjoin(variable, "=");
+	if (postfix == NULL)
+	{
+		perror(NULL);
+		exit(1);
+	}
+	string = ft_strings_get_string(g_ms.envp, postfix);
+	free(postfix);
+	if (string == NULL)
+	{
+		return (NULL);
+	}
+	else
+	{
+		string += ft_strlen(variable) + 1;
+		return (string);
+	}
 }
