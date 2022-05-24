@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/16 14:02:56 by ccamie            #+#    #+#              #
-#    Updated: 2022/05/18 01:58:59 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/24 17:34:28 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ function runTests {
 	for j in ${!TESTS[*]}
 	do
 		test
-		# testLeak
-		# testAddress
+		testLeak
+		testAddress
 		printAll
 	done
 	removeCurrentTest

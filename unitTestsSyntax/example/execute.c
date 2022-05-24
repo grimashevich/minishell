@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/16 00:00:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 19:53:42 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 18:20:45 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,15 +125,14 @@ int	check_single_quotation_mark(char *string)
 		{
 			string += 1;
 			string += skip_double_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 				return (0);
 		}
 		if (*string == '\'')
 		{
 			string += 1;
-
 			string += skip_single_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 				return (-1);
 		}
 		string += 1;
@@ -149,14 +148,14 @@ int	check_double_quotation_mark(char *string)
 		{
 			string += 1;
 			string += skip_double_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 				return (-1);
 		}
 		if (*string == '\'')
 		{
 			string += 1;
 			string += skip_single_quotation_mark(string);
-			if (*string == '\0' && *(string + 1) == '\0')
+			if (*string == '\0')
 			{
 				return (0);
 			}
@@ -603,7 +602,7 @@ int	check_syntax_of_redirect_outfile(char *string)
 				string += 1;
 			if (check_fd_redirect_outfile(string) == TRUE)
 				return (-1);
-			if (ft_isalnum(*string) == FALSE)
+			if (ft_isalnum(*string) == FALSE && *string != '\"' && *string != '*' && *string != '?')
 			{
 				if (print_error_redirect_outfile(string) == -1)
 					return (-1);
@@ -665,6 +664,64 @@ int	check_syntax_of_redirect_infile(char *string)
 	return (0);
 }
 
+char	*ft_strchr(char *string, char character)
+{
+	while (*string != character && *string != '\0')
+		string += 1;
+	if (*string == character)
+		return ((char *)string);
+	return (NULL);
+}
+
+int	check_syntax_costil_nbr1(char *string)
+{
+	int	i;
+	int	right;
+	int	left;
+
+	i = 0;
+	while (string[i] != '\0' && ft_strchr("< \t>", string[i]) != NULL)
+		i += 1;
+	if (string[i] != '\0')
+		return (0);
+	right = 0;
+	left = 0;
+	while (string[right] == '>')
+		right += 1;
+	i = right;
+	while (string[i + left] == '<')
+		left += 1;
+	if (right > 2)
+	{
+		if (right == 3)
+			write(1, "minishell: syntax error near unexpected token '>'", 50);
+		else if (right >= 4)
+			write(1, "minishell: syntax error near unexpected token '>>'", 51);
+		return (-1);
+	}
+	if (left != 0 && right == 0)
+	{
+		if (left <= 3)
+			write(1, "minishell: syntax error near unexpected token 'newline'", 56);
+		else if (left == 4)
+			write(1, "minishell: syntax error near unexpected token '<'", 50);
+		else if (left == 5)
+			write(1, "minishell: syntax error near unexpected token '<<'", 51);
+		else if (left >= 6)
+			write(1, "minishell: syntax error near unexpected token '<<<'", 52);
+		return (-1);
+	}
+	if (left == 1)
+		write(1, "minishell: syntax error near unexpected token '<'", 50);
+	else if (left == 2)
+		write(1, "minishell: syntax error near unexpected token '<<'", 51);
+	else if (left >= 3)
+		write(1, "minishell: syntax error near unexpected token '<<<'", 52);
+	if (right <= 2 && left == 0)
+		write(1, "minishell: syntax error near unexpected token 'newline'", 56);
+	return (-1);
+}
+
 int	check_syntax_of_redirect(char *string)
 {
 	if (check_syntax_of_redirect_infile(string) != 0)
@@ -702,13 +759,42 @@ int	check_syntax_of_redirect(char *string)
 
 
 
+int	check_syntax_costil_nbr2(char *string)
+{
+	int	i;
 
+	if (*string != '\"')
+	{
+		return (0);
+	}
+	i = 0;
+	while (string[i + 1] != '\0')
+	{
+		i += 1;
+	}
+	if (string[i] == '\"')
+	{
+		return (1);
+	}
+	else
+	{
+		return (0);
+	}
+}
 
 int	check_syntax(char *string)
 {
+	if (check_syntax_costil_nbr1(string) != 0)
+	{
+		return (-1);
+	}
 	if (check_quotation_mark_syntax(string) != 0)
 	{
 		return (-1);
+	}
+	if (check_syntax_costil_nbr2(string) == 1)
+	{
+		return (0);
 	}
 	if (check_syntax_of_parentheses(string) != 0)
 	{
@@ -727,6 +813,15 @@ int	check_syntax(char *string)
 
 void	execute(void)
 {
+	int	i;
+
+	i = 0;
+	while (g_data.string[i] != '#' && g_data.string[i] != '\0')
+	{
+		i += 1;
+	}
+	g_data.string = strndup(g_data.string, i);
 	g_data.returned = check_syntax(g_data.string);
 	g_data.output = get_value_output();
+	free(g_data.string);
 }
