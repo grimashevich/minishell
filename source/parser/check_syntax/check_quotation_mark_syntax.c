@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:23 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 18:08:40 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 21:00:09 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,12 +89,12 @@ int	check_quotation_mark_syntax(char *string)
 {
 	if (check_single_quotation_mark(string) != 0)
 	{
-		write(1, "minishell: syntax error near unexpected token '\''\n", 50);
+		write(2, "minishell: syntax error near unexpected token '\''\n", 50);
 		return (-1);
 	}
 	if (check_double_quotation_mark(string) != 0)
 	{
-		write(1, "minishell: syntax error near unexpected token '\"'\n", 50);
+		write(2, "minishell: syntax error near unexpected token '\"'\n", 50);
 		return (-1);
 	}
 	return (0);

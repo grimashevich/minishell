@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 12:21:30 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 22:59:09 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ typedef struct s_rdr_fls
 	char				*path;
 	char				**out_files;
 	struct s_rdr_fls	*next;
-} t_rdr_fls;
+}	t_rdr_fls;
 
 typedef struct s_tag
 {
@@ -66,15 +66,10 @@ typedef struct s_tag
 
 typedef struct s_cont
 {
-	int		prev_operator;		// Глоабальнй оператор
-	int		next_operator;		// Глоабальнй оператор
-	char	*infile;			// Путь до файла						|
-	char	*outfile;			// Путь до файла						|
-	int		append_outfile;		// Создать или добававить в файл		|	отдельная структура???
-	int		isheredoc;			// Создать временый файл				|
-	int		infd;				// Всегда dup2
-	int		outfd;				// Всегда dup2
-	t_tag	*tag;
+	int			prev_operator;		// Глоабальнй оператор
+	int			next_operator;		// Глоабальнй оператор
+	t_rdr_fls	*redirects;			// Содержит односвязный список редиректов //TODO добавлено eClown
+	t_tag		*tag;
 }	t_cont;
 
 typedef struct s_cmd
@@ -101,7 +96,7 @@ typedef struct s_ms
 
 t_ms	g_ms;
 
-void ms_error(char *func_name, char *str_error, int errn);
+void 	ms_error(char *func_name, char *str_error, int errn);
 t_tag	*parser(char *line);
 
 #endif // MINISHELL_H

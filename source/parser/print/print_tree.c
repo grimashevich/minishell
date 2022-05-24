@@ -99,7 +99,24 @@ void	print_tree(t_tag *head)
 	// printf("\n");
 }
 
-void print_tcmd (t_cmd *cmd);
+void	print_tcmd(t_cmd *cmd);
+void	print_rdr(t_rdr_fls *item);
+
+void print_tcont(t_cont *container)
+{
+	int i = 0;
+	t_rdr_fls *tmp_rdr;
+
+	printf("\nCONTAINER:\n---\n");
+	printf("REDIRECTS:\n");
+	tmp_rdr = container->redirects;
+	while (tmp_rdr)
+	{
+		printf("%2d:",i++);
+		print_rdr(tmp_rdr);
+		tmp_rdr = tmp_rdr->next;
+	}
+}
 
 void	print_cmd(t_tag *head)
 {
@@ -127,6 +144,7 @@ void	print_cmd(t_tag *head)
 		if (head[i].type == CONTAINER)
 		{
 			container = (t_cont *)head[i].data;
+			print_tcont(container);
 			print_cmd(container->tag);
 		}
 		else if (head[i].type == END)

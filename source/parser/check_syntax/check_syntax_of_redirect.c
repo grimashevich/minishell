@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:16:32 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 18:10:13 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 21:00:09 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ int	check_fd_redirect_outfile(char *string)
 	}
 	if (*string == '>' && i != 0)
 	{
-		write(1, "minishell: syntax error near unexpected token '", 47);
+		write(2, "minishell: syntax error near unexpected token '", 47);
 		write(1, num, i);
 		write(1, "'\n", 2);
 		return (TRUE);
@@ -68,7 +68,7 @@ int	check_fd_redirect_infile(char *string)
 	}
 	if (*string == '>' && i != 0)
 	{
-		write(1, "minishell: syntax error near unexpected token '", 47);
+		write(2, "minishell: syntax error near unexpected token '", 47);
 		if (ft_atol(num) > 2147483647)
 			write(1, "-1\n", 3);	
 		else
@@ -83,17 +83,17 @@ int	print_error_redirect_outfile(char *string)
 {
 	if (check_newline(string) == TRUE)
 	{
-		write(1, "minishell: syntax error near unexpected token 'newline'\n", 57);
+		write(2, "minishell: syntax error near unexpected token 'newline'\n", 57);
 		return (-1);
 	}
 	if (*(string + 1) == '>')
 	{
-		write(1, "minishell: syntax error near unexpected token '>>'\n", 52);
+		write(2, "minishell: syntax error near unexpected token '>>'\n", 52);
 		return (-1);
 	}
 	else
 	{
-		write(1, "minishell: syntax error near unexpected token '>'\n", 51);
+		write(2, "minishell: syntax error near unexpected token '>'\n", 51);
 		return (-1);
 	}
 	return (0);
@@ -127,22 +127,22 @@ int	check_error_infile(char *string, int i)
 {
 	if (check_newline(string + i) == TRUE)
 	{
-		write(1, "minishell: syntax error near unexpected token 'newline'\n", 56);
+		write(2, "minishell: syntax error near unexpected token 'newline'\n", 56);
 		return (-1);
 	}
 	if (i == 4)
 	{
-		write(1, "minishell: syntax error near unexpected token '<'\n", 51);
+		write(2, "minishell: syntax error near unexpected token '<'\n", 51);
 		return (-1);
 	}
 	if (i == 5)
 	{
-		write(1, "minishell: syntax error near unexpected token '<<'\n", 52);
+		write(2, "minishell: syntax error near unexpected token '<<'\n", 52);
 		return (-1);
 	}
 	if (i >= 6)
 	{
-		write(1, "minishell: syntax error near unexpected token '<<<'\n", 52);
+		write(2, "minishell: syntax error near unexpected token '<<<'\n", 52);
 		return (-1);
 	}
 	return (0);

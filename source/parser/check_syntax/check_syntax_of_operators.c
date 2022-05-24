@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:16:35 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 22:14:02 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/24 21:00:09 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,19 +16,19 @@ void	print_error(int operator)
 {
 	if (operator == AND)
 	{
-		write(1, "minishell: syntax error near unexpected token '&&'\n", 51);
+		write(2, "minishell: syntax error near unexpected token '&&'\n", 51);
 	}
 	else if (operator == OR)
 	{
-		write(1, "minishell: syntax error near unexpected token '||'\n", 51);
+		write(2, "minishell: syntax error near unexpected token '||'\n", 51);
 	}
 	else if (operator == PIPE)
 	{
-		write(1, "minishell: syntax error near unexpected token '|'\n", 50);
+		write(2, "minishell: syntax error near unexpected token '|'\n", 50);
 	}
 	else if (operator == SEQUENCE)
 	{
-		write(1, "minishell: syntax error near unexpected token ';'\n", 50);
+		write(2, "minishell: syntax error near unexpected token ';'\n", 50);
 	}
 }
 
