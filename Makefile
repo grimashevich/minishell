@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+         #
+#    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/23 21:21:08 by EClown           ###   ########.fr        #
+#    Updated: 2022/05/24 11:12:00 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,13 +17,19 @@ NAME		=	minishell
 LIBFT		=	libft/library/libft.a
 
 CC			=	cc
-CFLAGS		=	-Wall -Wextra -Werror -g
+CFLAGS		=	-Wall -Wextra -Werror -g	\
+				-I libft/include			\
+				-I include
 # CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 LDFLAGS 	=	-lreadline
-RM			=	rm -f
 
-HEADER		=	$(addprefix include/,			\
+RM			=	rm -f
+MKDIR		=	mkdir -p
+RMDIR		=	rm -rf
+
+HEADER		=	libft/inlude/libft.h			\
+				$(addprefix include/,			\
 				cd_function.h					\
 				eclown_utils.h					\
 				minishell.h						\
@@ -31,15 +37,20 @@ HEADER		=	$(addprefix include/,			\
 				wildcard.h						\
 				)
 
-FUNCTIONS	=	main.c															\
-				$(wildcard eclown/*.c)											\
-				$(wildcard eclown/utils/*.c)									\
-				$(wildcard utils/*.c)											\
-				$(wildcard wildcard/*.c)										\
-				$(wildcard wildcard/utils/*.c)									\
-				$(wildcard envp/*.c)									\
+FUNCTIONS	=	$(addprefix eclown/,				\
+				$(addprefix utils/,					\
+					ft_free_text.c					\
+					ft_is_str_equal.c				\
+					ft_max_mib_int.c				\
+					ft_split_new.c					\
+					ft_strjoin3.c					\
+					)								\
+				cd_function.c						\
+				lvl2_parsing.c						\
+				)
 
-FUNCTIONS	=	$(addprefix parser/,				\
+
+FUNCTIONS	+=	$(addprefix parser/,				\
 				$(addprefix check_syntax/,			\
 					check_quotation_mark_syntax.c	\
 					check_syntax_of_operators.c		\
@@ -60,9 +71,22 @@ FUNCTIONS	=	$(addprefix parser/,				\
 				just_print.c						\
 				)
 
+FUNCTIONS	+=	$(addprefix utils/,					\
+				ls_cwd_antisplit.c					\
+				ls_cwd.c							\
+				ms_error.c							\
+				)
+
+FUNCTIONS	+=	$(addprefix wildcard/,				\
+				eclown_func1.c						\
+				wildcard_1.c						\
+				wildcard_2.c						\
+				)
+
+
 SOURCE		=	$(addprefix source/, $(FUNCTIONS))
 OBJECT		=	$(addprefix object/, $(FUNCTIONS:.c=.o))
-FOLDER		=	$(sort $(dir object/ $(OBJECT) $(LIBPARSER)))
+FOLDER		=	$(sort $(dir object/ $(OBJECT)))
 
 .SUFFIXES	:
 .SUFFIXES	:	.c .o
