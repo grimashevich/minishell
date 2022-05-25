@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/25 16:54:46 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/25 21:25:01 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,6 +152,7 @@ int	main(int argc, char **argv, char **envp)
 	t_cmd	*command;
 	char	*answer;
 
+	envp_init(envp);
 	answer = (char *)1;
 	while (answer)
 	{
@@ -159,24 +160,18 @@ int	main(int argc, char **argv, char **envp)
 		head = parser(answer);
 		if (head == NULL)
 		{
+			add_history(answer);
+			free(answer);
 			continue ;
 		}
 		add_history(answer);
 		free(answer);
 		command = head->data;
-		if (strcmp(command->command[0], "exit") == 0)
-		{
-			built_exit(command->command);
-			continue ;
-		}
-		// if (strcmp(command->command[0], "echo") == 0)
-		// {
-		// 	built_echo(command->command);
-		// 	continue ;
-		// }
-		print_diagram(head);
-		print_tree(head);
-		print_cmd(head);
+		// print_diagram(head);
+		// print_tree(head);
+		// print_cmd(head);
+		// printf("-----------------------------------------\n");
+		executor(head);
 		remove_tree(head);
 	}
 

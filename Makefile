@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/25 15:28:41 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/25 17:04:01 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,12 @@ HEADER		=	libft/include/libft.h			\
 				$(addprefix include/,			\
 				cd_function.h					\
 				eclown_utils.h					\
+				executor.h						\
 				minishell.h						\
 				parser.h						\
 				wildcard.h						\
 				)
+
 FUNCTIONS	=	$(addprefix builtin/,				\
 				echo.c								\
 				exit.c								\
@@ -70,6 +72,11 @@ FUNCTIONS	+=	$(addprefix envp/,					\
 				envp_replace_by_index.c				\
 				envp_replace.c						\
 				envp_status.c						\
+				)
+
+
+FUNCTIONS	+=	$(addprefix executor/,				\
+				executor.c							\
 				)
 
 FUNCTIONS	+=	$(addprefix parser/,				\

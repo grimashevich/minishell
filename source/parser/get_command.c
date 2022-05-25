@@ -6,12 +6,12 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 12:21:18 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/25 21:30:09 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-
+// echo 1 "asd'" ''
 void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct);
 
 static int	is_this_an_operator(char *line)
@@ -66,7 +66,8 @@ static int	get_next_operator(char *line)
 	i = ft_strlen(line) - 1;
 	while (i > 0 && ft_isspace(line[i]) == TRUE)
 		i -= 1;
-	i -= 1;
+	if (line[i] != ';' && line[i] != '|')
+		i -= 1;
 	while (i > 0 && line[i] != '\0')
 	{
 		if (ft_isalnum(line[i]) == TRUE)
