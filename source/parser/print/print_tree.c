@@ -73,6 +73,22 @@ void	print_tree(t_tag *head)
 			printf(" (");
 			print_tree(container->tag);
 			printf(") ");
+				t_rdr_fls	*rdr;
+
+			rdr = container->redirects;
+			while (rdr != NULL)
+			{
+				if (rdr->type == WRITE)
+					printf("\x1b[33m> \x1b[0m");
+				if (rdr->type == APPEND)
+					printf("\x1b[33m>> \x1b[0m");
+				if (rdr->type == READ)
+					printf("\x1b[33m< \x1b[0m");
+				if (rdr->type == HERE_DOC)
+					printf("\x1b[33m<< \x1b[0m");
+				printf("\x1b[33m%s \x1b[0m", rdr->path);
+				rdr = rdr->next;
+			}
 			print_operator(container->next_operator);
 		}
 		else if (head[i].type == END)

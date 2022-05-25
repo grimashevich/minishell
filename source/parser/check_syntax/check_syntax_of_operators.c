@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:16:35 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 21:00:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/25 12:06:29 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,15 @@ int	skip_all_quotation_mar_operator(char **string)
 	return (0);
 }
 
+int	ft_issomething(char character)
+{
+	return (character == '&' || character == '(' || character == ')' | \
+			character == '|' || character == ';');
+}
+
 int	check_all_operators(char **string, 	int	*iscommand, int *operator, int *was_operator)
 {
-	if (ft_isalnum(**string) == TRUE)
+	if (ft_isgraph(**string) == TRUE && ft_issomething(**string) == FALSE)
 		*iscommand = TRUE;
 	*operator = is_this_operator(string);
 	if (*operator != EMPTY)
