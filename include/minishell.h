@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 22:59:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/25 15:30:12 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ t_ms	g_ms;
 
 void 	ms_error(char *func_name, char *str_error, int errn);
 t_tag	*parser(char *line);
+void	built_echo(char **command);
+void	built_exit(char **code);
 
 #endif // MINISHELL_H
 

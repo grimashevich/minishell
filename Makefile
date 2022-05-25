@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/24 18:11:53 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/25 15:28:41 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,8 +37,12 @@ HEADER		=	libft/include/libft.h			\
 				parser.h						\
 				wildcard.h						\
 				)
+FUNCTIONS	=	$(addprefix builtin/,				\
+				echo.c								\
+				exit.c								\
+				)
 
-FUNCTIONS	=	$(addprefix eclown/,				\
+FUNCTIONS	+=	$(addprefix eclown/,				\
 				$(addprefix utils/,					\
 					ft_free_text.c					\
 					ft_is_str_equal.c				\

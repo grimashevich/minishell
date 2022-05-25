@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/24 13:18:17 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/25 16:54:46 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,37 +146,38 @@ int	main(int argc, char **argv, char **envp)
 
 
 	//char *answer = malloc(256);
-	char *answer;
-	answer = (char *)1;
 	//char *answer = ft_strdup("<infile.txt echo 1 > outfile.txt 2> error.log *m* 3>*o*");
 
 	t_tag	*head;
 	t_cmd	*command;
+	char	*answer;
+
+	answer = (char *)1;
 	while (answer)
 	{
 		answer = readline("minishell🗿");
-		if (strcmp(answer, "exit") == 0)
-		{
-			free(answer);
-			break ;
-		}
 		head = parser(answer);
 		if (head == NULL)
 		{
-			free(answer);
-			add_history(answer);
 			continue ;
 		}
+		add_history(answer);
+		free(answer);
 		command = head->data;
+		if (strcmp(command->command[0], "exit") == 0)
+		{
+			built_exit(command->command);
+			continue ;
+		}
+		// if (strcmp(command->command[0], "echo") == 0)
+		// {
+		// 	built_echo(command->command);
+		// 	continue ;
+		// }
 		print_diagram(head);
 		print_tree(head);
 		print_cmd(head);
-		add_history(answer);
-		// print_tcmd(command);
-		free(answer);
 		remove_tree(head);
-		// free_t_cmd(command);
-		//return (0);
 	}
 
 /* // TEST CASE  char	**expand_wildcard_arr(char *wildcard)
