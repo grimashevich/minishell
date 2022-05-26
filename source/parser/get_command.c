@@ -6,13 +6,13 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/25 21:30:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/26 17:33:12 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 // echo 1 "asd'" ''
-void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct);
+void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars);
 
 static int	is_this_an_operator(char *line)
 {
@@ -129,7 +129,7 @@ t_cmd	*get_command(char *line)
 	commamd->prev_operator = get_prev_operator(line);
 	commamd->next_operator = get_next_operator(line);
 	line = new_line_after_operator(line, commamd);
-	lvl2_parsing(line, commamd);
+	lvl2_parsing(line, commamd, g_ms.variables);
 	free(line);
 	return (commamd);
 }

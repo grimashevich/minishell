@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/24 11:59:02 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/26 17:48:19 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,353 @@ int		is_char_in_quotes(char *str, char *c);
 void	encode_quotes_str(char *str, char *char2encode);
 char	**add_text_to_text(char **dest, char **added, int need_free);
 char	**expand_wildcard_arr(char *wildcard);
+void	decode_text(char **text);
+void	open_quotes_text(char **text);
+char	**add_str_to_text(char *str, char **text);
+void	expand_vars(char **cmd, t_vars *vars, int need_unquote);
+
+char *empty_str_instead_null(char *str)
+{
+	if (! str)
+		return (ft_strdup(""));
+	return (str);
+}
+
+t_vars	*create_var(char *name, char *value)
+{
+	t_vars	*result;
+
+	result = ft_calloc(1, sizeof(t_vars));
+	if (! result)
+		return (NULL);
+	if (name)
+		result->name = ft_strdup(name);
+	if (value)
+		result->value = ft_strdup(value);
+	return (result);
+}
+
+t_vars	*add_var_first(t_vars *start, t_vars *new_var)
+{
+	if (! new_var)
+		return (start);
+	if (! start)
+		return (new_var);
+	new_var->next = start;
+	return (new_var);
+}
+
+void	set_var_global(t_vars *start, char *name)
+{
+	while (start)
+	{
+		if (ft_strcmp(start->name, name) == 0)
+		{
+			start->is_global = 1;
+			return ;
+		}
+		start = start->next;
+	}
+}
+
+char	*get_var_value(t_vars *start, char *name)
+{
+	while (start)
+	{
+		if (ft_strcmp(start->name, name) == 0)
+			return (start->value);
+		start = start->next;
+	}
+	return (NULL);
+}
+
+void free_var(t_vars *item)
+{
+	if (! item)
+		return ;
+	if (item->name)
+		free(item->name);
+	if (item->value)
+		free(item->value);
+	free(item);
+}
+
+t_vars	*delete_var(t_vars *start, char *name)
+{
+	t_vars	*prev;
+	t_vars	*tmp;
+	t_vars	*cur;
+
+	if (start == NULL)
+		return (NULL);
+	if (ft_strcmp(name, start->name) == 0)
+	{
+		tmp = start->next;
+		free_var(start);
+		return (tmp);
+	}
+	cur = start;
+	while (cur)
+	{
+		if (ft_strcmp(cur->name, name) == 0)
+		{
+			prev->next = cur->next;
+			free_var(cur);
+			return (start);
+		}
+		prev = cur;
+		cur = cur->next;
+	}
+	return (start);
+}
+
+void	delete_all_vars(t_vars *start)
+{
+	while (start)
+	{
+		start = delete_var(start, start->name);
+	}
+}
+
+t_vars	*update_vars(t_vars *start, char *name, char *new_value)
+{
+	t_vars	*tmp;
+
+	tmp = delete_var(start, name);
+	return (add_var_first(tmp, create_var(name, new_value)));
+}
+
+char **split_with_quotes(char *str, char sep, int need_unquote)
+{
+	char	*str_copy;
+	char	*sep_str;
+	char	**result;
+
+	str_copy = ft_strdup(str);
+	sep_str = ft_strdup(" ");
+	if (! str_copy || ! sep_str)
+		return (NULL);
+	sep_str[0] = sep;
+	encode_quotes_str(str_copy, sep_str);
+	result = ft_split(str_copy, sep);
+	if (result == NULL || result == 0)
+		return (NULL);
+	decode_text(result);
+	if (need_unquote)
+		open_quotes_text(result);
+	free(str_copy);
+	free(sep_str);
+	return (result);
+}
+
+/*
+Determine and return to out_var var assignation.
+Doesn't expand variables (i.e. var2=$var1)
+1. There is '=' in str
+2. First char is letter or '_'
+	2.1 Other chars from 1 to '=' is alphanumeric or '_'
+3. not
+*/
+int is_var_assign(char *str, t_vars **out_var)
+{
+	int		i;
+
+	*out_var = NULL;
+	if (! ft_strchr(str, '='))
+		return (0);
+	if (! (ft_isalpha(str[0]) || str[0] == '_'))
+		return (0);
+	i = 0;
+	while (str[i] && str[i] != '=')
+	{
+		if (! (ft_isalnum(str[i]) || str[i] == '_'))
+			return (0);
+		i++;
+	}
+	*out_var = malloc(sizeof(t_vars));
+	(*out_var)->next = NULL;
+	if (! out_var)
+		return (0);
+	(*out_var)->name = ft_substr(str, 0, i);
+	(*out_var)->value = ft_substr(&str[i + 1], 0, ft_strlen(&str[i + 1]));
+	return (1);
+}
+
+/*
+IT WORKS AFTER extraxt all redirects
+So, in start of the lone we can see only var assignation or command
+All text after command will be parametrs of this command
+*/
+t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_cmd, t_vars *ms_vars)
+{
+	char	**splits;
+	t_vars	*result;
+	t_vars	*tmp;
+	int		i;
+
+	splits = split_with_quotes(str, ' ', 0);
+	if (! splits)
+		return (NULL);
+	i = 0;
+	if (free_old_cmd)
+		free(str);
+	result = NULL;
+	*out_cmd_wout_assign = NULL;
+	tmp = NULL;
+	while (splits[i])
+	{
+		if (is_var_assign(splits[i], &tmp))
+		{
+			expand_vars(&(tmp->value), ms_vars, 0);
+			result = add_var_first(result, tmp);
+		}
+		else
+			break;
+		i++;
+	}
+	*out_cmd_wout_assign = empty_str_instead_null(ft_anti_split(&(splits[i]), " "));
+	ft_free_text(splits);
+	return (result);
+	//1. Разделяем на цельные слова с учетом скобок
+	//2. Сплитим
+	//3. Ппробегаемся циклом по всем словам и выясняем переменная ли это.
+	//4. Если переменная, добавляем её в структуру временных присвоейний
+	//		Если нет, джойним к строке через пробел, собирая новую строку без присвоений
+	
+}
+
+char	*replace_str_in_str(char *haystack, char *start, int len, char *new_str)
+{
+	int		new_len;
+	char	*result;
+	int		i;
+
+	if (start < haystack || start + len > haystack + ft_strlen(haystack))
+		return (NULL);
+	if (new_str == NULL)
+		new_str = "";
+	new_len = ft_strlen(haystack) - len + ft_strlen(new_str);
+	result = malloc(new_len + 1);
+	i = 0;
+	while (haystack < start)
+		result[i++] = *(haystack++);
+	haystack += len;
+	while (*new_str)
+		result[i++] = *(new_str++);
+	while (*haystack)
+		result[i++] = *(haystack++);
+	result[i] = 0;
+	return (result);
+}
+
+
+/*
+return var name lenght includeing first '$' symbol
+write to *out_name var name without first '$' symbol
+*str - is pointer to first '$' in str
+ */
+int	get_var_name_len(char *str, char **out_name)
+{
+	int	i;
+
+	if (ft_isspace(str[1]) || ft_isdigit(str[1]))
+	{
+		*out_name = NULL;
+		return (0);
+	}
+	if (str[1] == '$')
+	{
+		*out_name = ft_strdup("$");
+		return (2);
+	}
+	i = 1;
+	while (str[i] && (ft_isalnum(str[i]) || str[i] == '_'))
+		i++;
+	*out_name = malloc(i);
+	if (! *out_name)
+		ms_error("get_var_name_len", "malloc error", errno);
+	ft_strlcpy(str + 1, *out_name, i);
+	return (i);
+}
+
+char *open_quotes_with_free(char *str)
+{
+	char	*new_str;
+
+	if (! str)
+		return (NULL);
+	new_str = open_quotes(str);
+	free(str);
+	return(new_str);
+}
+
+char *strdup_null_safe(char *str)
+{
+	if (! str)
+		return ft_strdup("");
+	return ft_strdup(str);
+}
+
+void	expand_vars(char **cmd, t_vars *vars, int need_unquote)
+{
+	char	*tmp;
+	char	*tmp2;
+	char	*var_name;
+	int		name_len;
+	char	*var_value;
+
+	tmp = *cmd;
+	tmp = ft_strchr(tmp, '$');
+	while (tmp)
+	{
+		name_len = get_var_name_len(tmp, &var_name);
+		if (name_len > 0 && is_char_in_quotes(*cmd, tmp)!= '\'')
+		{
+			if (envp_get_value(var_name))
+				var_value = strdup_null_safe(envp_get_value(var_name));
+			else
+				var_value = strdup_null_safe(get_var_value(vars, var_name));
+			if (need_unquote)
+				var_value = open_quotes_with_free(var_value);
+			tmp2 = *cmd;
+			*cmd =  replace_str_in_str(*cmd, tmp, name_len, var_value);
+			free(tmp2);
+			tmp = *cmd;
+			tmp = ft_strchr(&tmp[tmp - *cmd + ft_strlen(var_value)], '$');
+			free(var_name);
+			free(var_value);
+			continue;
+		}
+		if (var_name)
+			free(var_name);
+		tmp++;
+		tmp = ft_strchr(tmp, '$');
+	}
+}
+
+
+/* 
+TODO
+1. Парсинг присвоения переменных
+2. Парсирнг значения переменных в строке
+
+
+УТВЕРЖДЕНИЯ:
+1. Присовение переменных может быть только левее команды, иначе они будут аргументами команды
+2. Присовением считается, когда есть символ = и слева находятся alphanumeric
+3. Имя переменной может начинаться только с буквы, иначе игнорируется
+4. Сначала происходит раскрытие переменных, потом присовение
+
+ */
+
+
+
+/* 
+#################################################################################################################
+#												OLD ZONE														#
+#################################################################################################################
+ */
+
 
 int str_is_numeric(char *str)
 {
@@ -428,11 +775,21 @@ void	extract_wldcrd_rdrs(t_rdr_fls *rdr_start)
 	}
 }
 
+void expand_vars_in_rdrs(t_rdr_fls *rdrs, t_vars *ms_vars)
+{
+	while (rdrs)
+	{
+		expand_vars(&(rdrs->path), ms_vars, 1);
+		rdrs = rdrs->next;
+	}
+}
+
+
 /*
 INPUT:
 malloced t_cmd *cmd_struct
 */
-void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
+void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars)
 {
 	char	*cmd;
 	char	**args;
@@ -444,9 +801,10 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 	if (! cmd)
 		return ;
 	cmd_struct->redirects = extract_all_rdrs(&cmd);
+	expand_vars_in_rdrs(cmd_struct->redirects, ms_vars);
 	extract_wldcrd_rdrs(cmd_struct->redirects);
-	// TODO пп. 1.1
-	
+	cmd_struct->vars = extract_var_assign(cmd, &cmd, 1, ms_vars);
+	expand_vars(&cmd, ms_vars, 1);
 	encode_quotes_str(cmd, " ");
 	tmp = ft_split(cmd, ' ');
 	if (tmp == NULL)
@@ -466,6 +824,8 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct)
 	}
 	ft_free_text(tmp);
 	//open_quotes_text(args);
+	if (args == NULL)
+		args = add_str_to_text(ft_strdup(""), args);
 	cmd_struct->command = args;
 }
 
@@ -488,7 +848,9 @@ void free_t_cmd (t_cmd *cmd)
 	1.1. В именах файлов редиректов расркрываем переменные
 	1.2. В именах файлов редиректов расркрываем * (применяем как к строке, где пробелы - разделители аргументов)
 	1.3. В именах файлов редиректов расркрываем кавычки
-2. Раскрываем переменные
+2. Обрабатываем переменные
+	2.1. Извлекаем присвоение переменных
+	2.2. Раскрываем переменные
 3. Минусим все пробелы, находящиеся внутри кавычек
 5. Сплитим команду на бинарник и агргумены
 3. Раскрываем *

@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/25 17:03:35 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/26 17:27:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,19 +72,28 @@ typedef struct s_cont
 	t_tag		*tag;
 }	t_cont;
 
+typedef struct s_vars
+{
+	char			*name;
+	char			*value;
+	int				is_global;
+	struct s_vars	*next;
+}	t_vars;
+
 typedef struct s_cmd
 {
 	int				prev_operator;		// Локальный оператор
 	int				next_operator;		// Локальный оператор
 	char			**command;			// Команда с флагами
 	t_cont			*container;			// Проверка на глобальные оператоы перенаправления 
-	t_rdr_fls		*redirects;	// Содержит односвязный список редиректов //TODO добавлено eClown
+	t_rdr_fls		*redirects;			// Содержит односвязный список редиректов //TODO добавлено eClown
+	t_vars			*vars;    			// TODO Добавлено eClown
 }	t_cmd;
 
 typedef struct s_pipe
 {
 	int	prev[2];				// Веременый преведущий канал
-	int current[2];				// Веременый текущий канал
+	int current[2];				// Веременый текущий кана
 }	t_pipe;
 
 typedef struct s_ms
@@ -92,6 +101,7 @@ typedef struct s_ms
 	char	**envp;				// Список переменных окружения
 	int		exit_code;				// Exit code последней исполненной команды
 	// t_tag	*commands;			// Указатель на начало списка текущих команд
+	t_vars	*variables;
 }   t_ms;
 
 t_ms	g_ms;
@@ -100,6 +110,8 @@ void 	ms_error(char *func_name, char *str_error, int errn);
 t_tag	*parser(char *line);
 void	built_echo(char **command);
 void	built_exit(char **code);
+t_vars	*update_vars(t_vars *start, char *name, char *new_value);
+t_vars	*add_var_first(t_vars *start, t_vars *new_var);
 
 void	executor(t_tag *head);
 

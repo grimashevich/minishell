@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:36:31 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/24 14:41:01 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/25 22:01:51 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -363,7 +363,7 @@ char	**expand_wildcard_arr(char *wildcard)
 	if (wildcard == NULL)
 		return (NULL);
 	if (*wildcard == 0)
-		return (NULL);
+		return (add_str_to_text(ft_strdup(""), NULL));
 	if (! strchr(wildcard, '*'))
 		return (add_str_to_text(wildcard, NULL));
 	cwd = malloc(MAX_PATH_LEN);
