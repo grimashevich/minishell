@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/26 21:31:12 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/26 22:12:50 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,6 @@ void assign_vars_value(t_cmd *command)
 {
 	int	index;
 
-	if (command->command[0][0] != '\0')
-		return ;
 	index = envp_get_index(command->vars->name);
 	if (index != -1)
 	{
@@ -128,10 +126,19 @@ void	launch_command(t_cmd *command)
 	// 	pipe(*fifo[0]);
 	// 	pipe(*fifo[1]);
 	// }
-	assign_vars_value(command);
+	if (command->command[0][0] == '\0')
+	{
+		assign_vars_value(command);
+		return ;
+	}
 	if (strcmp(command->command[0], "exit") == 0)
 	{
 		built_exit(command->command);
+		return ;
+	}
+	if (strcmp(command->command[0], "unset") == 0)
+	{
+		built_unset(command->command);
 		return ;
 	}
 	pid = fork();
@@ -152,22 +159,17 @@ void	launch_command(t_cmd *command)
 		if (strcmp(command->command[0], "echo") == 0)
 		{
 			built_echo(command->command);
+			exit(g_ms.exit_code);
 			return ;
 		}
 		if (strcmp(command->command[0], "cd") == 0)
 		{
-			change_direcory(command->command[1]);
-			return ;
+			exit(change_direcory(command->command[1]));
 		}
 		if (strcmp(command->command[0], "env") == 0)
 		{
 			envp_print();
-			return ;
-		}
-		if (strcmp(command->command[0], "unset") == 0)
-		{
-			built_unset(command->command);
-			return ;
+			exit(0);
 		}
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
