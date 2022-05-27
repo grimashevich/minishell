@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd_function.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:14:43 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/07 19:26:22 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/27 15:07:38 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,5 +76,5 @@ int	change_direcory(char *new_path)
 		errn = update_pwd(old_pwd);
 		return(! errn);
 	}
-	return (! update_pwd(new_path));
+	return (update_pwd(new_path));
 }

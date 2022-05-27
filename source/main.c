@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/27 13:49:27 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/27 15:51:31 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,10 @@ int	main(int argc, char **argv, char **envp)
 	while (answer)
 	{
 		answer = readline("minishell👹");
+		if (ft_strcmp(answer, "return") == 0)
+		{
+			return (0);
+		}
 		if (answer == NULL)
 		{
 			write(1, "\b\bexit\n", 7);
