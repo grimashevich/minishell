@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 16:01:25 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 18:16:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,25 @@ void	redirects(t_rdr_fls *redirects)
 	}
 }
 
+void	minecraft(void)
+{
+	char	buffer[1025];
+	int		fd;
+	ssize_t	readed;
+
+	printf("\x1b[32m\n");
+	fd = open("minecraft", O_RDONLY);
+	readed = read(fd, buffer, 1024);
+	while (readed != 0)
+	{
+		buffer[readed] = '\0';
+		write(1, buffer, ft_strlen(buffer));
+		readed = read(fd, buffer, 1024);
+	}
+	printf("\n");
+	close(fd);
+}
+
 void	launch_command(t_cmd *command, int fifo[2][2])
 {
 	pid_t	pid;
@@ -167,6 +186,11 @@ void	launch_command(t_cmd *command, int fifo[2][2])
 	if (ft_strcmp(command->command[0], "pwd") == 0)
 	{
 		built_pwd();
+		return ;
+	}
+	if (ft_strcmp(command->command[0], "Minecraft") == 0)
+	{
+		minecraft();
 		return ;
 	}
 	if (ft_strcmp(command->command[0], "echo") == 0)
