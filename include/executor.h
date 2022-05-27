@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:52 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 13:16:39 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:47:12 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	assign_vars_value(t_cmd *command);
 
 void	built_echo(char **command);
 void	built_exit(char **code);
+void	built_export(char **command);
 void	built_pwd(void);
 void	built_unset(char **command);
 

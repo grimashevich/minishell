@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/26 17:48:19 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:50:44 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,11 +188,10 @@ int is_var_assign(char *str, t_vars **out_var)
 	return (1);
 }
 
-/*
-IT WORKS AFTER extraxt all redirects
-So, in start of the lone we can see only var assignation or command
-All text after command will be parametrs of this command
-*/
+
+// IT WORKS AFTER extraxt all redirects
+// So, in start of the lone we can see only var assignation or command
+// All text after command will be parametrs of this command
 t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_cmd, t_vars *ms_vars)
 {
 	char	**splits;

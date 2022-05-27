@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/27 13:15:26 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/27 14:00:07 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ HEADER		=	libft/include/libft.h			\
 FUNCTIONS	=	$(addprefix builtin/,				\
 				echo.c								\
 				exit.c								\
+				export.c							\
 				pwd.c								\
 				unset.c								\
 				)

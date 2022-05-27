@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 12:22:17 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:49:14 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,9 @@ t_tag	*parser(char *line);
 
 t_vars	*update_vars(t_vars *start, char *name, char *new_value);
 t_vars	*add_var_first(t_vars *start, t_vars *new_var);
-
 void	executor(t_tag *head);
+
+t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_cmd, t_vars *ms_vars);
 
 #endif // MINISHELL_H
 

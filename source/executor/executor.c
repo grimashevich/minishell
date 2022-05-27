@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 13:16:53 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 14:00:44 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,11 @@ void	launch_command(t_cmd *command, int fifo[2][2])
 	if (command->command[0][0] == '\0')
 	{
 		assign_vars_value(command);
+		return ;
+	}
+	if (ft_strcmp(command->command[0], "export") == 0)
+	{
+		built_export(command->command);
 		return ;
 	}
 	if (ft_strcmp(command->command[0], "exit") == 0)
