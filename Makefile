@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/27 14:00:07 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/27 17:19:15 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,12 +17,13 @@ NAME		=	minishell
 LIBFT		=	libft/library/libft.a
 
 CC			=	cc
-CPPFLAGS	=	-Wall -Wextra -Werror -g	\
-				-I libft/include			\
-				-I include
 
-# CFLAGS		+=	-fsanitize=address
+CPPFLAGS	=	-I libft/include			\
+				-I include
+# CPPFLAGS	+=	-Wall -Wextra -Werror -g
+CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
+
 LDFLAGS 	=	-lreadline
 
 RM			=	rm -f
