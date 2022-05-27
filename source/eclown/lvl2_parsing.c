@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lvl2_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/27 14:18:14 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/27 16:10:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -836,7 +836,7 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars)
 
 
 
-void free_t_cmd (t_cmd *cmd)
+void free_t_cmd(t_cmd *cmd)
 {
 	if (cmd == NULL)
 		return ;
@@ -844,6 +844,8 @@ void free_t_cmd (t_cmd *cmd)
 		ft_free_text(cmd->command);
 	if (cmd->redirects)
 		free_rdr_list(cmd->redirects);
+	if (cmd->vars)
+		delete_all_vars(cmd->vars);
 	free(cmd);
 }
 

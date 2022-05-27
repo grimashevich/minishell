@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 14:55:07 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 16:01:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,6 +169,17 @@ void	launch_command(t_cmd *command, int fifo[2][2])
 		built_pwd();
 		return ;
 	}
+	if (ft_strcmp(command->command[0], "echo") == 0)
+	{
+		built_echo(command->command);
+		return ;
+	}
+	if (ft_strcmp(command->command[0], "env") == 0)
+	{
+		envp_print();
+		g_ms.exit_code = 0;
+		return ;
+	}
 	pid = fork();
 	if (pid == -1)
 	{
@@ -184,17 +195,16 @@ void	launch_command(t_cmd *command, int fifo[2][2])
 		// {
 		// 	dup2(0, fifo[0])
 		// }
-		if (ft_strcmp(command->command[0], "echo") == 0)
-		{
-			built_echo(command->command);
-			exit(g_ms.exit_code);
-			return ;
-		}
-		if (ft_strcmp(command->command[0], "env") == 0)
-		{
-			envp_print();
-			exit(0);
-		}
+		// if (ft_strcmp(command->command[0], "echo") == 0)
+		// {
+		// 	built_echo(command->command);
+		// 	exit(g_ms.exit_code);
+		// }
+		// if (ft_strcmp(command->command[0], "env") == 0)
+		// {
+		// 	envp_print();
+		// 	exit(0);
+		// }
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}

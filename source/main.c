@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/27 15:51:31 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 16:14:50 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	remove_tree(t_tag *head)
 	free(start);
 }
 
+void	delete_all_vars(t_vars *start);
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void) argv;
@@ -154,13 +156,18 @@ int	main(int argc, char **argv, char **envp)
 
 	envp_init(envp);
 	g_ms.variables = NULL;
-	g_ms.variables = update_vars(g_ms.variables, ft_strdup("$"), ft_itoa(getpid())); 
+	char	*num = ft_itoa(getpid());
+	g_ms.variables = update_vars(g_ms.variables, "$", num);
+	free(num);
 	answer = (char *)1;
 	while (answer)
 	{
-		answer = readline("minishell👹");
+		answer = readline("minishell Anton Krytoe but Kosta ne zapushil");
 		if (ft_strcmp(answer, "return") == 0)
 		{
+			free(answer);
+			delete_all_vars(g_ms.variables);
+			envp_remove_all();
 			return (0);
 		}
 		if (answer == NULL)

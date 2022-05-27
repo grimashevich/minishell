@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 13:40:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 15:48:18 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 16:03:36 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	append_envp(char *command)
 	if (variable == NULL)
 	{
 		local_into_envp(out);
+		free(out);
 	}
 	else
 	{

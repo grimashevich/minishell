@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 04:08:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/26 17:54:50 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 15:58:15 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,4 +29,5 @@ void	envp_init(char **envp)
 		exit(1);
 	}
 	envp_replace("SHLVL", shell_level);
+	free(shell_level);
 }
