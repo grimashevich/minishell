@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/27 17:22:55 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 00:57:32 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,18 +162,18 @@ int	main(int argc, char **argv, char **envp)
 	answer = (char *)1;
 	while (answer)
 	{
-		answer = readline("minishell Anton Krytoe but Kosta ne zapushil 👁 👄👁 👉");
+		answer = readline("minishell🍺");
+		if (answer == NULL)
+		{
+			write(1, "\b\bexit\n", 7);
+			exit (0);
+		}
 		if (ft_strcmp(answer, "return") == 0)
 		{
 			free(answer);
 			delete_all_vars(g_ms.variables);
 			envp_remove_all();
 			return (0);
-		}
-		if (answer == NULL)
-		{
-			write(1, "\b\bexit\n", 7);
-			exit (0);
 		}
 		head = parser(answer);
 		if (head == NULL)

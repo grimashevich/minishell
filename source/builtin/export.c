@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 13:40:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 16:03:36 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 20:26:28 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,12 @@ void	built_export(char **command)
 		command++;
 		while (*command != NULL)
 		{
+			if (ft_isalpha(**command) == FALSE)
+			{
+				write(2, "minishell: export: ", 19);
+				write(2, *command, ft_strlen(*command));
+				write(2, ": not a valid identifier\n", 25);
+			}
 			append_envp(*command);
 			command++;
 		}
