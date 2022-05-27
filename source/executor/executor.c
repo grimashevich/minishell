@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 18:16:25 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 22:56:53 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,30 @@ void	redirects(t_rdr_fls *redirects)
 	}
 }
 
+void	🍴(int fd[2][2], t_cmd *command)
+{
+	pid_t	pid;
+	char	*file;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		dup2(fd[0][0], 0);
+		dup2(fd[1][1], 1);
+		// close(fd[0][0]);
+		close(fd[0][1]);
+		close(fd[1][0]);
+		// close(fd[1][1]);
+		file = get_file(command->command[0], g_ms.envp);
+		execve(file, command->command, g_ms.envp);
+	}
+}
+
 void	minecraft(void)
 {
 	char	buffer[1025];
@@ -131,7 +155,19 @@ void	minecraft(void)
 	close(fd);
 }
 
-void	launch_command(t_cmd *command, int fifo[2][2])
+void	change_fd_arr(int arr[2][2])
+{
+	int	t;
+
+	t = arr[0][0];
+	arr[0][0] = arr[1][0];
+	arr[1][0] = t;
+	t = arr[0][1];
+	arr[0][1] = arr[1][1];
+	arr[1][1] = t;
+}
+
+void	launch_command(t_cmd *command, int fd[2][2])
 {
 	pid_t	pid;
 	char	*file;
@@ -145,11 +181,83 @@ void	launch_command(t_cmd *command, int fifo[2][2])
 	{
 		return ;
 	}
-	(void)fifo;
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	if (command->prev_operator == PIPE)
+	{
+		if (command->next_operator == PIPE)
+		{
+			// MIDDLE
+			change_fd_arr(fd);
+			pipe(fd[1]);
+			🍴(fd, command);
+			close(fd[0][0]);
+			close(fd[0][1]);
+			fd[0][0] = STDIN_FILENO;
+			fd[0][1] = STDOUT_FILENO;
+		}
+		else
+		{
+			// LAST
+			change_fd_arr(fd);
+			🍴(fd, command);
+			close(fd[0][0]);
+			close(fd[0][1]);
+			fd[0][0] = STDIN_FILENO;
+			fd[0][1] = STDOUT_FILENO;
+		}
+		return ;
+	}
+	else if (command->next_operator == PIPE)
+	{
+		// FIRST
+		// pipe(fd[0]);
+		pipe(fd[1]);
+		🍴(fd, command);
+		return ;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	(void)fd;
 	// if (command->next_operator == PIPE)
 	// {
-	// 	pipe(*fifo[0]);
-	// 	pipe(*fifo[1]);
+	// 	pipe(*fd[0]);
+	// 	pipe(*fd[1]);
 	// }
 	if (command->redirects != NULL)
 	{
@@ -217,17 +325,7 @@ void	launch_command(t_cmd *command, int fifo[2][2])
 		// fd = get_fd(command->redirects);
 		// if (fd == -1)
 		// {
-		// 	dup2(0, fifo[0])
-		// }
-		// if (ft_strcmp(command->command[0], "echo") == 0)
-		// {
-		// 	built_echo(command->command);
-		// 	exit(g_ms.exit_code);
-		// }
-		// if (ft_strcmp(command->command[0], "env") == 0)
-		// {
-		// 	envp_print();
-		// 	exit(0);
+		// 	dup2(0, fd[0])
 		// }
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
@@ -236,7 +334,7 @@ void	launch_command(t_cmd *command, int fifo[2][2])
 	g_ms.exit_code = status;
 }
 
-void	launch_container(t_cont *container, int fifo[2][2])
+void	launch_container(t_cont *container, int fd[2][2])
 {
 	pid_t	pid;
 	int		status;
@@ -249,7 +347,7 @@ void	launch_container(t_cont *container, int fifo[2][2])
 	{
 		return ;
 	}
-	(void)fifo;
+	(void)fd;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -269,21 +367,24 @@ void	launch_container(t_cont *container, int fifo[2][2])
 
 void	executor(t_tag *head)
 {
-	int	fifo[2][2];
+	int	fd[2][2];
 	int	i;
 
 	i = 0;
-	ft_memset(&fifo, 0, sizeof(int *) * 2);
+	fd[0][0] = 0;
+	fd[0][1] = 1;
+	fd[1][0] = 0;
+	fd[1][1] = 1;
 	while (head[i].type != END)
 	{
 		// NOT creatE pipe
 		if (head[i].type == COMMAND)
 		{
-			launch_command(head[i].data, fifo);
+			launch_command(head[i].data, fd);
 		}
 		else if (head[i].type == CONTAINER)
 		{
-			launch_container(head[i].data, fifo);
+			launch_container(head[i].data, fd);
 		}
 		i += 1;
 	}
