@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 09:55:41 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:16:53 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	redirects(t_rdr_fls *redirects)
 		}
 		if (redirects->type == APPEND)
 		{
-			fd = open(redirects->path, O_CREAT | O_WRONLY, 0677);
+			fd = open(redirects->path, O_CREAT | O_APPEND | O_WRONLY, 0677);
 		}
 		if (redirects->type == READ)
 		{
@@ -112,7 +112,7 @@ void	redirects(t_rdr_fls *redirects)
 	}
 }
 
-void	launch_command(t_cmd *command, int fifo[][])
+void	launch_command(t_cmd *command, int fifo[2][2])
 {
 	pid_t	pid;
 	char	*file;
@@ -151,6 +151,16 @@ void	launch_command(t_cmd *command, int fifo[][])
 		built_unset(command->command);
 		return ;
 	}
+	if (ft_strcmp(command->command[0], "cd") == 0)
+	{
+		g_ms.exit_code = (change_direcory(command->command[1]));
+		return ;
+	}
+	if (ft_strcmp(command->command[0], "pwd") == 0)
+	{
+		built_pwd();
+		return ;
+	}
 	pid = fork();
 	if (pid == -1)
 	{
@@ -172,10 +182,6 @@ void	launch_command(t_cmd *command, int fifo[][])
 			exit(g_ms.exit_code);
 			return ;
 		}
-		if (ft_strcmp(command->command[0], "cd") == 0)
-		{
-			exit(change_direcory(command->command[1]));
-		}
 		if (ft_strcmp(command->command[0], "env") == 0)
 		{
 			envp_print();
@@ -188,7 +194,7 @@ void	launch_command(t_cmd *command, int fifo[][])
 	g_ms.exit_code = status;
 }
 
-void	launch_container(t_cont *container, int fifo[][])
+void	launch_container(t_cont *container, int fifo[2][2])
 {
 	pid_t	pid;
 	int		status;
@@ -231,11 +237,11 @@ void	executor(t_tag *head)
 		// NOT creatE pipe
 		if (head[i].type == COMMAND)
 		{
-			launch_command(head[i].data, &fifo);
+			launch_command(head[i].data, fifo);
 		}
 		else if (head[i].type == CONTAINER)
 		{
-			launch_container(head[i].data, &fifo);
+			launch_container(head[i].data, fifo);
 		}
 		i += 1;
 	}

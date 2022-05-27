@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/26 21:08:50 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 13:02:54 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,11 +154,16 @@ int	main(int argc, char **argv, char **envp)
 
 	envp_init(envp);
 	g_ms.variables = NULL;
-	g_ms.variables = update_vars(g_ms.variables, ft_strdup("$"), ft_itoa(getpid()));
+	g_ms.variables = update_vars(g_ms.variables, ft_strdup("$"), ft_itoa(getpid())); 
 	answer = (char *)1;
 	while (answer)
 	{
 		answer = readline("minishell🗿");
+		if (answer == NULL)
+		{
+			write(1, "\b\bexit\n", 7);
+			exit (0);
+		}
 		head = parser(answer);
 		if (head == NULL)
 		{
