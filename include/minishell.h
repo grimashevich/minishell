@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/26 17:27:25 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 00:39:45 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,10 +108,6 @@ t_ms	g_ms;
 
 void 	ms_error(char *func_name, char *str_error, int errn);
 t_tag	*parser(char *line);
-void	built_echo(char **command);
-void	built_exit(char **code);
-t_vars	*update_vars(t_vars *start, char *name, char *new_value);
-t_vars	*add_var_first(t_vars *start, t_vars *new_var);
 
 void	executor(t_tag *head);
 

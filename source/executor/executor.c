@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/26 22:12:50 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 09:55:41 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ static char	**get_path(char **envp, char *command)
 		envp++;
 	if (*envp == NULL)
 	{
-		// access(command, 0);
 		ft_putstr_fd("minishell: ", 2);
 		perror(command);
 		exit(127);
@@ -82,32 +81,38 @@ static char	*get_file(char *command, char **envp)
 	return (file);
 }
 
-void	built_unset(char **command)
+void	redirects(t_rdr_fls *redirects)
 {
-	command++;
-	while (*command != NULL)
+	int	fd;
+
+	while (redirects != NULL)
 	{
-		envp_remove(*command);
-		command++;
+		if (redirects->type == WRITE)
+		{
+			fd = open(redirects->path, O_CREAT | O_TRUNC | O_WRONLY, 0677);
+		}
+		if (redirects->type == APPEND)
+		{
+			fd = open(redirects->path, O_CREAT | O_WRONLY, 0677);
+		}
+		if (redirects->type == READ)
+		{
+			fd = open(redirects->path, O_RDONLY);
+		}
+		// if (redirects->type == HERE_DOC)
+		// {
+		// 	fd = open(redirects->path, O_CREAT | O_TRUNC | O_RDWR, 0677);
+		// }
+		if (fd == -1)
+		{
+			perror("minishell:");
+		}
+		close(fd); // ban
+		redirects = redirects->next;
 	}
 }
 
-void assign_vars_value(t_cmd *command)
-{
-	int	index;
-
-	index = envp_get_index(command->vars->name);
-	if (index != -1)
-	{
-		envp_replace_by_index(command->vars->name, command->vars->value, index);
-	}
-	else
-	{
-		g_ms.variables = update_vars(g_ms.variables, command->vars->name, command->vars->value);
-	}
-}
-
-void	launch_command(t_cmd *command)
+void	launch_command(t_cmd *command, int fifo[][])
 {
 	pid_t	pid;
 	char	*file;
@@ -121,22 +126,27 @@ void	launch_command(t_cmd *command)
 	{
 		return ;
 	}
+	(void)fifo;
 	// if (command->next_operator == PIPE)
 	// {
 	// 	pipe(*fifo[0]);
 	// 	pipe(*fifo[1]);
 	// }
+	if (command->redirects != NULL)
+	{
+		redirects(command->redirects);
+	}
 	if (command->command[0][0] == '\0')
 	{
 		assign_vars_value(command);
 		return ;
 	}
-	if (strcmp(command->command[0], "exit") == 0)
+	if (ft_strcmp(command->command[0], "exit") == 0)
 	{
 		built_exit(command->command);
 		return ;
 	}
-	if (strcmp(command->command[0], "unset") == 0)
+	if (ft_strcmp(command->command[0], "unset") == 0)
 	{
 		built_unset(command->command);
 		return ;
@@ -156,17 +166,17 @@ void	launch_command(t_cmd *command)
 		// {
 		// 	dup2(0, fifo[0])
 		// }
-		if (strcmp(command->command[0], "echo") == 0)
+		if (ft_strcmp(command->command[0], "echo") == 0)
 		{
 			built_echo(command->command);
 			exit(g_ms.exit_code);
 			return ;
 		}
-		if (strcmp(command->command[0], "cd") == 0)
+		if (ft_strcmp(command->command[0], "cd") == 0)
 		{
 			exit(change_direcory(command->command[1]));
 		}
-		if (strcmp(command->command[0], "env") == 0)
+		if (ft_strcmp(command->command[0], "env") == 0)
 		{
 			envp_print();
 			exit(0);
@@ -178,7 +188,7 @@ void	launch_command(t_cmd *command)
 	g_ms.exit_code = status;
 }
 
-void	launch_container(t_cont *container)
+void	launch_container(t_cont *container, int fifo[][])
 {
 	pid_t	pid;
 	int		status;
@@ -191,6 +201,7 @@ void	launch_container(t_cont *container)
 	{
 		return ;
 	}
+	(void)fifo;
 	pid = fork();
 	if (pid == -1)
 	{
@@ -208,28 +219,23 @@ void	launch_container(t_cont *container)
 	}
 }
 
-// int get_fd
-
 void	executor(t_tag *head)
 {
-	// int	fifo[2][2];
+	int	fifo[2][2];
 	int	i;
 
 	i = 0;
-	// fifo[0][0] = 0;
-	// fifo[0][1] = 1;
-	// fifo[1][0] = 0;
-	// fifo[1][1] = 1;
+	ft_memset(&fifo, 0, sizeof(int *) * 2);
 	while (head[i].type != END)
 	{
 		// NOT creatE pipe
 		if (head[i].type == COMMAND)
 		{
-			launch_command(head[i].data);
+			launch_command(head[i].data, &fifo);
 		}
 		else if (head[i].type == CONTAINER)
 		{
-			launch_container(head[i].data);
+			launch_container(head[i].data, &fifo);
 		}
 		i += 1;
 	}

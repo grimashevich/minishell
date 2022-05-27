@@ -1,27 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.h                                         :+:      :+:    :+:   */
+/*   assign_vars_value.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/25 16:58:52 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 00:39:49 by ccamie           ###   ########.fr       */
+/*   Created: 2022/05/27 00:38:46 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/27 00:39:03 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef EXECUTOR_H
-# define EXECUTOR_H
+#include "executor.h"
 
-# include "minishell.h"
+void	assign_vars_value(t_cmd *command)
+{
+	int	index;
 
-void	assign_vars_value(t_cmd *command);
-
-void	built_echo(char **command);
-void	built_exit(char **code);
-void	built_unset(char **command);
-
-t_vars	*update_vars(t_vars *start, char *name, char *new_value);
-t_vars	*add_var_first(t_vars *start, t_vars *new_var);
-
-#endif // EXECUTOR_H
+	index = envp_get_index(command->vars->name);
+	if (index != -1)
+	{
+		envp_replace_by_index(command->vars->name, command->vars->value, index);
+	}
+	else
+	{
+		g_ms.variables = update_vars(g_ms.variables, command->vars->name, command->vars->value);
+	}
+}
