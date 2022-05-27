@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lvl2_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/26 17:48:19 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/27 14:18:14 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -630,12 +630,14 @@ void delete_rdr_from_str(char **str, int start, int end)
 	*str = tmp;
 }
 
-int fd_str_len(int fd, char *fd_str)
+int fd_str_len(char *fd_str)
 {
-	int	i;
-
+	//int	i;
 	if (fd_str != NULL)
 		return (ft_strlen(fd_str));
+	return (0);
+/*
+TODO DELETE?
 	i = 0;
 	while (fd)
 	{
@@ -643,9 +645,11 @@ int fd_str_len(int fd, char *fd_str)
 		i++;
 	}
 	return (i);
+*/
 }
 
 /* 
+cmd > 2 param1
 TODO FIX WORKING WITH QUOTES
  */
 t_rdr_fls *eject_redirect(char **str, char *c, int rdr_type)
@@ -667,8 +671,10 @@ t_rdr_fls *eject_redirect(char **str, char *c, int rdr_type)
 	if (! result)
 		return (NULL);
 	result->type = rdr_type;
+	int start_rdr = c - *str;
+	(void) start_rdr;
 	delete_rdr_from_str(str, 
-		c - *str - fd_str_len(fd_int, fd_str),
+		c - *str - fd_str_len(fd_str),
 		c - *str + ft_strlen((char *) get_rdr_type(rdr_type)) - 1 + r_word_len);
 	if (fd_str)
 		free(fd_str);
