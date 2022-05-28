@@ -6,11 +6,13 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 21:19:36 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 21:41:54 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+#define HEREDOC_TMP_FILENAME ".heredoc_tmp"
 
 static char	**get_path(char **envp, char *command)
 {
@@ -81,6 +83,34 @@ static char	*get_file(char *command, char **envp)
 	return (file);
 }
 
+
+
+
+int	here_doc(char *stop_word)
+{
+	char	*buffer;
+	int		read_len;
+	int		stop_word_len;
+    int     tmp_file_fd;
+
+    stop_word_len = ft_strlen(stop_word);
+	buffer = malloc(stop_word_len + 2);
+	if (! buffer)
+        exit(1);
+    tmp_file_fd = open(HEREDOC_TMP_FILENAME, O_WRONLY | O_CREAT | O_TRUNC, 0664);
+    while (1)
+	{
+		read_len = read(0, buffer, stop_word_len + 2);
+		if (read_len - 1 == stop_word_len
+			&& ft_strncmp(buffer, stop_word, read_len - 1) == 0)
+			break ;
+		write(tmp_file_fd, buffer, read_len);
+	}
+	free(buffer);
+    close(tmp_file_fd);
+    tmp_file_fd = open(HEREDOC_TMP_FILENAME, O_RDONLY);
+    return (tmp_file_fd);
+}
 
 void	minecraft(void)
 {
@@ -157,26 +187,24 @@ void	redirects(t_rdr_fls *redirects)
 		if (redirects->type == WRITE)
 		{
 			fd = open(redirects->path, O_CREAT | O_TRUNC | O_WRONLY, 0677);
-			dup2(fd, 1);
 		}
 		if (redirects->type == APPEND)
 		{
 			fd = open(redirects->path, O_CREAT | O_APPEND | O_WRONLY, 0677);
-			dup2(fd, 1);
 		}
 		if (redirects->type == READ)
 		{
 			fd = open(redirects->path, O_RDONLY);
-			dup2(fd, 0);
 		}
-		// if (redirects->type == HERE_DOC)
-		// {
-		// 	fd = open(redirects->path, O_CREAT | O_TRUNC | O_RDWR, 0677);
-		// }
+		if (redirects->type == HERE_DOC)
+		{
+			fd = here_doc(redirects->path);
+		}
 		if (fd == -1)
 		{
 			perror("minishell:");
 		}
+		dup2(fd, redirects->fd);
 		close(fd); // ban
 		redirects = redirects->next;
 	}
@@ -395,6 +423,7 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 			fd[1][0] = STDIN_FILENO;
 			fd[1][1] = STDOUT_FILENO;
 			waitpid(pid, &g_ms.exit_code, 0);
+			unlink(HEREDOC_TMP_FILENAME);
 			while (*number_of_process_for_wait_for_without_of_waitpid > 0)
 			{
 				wait(NULL);
@@ -477,6 +506,7 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 			fd[1][0] = STDIN_FILENO;
 			fd[1][1] = STDOUT_FILENO;
 			waitpid(pid, &g_ms.exit_code, 0);
+			unlink(HEREDOC_TMP_FILENAME);
 			while (*number_of_process_for_wait_for_without_of_waitpid > 0)
 			{
 				wait(NULL);
