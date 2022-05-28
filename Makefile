@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/27 22:53:45 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/28 15:50:40 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ CC			=	cc
 
 CPPFLAGS	=	-I libft/include			\
 				-I include
-# CPPFLAGS	+=	-Wall -Wextra -Werror -g
+CPPFLAGS	+=	-Wall -Wextra -Werror -g
+# CPPFLAGS	+=	-g
 # CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 

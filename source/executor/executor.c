@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 01:12:27 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 16:19:23 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static char	*get_file(char *command, char **envp)
 	int		i;
 	char	*file;
 
-	if (access(command, 0) == 0)
+	if (access(command, 0) == 0) // bugfix
 		return (command);
 	path = get_path(envp, command);
 	i = 0;
@@ -112,7 +112,7 @@ void	redirects(t_rdr_fls *redirects)
 	}
 }
 
-void	🍴(int fd[2][2], t_cmd *command)
+void	first_🍴(int pipe[2], t_cmd *command)
 {
 	pid_t	pid;
 	char	*file;
@@ -125,12 +125,64 @@ void	🍴(int fd[2][2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
-		dup2(fd[0][0], 0);
-		dup2(fd[1][1], 1);
-		// close(fd[0][0]);
+		// dup2(0, STDIN_FILENO);
+		dup2(pipe[1], STDOUT_FILENO);
+		// close(0);
+		close(pipe[0]);
+		close(pipe[1]);
+		file = get_file(command->command[0], g_ms.envp);
+		execve(file, command->command, g_ms.envp);
+	}
+}
+
+void	last_🍴(int pipe[2], t_cmd *command)
+{
+	pid_t	pid;
+	char	*file;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		dup2(pipe[0], STDIN_FILENO);
+		// dup2(1, STDOUT_FILENO);
+		// close(1);
+		close(pipe[0]);
+		close(pipe[1]);
+		file = get_file(command->command[0], g_ms.envp);
+		execve(file, command->command, g_ms.envp);
+	}
+}
+
+void	🍴(int fd[2][2], t_cmd *command)
+{
+	pid_t	pid;
+	char	*file;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	// printf("pid - %d\n", pid);
+	if (pid == 0)
+	{
+		// dup2(fd[0][1], STDOUT_FILENO);
+		// dup2(fd[1][0], STDIN_FILENO);
+	
+		dup2(fd[0][0], STDIN_FILENO);
+		dup2(fd[1][1], STDOUT_FILENO);
+	
+		close(fd[0][0]);
 		// close(fd[0][1]);
 		// close(fd[1][0]);
-		// close(fd[1][1]);
+		close(fd[1][1]);
+	
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
@@ -203,13 +255,6 @@ void	launch_command(t_cmd *command, int fd[2][2])
 			// MIDDLE
 			juggle_pipes(fd);
 			pipe(fd[1]);
-			// printf("middle\n");
-			// printf("in\n");
-			// printf("fd[0][0]: %d\n", fd[0][0]);
-			// printf("fd[0][1]: %d\n", fd[0][1]);
-			// printf("out\n");
-			// printf("fd[1][0]: %d\n", fd[1][0]);
-			// printf("fd[1][1]: %d\n", fd[1][1]);
 			🍴(fd, command);
 			close(fd[0][0]);
 			close(fd[0][1]);
@@ -219,19 +264,14 @@ void	launch_command(t_cmd *command, int fd[2][2])
 		else
 		{
 			// LAST
-			juggle_pipes(fd);
-			// printf("last\n");
-			// printf("in\n");
-			// printf("fd[0][0]: %d\n", fd[0][0]);
-			// printf("fd[0][1]: %d\n", fd[0][1]);
-			// printf("out\n");
-			// printf("fd[1][0]: %d\n", fd[1][0]);
-			// printf("fd[1][1]: %d\n", fd[1][1]);
-			🍴(fd, command);
-			close(fd[0][0]);
-			close(fd[0][1]);
-			fd[0][0] = STDIN_FILENO;
-			fd[0][1] = STDOUT_FILENO;
+			// juggle_pipes(fd);
+			// last_🍴(fd[0], 1, command);
+			last_🍴(fd[1], command);
+			close(fd[1][0]);
+			close(fd[1][1]);
+			fd[1][0] = STDIN_FILENO;
+			fd[1][1] = STDOUT_FILENO;
+			wait(NULL);
 			wait(NULL);
 		}
 		return ;
@@ -239,16 +279,8 @@ void	launch_command(t_cmd *command, int fd[2][2])
 	else if (command->next_operator == PIPE)
 	{
 		// FIRST
-		// pipe(fd[0]);
 		pipe(fd[1]);
-		// printf("first\n");
-		// printf("in\n");
-		// printf("fd[0][0]: %d\n", fd[0][0]);
-		// printf("fd[0][1]: %d\n", fd[0][1]);
-		// printf("out\n");
-		// printf("fd[1][0]: %d\n", fd[1][0]);
-		// printf("fd[1][1]: %d\n", fd[1][1]);
-		🍴(fd, command);
+		first_🍴(fd[1], command);
 		return ;
 	}
 
