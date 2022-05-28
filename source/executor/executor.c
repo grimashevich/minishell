@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 19:37:24 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 21:19:36 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,73 @@ static char	*get_file(char *command, char **envp)
 	return (file);
 }
 
+
+void	minecraft(void)
+{
+	char	buffer[1025];
+	int		fd;
+	ssize_t	readed;
+
+	printf("\x1b[32m\n");
+	fd = open("minecraft", O_RDONLY);
+	readed = read(fd, buffer, 1024);
+	while (readed != 0)
+	{
+		buffer[readed] = '\0';
+		write(1, buffer, ft_strlen(buffer));
+		readed = read(fd, buffer, 1024);
+	}
+	printf("\n");
+	close(fd);
+}
+
+
+int	built_in(t_cmd *command)
+{
+	if (ft_strcmp(command->command[0], "export") == 0)
+	{
+		built_export(command->command);
+		return (TRUE);
+	}
+	if (ft_strcmp(command->command[0], "exit") == 0)
+	{
+		built_exit(command->command);
+		return (TRUE);
+	}
+	if (ft_strcmp(command->command[0], "unset") == 0)
+	{
+		built_unset(command->command);
+		return (TRUE);
+	}
+	if (ft_strcmp(command->command[0], "cd") == 0)
+	{
+		g_ms.exit_code = (change_direcory(command->command[1]));
+		return (TRUE);
+	}
+	if (ft_strcmp(command->command[0], "pwd") == 0)
+	{
+		built_pwd();
+		return (TRUE);
+	}
+	if (ft_strcmp(command->command[0], "Minecraft") == 0)
+	{
+		minecraft();
+		return (TRUE);
+	}
+	if (ft_strcmp(command->command[0], "echo") == 0)
+	{
+		built_echo(command->command);
+		return (TRUE);
+	}
+	if (ft_strcmp(command->command[0], "env") == 0)
+	{
+		envp_print();
+		g_ms.exit_code = 0;
+		return (TRUE);
+	}
+	return (FALSE);
+}
+
 void	redirects(t_rdr_fls *redirects)
 {
 	int	fd;
@@ -90,14 +157,17 @@ void	redirects(t_rdr_fls *redirects)
 		if (redirects->type == WRITE)
 		{
 			fd = open(redirects->path, O_CREAT | O_TRUNC | O_WRONLY, 0677);
+			dup2(fd, 1);
 		}
 		if (redirects->type == APPEND)
 		{
 			fd = open(redirects->path, O_CREAT | O_APPEND | O_WRONLY, 0677);
+			dup2(fd, 1);
 		}
 		if (redirects->type == READ)
 		{
 			fd = open(redirects->path, O_RDONLY);
+			dup2(fd, 0);
 		}
 		// if (redirects->type == HERE_DOC)
 		// {
@@ -125,9 +195,11 @@ void	first_cont_🍴(int pipe[2], t_cont *container)
 	if (pid == 0)
 	{
 		dup2(pipe[1], STDOUT_FILENO);
+		redirects(container->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
 		executor(container->tag);
+		exit(g_ms.exit_code);
 	}
 }
 
@@ -144,9 +216,11 @@ pid_t	last_cont_🍴(int pipe[2], t_cont *container)
 	if (pid == 0)
 	{
 		dup2(pipe[0], STDIN_FILENO);
+		redirects(container->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
 		executor(container->tag);
+		exit(g_ms.exit_code);
 	}
 	return (pid);
 }
@@ -165,11 +239,13 @@ void	cont_🍴(int fd[2][2], t_cont *container)
 	{
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
+		redirects(container->redirects);
 		close(fd[0][0]);
 		close(fd[0][1]);
 		close(fd[1][0]);
 		close(fd[1][1]);
 		executor(container->tag);
+		exit(g_ms.exit_code);
 	}
 }
 
@@ -187,8 +263,13 @@ void	first_🍴(int pipe[2], t_cmd *command)
 	if (pid == 0)
 	{
 		dup2(pipe[1], STDOUT_FILENO);
+		redirects(command->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
+		if (built_in(command) == TRUE)
+		{
+			exit(g_ms.exit_code);
+		}
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
@@ -208,8 +289,13 @@ pid_t	last_🍴(int pipe[2], t_cmd *command)
 	if (pid == 0)
 	{
 		dup2(pipe[0], STDIN_FILENO);
+		redirects(command->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
+		if (built_in(command) == TRUE)
+		{
+			exit(g_ms.exit_code);
+		}
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
@@ -231,32 +317,18 @@ void	🍴(int fd[2][2], t_cmd *command)
 	{
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
+		redirects(command->redirects);
 		close(fd[0][0]);
 		close(fd[0][1]);
 		close(fd[1][0]);
 		close(fd[1][1]);
+		if (built_in(command) == TRUE)
+		{
+			exit(g_ms.exit_code);
+		}
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
-}
-
-void	minecraft(void)
-{
-	char	buffer[1025];
-	int		fd;
-	ssize_t	readed;
-
-	printf("\x1b[32m\n");
-	fd = open("minecraft", O_RDONLY);
-	readed = read(fd, buffer, 1024);
-	while (readed != 0)
-	{
-		buffer[readed] = '\0';
-		write(1, buffer, ft_strlen(buffer));
-		readed = read(fd, buffer, 1024);
-	}
-	printf("\n");
-	close(fd);
 }
 
 void	juggle_pipes(int arr[2][2])
@@ -339,31 +411,6 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 		first_🍴(fd[1], command);
 		return ;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	if (command->redirects != NULL)
 	{
 		redirects(command->redirects);
@@ -376,45 +423,8 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 			return ;
 		}
 	}
-	if (ft_strcmp(command->command[0], "export") == 0)
+	if (built_in(command) == TRUE)
 	{
-		built_export(command->command);
-		return ;
-	}
-	if (ft_strcmp(command->command[0], "exit") == 0)
-	{
-		built_exit(command->command);
-		return ;
-	}
-	if (ft_strcmp(command->command[0], "unset") == 0)
-	{
-		built_unset(command->command);
-		return ;
-	}
-	if (ft_strcmp(command->command[0], "cd") == 0)
-	{
-		g_ms.exit_code = (change_direcory(command->command[1]));
-		return ;
-	}
-	if (ft_strcmp(command->command[0], "pwd") == 0)
-	{
-		built_pwd();
-		return ;
-	}
-	if (ft_strcmp(command->command[0], "Minecraft") == 0)
-	{
-		minecraft();
-		return ;
-	}
-	if (ft_strcmp(command->command[0], "echo") == 0)
-	{
-		built_echo(command->command);
-		return ;
-	}
-	if (ft_strcmp(command->command[0], "env") == 0)
-	{
-		envp_print();
-		g_ms.exit_code = 0;
 		return ;
 	}
 	pid = fork();
@@ -434,9 +444,7 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_for_wait_for_without_of_waitpid)
 {
 	pid_t	pid;
-	// int		status;
-
-	(void)number_of_process_for_wait_for_without_of_waitpid;
+	
 	if (container->prev_operator == AND && g_ms.exit_code != 0)
 	{
 		return ;
@@ -445,14 +453,6 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 	{
 		return ;
 	}
-	(void)fd;
-
-
-
-
-
-
-
 	if (container->prev_operator == PIPE)
 	{
 		if (container->next_operator == PIPE)
@@ -493,10 +493,6 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 		first_cont_🍴(fd[1], container);
 		return ;
 	}
-
-
-
-
 	pid = fork();
 	if (pid == -1)
 	{
@@ -505,7 +501,9 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 	}
 	if (pid == 0)
 	{
+		redirects(container->redirects);
 		executor(container->tag);
+		exit(g_ms.exit_code);
 	}
 	if (container->next_operator != PIPE)
 	{
@@ -516,6 +514,7 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 void	executor(t_tag *head)
 {
 	int	fd[2][2];
+	int	binout[2];
 	int	number_of_process_for_wait_for_without_of_waitpid;
 	int	i;
 
@@ -524,6 +523,8 @@ void	executor(t_tag *head)
 	fd[0][1] = 1;
 	fd[1][0] = 0;
 	fd[1][1] = 1;
+	binout[0] = dup(0);
+	binout[1] = dup(1);
 	number_of_process_for_wait_for_without_of_waitpid = 0;
 	while (head[i].type != END)
 	{
@@ -535,8 +536,9 @@ void	executor(t_tag *head)
 		else if (head[i].type == CONTAINER)
 		{
 			launch_container(head[i].data, fd, &number_of_process_for_wait_for_without_of_waitpid);
-			exit(g_ms.exit_code);
 		}
+		dup2(binout[1], 1);
+		dup2(binout[0], 0);
 		i += 1;
 	}
 }

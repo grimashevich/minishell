@@ -6,10 +6,9 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/28 20:25:55 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 20:38:40 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minishell.h"
 #include <time.h>
@@ -17,7 +16,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "cd_function.h"
-
 
 int	str_wildcard_compare(char *str, char *ptrn);
 int str_is_numeric(char *str);
@@ -48,7 +46,6 @@ void print_text(char **text)
 	}	
 }
 
-
 void print_rdr(t_rdr_fls *item)
 {
 	char *outs = NULL;
@@ -63,7 +60,7 @@ void print_rdr(t_rdr_fls *item)
 		free(outs);
 }
 
-void print_tcmd (t_cmd *cmd)
+void print_tcmd(t_cmd *cmd)
 {
 	int i = 0;
 	t_rdr_fls *tmp_rdr;
@@ -190,10 +187,10 @@ int	main(int argc, char **argv, char **envp)
 		add_history(answer);
 		free(answer);
 		command = head->data;
-		print_diagram(head);
-		print_tree(head);
-		print_cmd(head);
-		printf("-----------------------------------------\n");
+		// print_diagram(head);
+		// print_tree(head);
+		// print_cmd(head);
+		// printf("-----------------------------------------\n");
 		executor(head);
 		remove_tree(head);
 	}
