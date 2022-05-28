@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 13:40:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 20:26:28 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 16:52:00 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	local_into_envp(char *name)
 	}
 }
 
+t_vars	*delete_var(t_vars *start, char *name);
+
 void	append_envp(char *command)
 {
 	t_vars	*variable;
@@ -64,6 +66,7 @@ void	append_envp(char *command)
 			envp_replace_by_index(variable->name, variable->value, index);
 		}
 		free(out);
+		delete_var(g_ms.variables, variable->name);
 		delete_all_vars(variable);
 	}
 }

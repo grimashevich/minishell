@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 21:00:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 19:03:07 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ static int	check_parentheses_after_operator(char *string)
 				string += skip_double_quotation_mark(string + 1) + 1;
 			string += 1;
 		}
-		if (*string == '\0')
+		if (*string == '\0' || (*string == ')' && *(string + 1) == '\0'))
 			return (0);
 		while (operator == EMPTY && *string != '\0')
 		{

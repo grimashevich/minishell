@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/28 00:57:32 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 20:25:55 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,11 +162,16 @@ int	main(int argc, char **argv, char **envp)
 	answer = (char *)1;
 	while (answer)
 	{
-		answer = readline("minishell🍺");
+		answer = readline("minishell🍺 ");
 		if (answer == NULL)
 		{
-			write(1, "\b\bexit\n", 7);
+			write(1, "\b\bexit\n", 10);
 			exit (0);
+		}
+		if (*answer == '\0')
+		{
+			free(answer);
+			continue ;
 		}
 		if (ft_strcmp(answer, "return") == 0)
 		{
@@ -185,10 +190,10 @@ int	main(int argc, char **argv, char **envp)
 		add_history(answer);
 		free(answer);
 		command = head->data;
-		// print_diagram(head);
-		// print_tree(head);
-		// print_cmd(head);
-		// printf("-----------------------------------------\n");
+		print_diagram(head);
+		print_tree(head);
+		print_cmd(head);
+		printf("-----------------------------------------\n");
 		executor(head);
 		remove_tree(head);
 	}

@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/26 17:33:12 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 20:31:56 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,10 @@ static int	get_next_operator(char *line)
 	i = ft_strlen(line) - 1;
 	while (i > 0 && ft_isspace(line[i]) == TRUE)
 		i -= 1;
-	if (line[i] != ';' && line[i] != '|')
+	if (line[i] != ';')
 		i -= 1;
+	if (line[i] != '|' && line[i + 1] == '|')
+		i += 1;
 	while (i > 0 && line[i] != '\0')
 	{
 		if (ft_isalnum(line[i]) == TRUE)

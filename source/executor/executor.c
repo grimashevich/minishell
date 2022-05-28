@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 16:19:23 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/28 19:37:24 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,67 @@ void	redirects(t_rdr_fls *redirects)
 	}
 }
 
+void	first_cont_🍴(int pipe[2], t_cont *container)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		dup2(pipe[1], STDOUT_FILENO);
+		close(pipe[0]);
+		close(pipe[1]);
+		executor(container->tag);
+	}
+}
+
+pid_t	last_cont_🍴(int pipe[2], t_cont *container)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		dup2(pipe[0], STDIN_FILENO);
+		close(pipe[0]);
+		close(pipe[1]);
+		executor(container->tag);
+	}
+	return (pid);
+}
+
+void	cont_🍴(int fd[2][2], t_cont *container)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	if (pid == 0)
+	{
+		dup2(fd[0][0], STDIN_FILENO);
+		dup2(fd[1][1], STDOUT_FILENO);
+		close(fd[0][0]);
+		close(fd[0][1]);
+		close(fd[1][0]);
+		close(fd[1][1]);
+		executor(container->tag);
+	}
+}
+
 void	first_🍴(int pipe[2], t_cmd *command)
 {
 	pid_t	pid;
@@ -125,9 +186,7 @@ void	first_🍴(int pipe[2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
-		// dup2(0, STDIN_FILENO);
 		dup2(pipe[1], STDOUT_FILENO);
-		// close(0);
 		close(pipe[0]);
 		close(pipe[1]);
 		file = get_file(command->command[0], g_ms.envp);
@@ -135,7 +194,7 @@ void	first_🍴(int pipe[2], t_cmd *command)
 	}
 }
 
-void	last_🍴(int pipe[2], t_cmd *command)
+pid_t	last_🍴(int pipe[2], t_cmd *command)
 {
 	pid_t	pid;
 	char	*file;
@@ -149,13 +208,12 @@ void	last_🍴(int pipe[2], t_cmd *command)
 	if (pid == 0)
 	{
 		dup2(pipe[0], STDIN_FILENO);
-		// dup2(1, STDOUT_FILENO);
-		// close(1);
 		close(pipe[0]);
 		close(pipe[1]);
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
+	return (pid);
 }
 
 void	🍴(int fd[2][2], t_cmd *command)
@@ -169,20 +227,14 @@ void	🍴(int fd[2][2], t_cmd *command)
 		perror("minishell");
 		exit(1);
 	}
-	// printf("pid - %d\n", pid);
 	if (pid == 0)
 	{
-		// dup2(fd[0][1], STDOUT_FILENO);
-		// dup2(fd[1][0], STDIN_FILENO);
-	
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
-	
 		close(fd[0][0]);
-		// close(fd[0][1]);
-		// close(fd[1][0]);
+		close(fd[0][1]);
+		close(fd[1][0]);
 		close(fd[1][1]);
-	
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
@@ -219,11 +271,10 @@ void	juggle_pipes(int arr[2][2])
 	arr[1][1] = t;
 }
 
-void	launch_command(t_cmd *command, int fd[2][2])
+void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wait_for_without_of_waitpid)
 {
 	pid_t	pid;
 	char	*file;
-	int		status;
 
 	if (command->prev_operator == AND && g_ms.exit_code != 0)
 	{
@@ -253,6 +304,7 @@ void	launch_command(t_cmd *command, int fd[2][2])
 		if (command->next_operator == PIPE)
 		{
 			// MIDDLE
+			*number_of_process_for_wait_for_without_of_waitpid += 1;
 			juggle_pipes(fd);
 			pipe(fd[1]);
 			🍴(fd, command);
@@ -264,21 +316,25 @@ void	launch_command(t_cmd *command, int fd[2][2])
 		else
 		{
 			// LAST
-			// juggle_pipes(fd);
-			// last_🍴(fd[0], 1, command);
-			last_🍴(fd[1], command);
-			close(fd[1][0]);
-			close(fd[1][1]);
+			juggle_pipes(fd);
+			pid_t	pid = last_🍴(fd[0], command);
+			close(fd[0][0]);
+			close(fd[0][1]);
 			fd[1][0] = STDIN_FILENO;
 			fd[1][1] = STDOUT_FILENO;
-			wait(NULL);
-			wait(NULL);
+			waitpid(pid, &g_ms.exit_code, 0);
+			while (*number_of_process_for_wait_for_without_of_waitpid > 0)
+			{
+				wait(NULL);
+				*number_of_process_for_wait_for_without_of_waitpid -= 1;
+			}
 		}
 		return ;
 	}
 	else if (command->next_operator == PIPE)
 	{
 		// FIRST
+		*number_of_process_for_wait_for_without_of_waitpid += 1;
 		pipe(fd[1]);
 		first_🍴(fd[1], command);
 		return ;
@@ -369,25 +425,18 @@ void	launch_command(t_cmd *command, int fd[2][2])
 	}
 	if (pid == 0)
 	{
-		// int	fd;
-
-		// fd = get_fd(command->redirects);
-		// if (fd == -1)
-		// {
-		// 	dup2(0, fd[0])
-		// }
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
-	waitpid(pid, &status, 0);
-	g_ms.exit_code = status;
+	waitpid(pid, &g_ms.exit_code, 0);
 }
 
-void	launch_container(t_cont *container, int fd[2][2])
+void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_for_wait_for_without_of_waitpid)
 {
 	pid_t	pid;
-	int		status;
+	// int		status;
 
+	(void)number_of_process_for_wait_for_without_of_waitpid;
 	if (container->prev_operator == AND && g_ms.exit_code != 0)
 	{
 		return ;
@@ -397,6 +446,57 @@ void	launch_container(t_cont *container, int fd[2][2])
 		return ;
 	}
 	(void)fd;
+
+
+
+
+
+
+
+	if (container->prev_operator == PIPE)
+	{
+		if (container->next_operator == PIPE)
+		{
+			// MIDDLE
+			*number_of_process_for_wait_for_without_of_waitpid += 1;
+			juggle_pipes(fd);
+			pipe(fd[1]);
+			cont_🍴(fd, container);
+			close(fd[0][0]);
+			close(fd[0][1]);
+			fd[0][0] = STDIN_FILENO;
+			fd[0][1] = STDOUT_FILENO;
+		}
+		else
+		{
+			// LAST
+			juggle_pipes(fd);
+			pid = last_cont_🍴(fd[0], container);
+			close(fd[0][0]);
+			close(fd[0][1]);
+			fd[1][0] = STDIN_FILENO;
+			fd[1][1] = STDOUT_FILENO;
+			waitpid(pid, &g_ms.exit_code, 0);
+			while (*number_of_process_for_wait_for_without_of_waitpid > 0)
+			{
+				wait(NULL);
+				*number_of_process_for_wait_for_without_of_waitpid -= 1;
+			}
+		}
+		return ;
+	}
+	else if (container->next_operator == PIPE)
+	{
+		// FIRST
+		*number_of_process_for_wait_for_without_of_waitpid += 1;
+		pipe(fd[1]);
+		first_cont_🍴(fd[1], container);
+		return ;
+	}
+
+
+
+
 	pid = fork();
 	if (pid == -1)
 	{
@@ -409,14 +509,14 @@ void	launch_container(t_cont *container, int fd[2][2])
 	}
 	if (container->next_operator != PIPE)
 	{
-		waitpid(pid, &status, 0);
-		g_ms.exit_code = status;
+		waitpid(pid, &g_ms.exit_code, 0);
 	}
 }
 
 void	executor(t_tag *head)
 {
 	int	fd[2][2];
+	int	number_of_process_for_wait_for_without_of_waitpid;
 	int	i;
 
 	i = 0;
@@ -424,16 +524,18 @@ void	executor(t_tag *head)
 	fd[0][1] = 1;
 	fd[1][0] = 0;
 	fd[1][1] = 1;
+	number_of_process_for_wait_for_without_of_waitpid = 0;
 	while (head[i].type != END)
 	{
 		// NOT creatE pipe
 		if (head[i].type == COMMAND)
 		{
-			launch_command(head[i].data, fd);
+			launch_command(head[i].data, fd, &number_of_process_for_wait_for_without_of_waitpid);
 		}
 		else if (head[i].type == CONTAINER)
 		{
-			launch_container(head[i].data, fd);
+			launch_container(head[i].data, fd, &number_of_process_for_wait_for_without_of_waitpid);
+			exit(g_ms.exit_code);
 		}
 		i += 1;
 	}
