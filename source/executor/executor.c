@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 21:41:54 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 16:34:21 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,6 @@ static char	*get_file(char *command, char **envp)
 	ft_strings_remove_all(&path);
 	return (file);
 }
-
-
-
 
 int	here_doc(char *stop_word)
 {
@@ -499,13 +496,22 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 		else
 		{
 			// LAST
+			int	status;
 			juggle_pipes(fd);
 			pid = last_cont_🍴(fd[0], container);
 			close(fd[0][0]);
 			close(fd[0][1]);
 			fd[1][0] = STDIN_FILENO;
 			fd[1][1] = STDOUT_FILENO;
-			waitpid(pid, &g_ms.exit_code, 0);
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status) != 0)
+			{
+				g_ms.exit_code = status;
+			}
+			else
+			{
+				g_ms.exit_code = 0;
+			}
 			unlink(HEREDOC_TMP_FILENAME);
 			while (*number_of_process_for_wait_for_without_of_waitpid > 0)
 			{
@@ -571,4 +577,5 @@ void	executor(t_tag *head)
 		dup2(binout[0], 0);
 		i += 1;
 	}
+	unlink(HEREDOC_TMP_FILENAME);
 }

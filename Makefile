@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/28 20:32:53 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/29 16:30:04 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ CPPFLAGS	=	-I libft/include			\
 				-I include
 CPPFLAGS	+=	-Wall -Wextra -Werror -g
 # CPPFLAGS	+=	-g
-# CFLAGS		+=	-fsanitize=address
+CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 
 LDFLAGS 	=	-lreadline

@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 13:40:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 16:52:00 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 16:29:46 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,22 @@ char	*get_var_value(t_vars *start, char *name);
 void	print_export(void)
 {
 	char	**envp;
+	int		i;
 	
 	envp = g_ms.envp;
 	while (*envp)
 	{
 		write(1, "declare -x ", 11);
-		ft_putendl_fd(*envp, 1);
+		i = 0;
+		while ((*envp)[i] != '\0' && (*envp)[i] != '=')
+		{
+			i += 1;
+		}
+		write(1, *envp, i);
+		ft_putchar_fd('\"' , 1);
+		write(1, *envp + i, ft_strlen(*envp + i));
+		ft_putchar_fd('\"' , 1);
+		ft_putchar_fd('\n' , 1);
 		envp++;
 	}
 }
@@ -84,7 +94,7 @@ void	built_export(char **command)
 		command++;
 		while (*command != NULL)
 		{
-			if (ft_isalpha(**command) == FALSE)
+			if (**command != '_' && ft_isalpha(**command) == FALSE)
 			{
 				write(2, "minishell: export: ", 19);
 				write(2, *command, ft_strlen(*command));
