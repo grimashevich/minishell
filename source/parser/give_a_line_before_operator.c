@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:33 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 21:42:10 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 17:37:12 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ static void	is_this_a_single_quotation_mark(char *line, int *i)
 	if (*line != '\'')
 		return ;
 	j = 1;
-	while (line[j] != '\'')
+	while (line[j] != '\'' && line[j] != '\0')
 	{
 		j += 1;
 	}
@@ -86,7 +86,7 @@ static void	is_this_a_double_quotation_mark(char *line, int *i)
 	if (*line != '\"')
 		return ;
 	j = 1;
-	while (line[j] != '\"')
+	while (line[j] != '\"' && line[j] != '\0')
 	{
 		j += 1;
 	}

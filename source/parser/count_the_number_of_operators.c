@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:27 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 21:48:40 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 17:36:40 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static void	is_this_a_single_quotation_mark(char **line)
 	if (**line != '\'')
 		return ;
 	*line += 1;
-	while (**line != '\'')
+	while (**line != '\'' && **line != '\0')
 	{
 		*line += 1;
 	}
@@ -77,7 +77,7 @@ static void	is_this_a_double_quotation_mark(char **line)
 	if (**line != '\"')
 		return ;
 	*line += 1;
-	while (**line != '\"')
+	while (**line != '\"' && **line != '\0')
 	{
 		*line += 1;
 	}
@@ -92,7 +92,11 @@ int	count_the_number_of_operators(char *line)
 	while (*line != '\0')
 	{
 		is_this_a_single_quotation_mark(&line);
+		if (*line == '\0')
+			return (number_of_operators);
 		is_this_a_double_quotation_mark(&line);
+		if (*line == '\0')
+			return (number_of_operators);
 		is_this_a_brace(&line);
 		is_this_an_operator(&line, &number_of_operators);
 	}
