@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/29 16:34:21 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 18:20:49 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
 #define HEREDOC_TMP_FILENAME ".heredoc_tmp"
-
+//TODO do somthing
 static char	**get_path(char **envp, char *command)
 {
 	char	**path;
@@ -393,7 +393,7 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 	
 	
 	
-	
+	int	status;
 	
 
 	if (command->prev_operator == PIPE)
@@ -419,7 +419,15 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 			close(fd[0][1]);
 			fd[1][0] = STDIN_FILENO;
 			fd[1][1] = STDOUT_FILENO;
-			waitpid(pid, &g_ms.exit_code, 0);
+			waitpid(pid, &status, 0);
+			if (WIFEXITED(status) != 0)
+			{
+				g_ms.exit_code = WEXITSTATUS(status);
+			}
+			else
+			{
+				g_ms.exit_code = 0;
+			}
 			unlink(HEREDOC_TMP_FILENAME);
 			while (*number_of_process_for_wait_for_without_of_waitpid > 0)
 			{
@@ -464,11 +472,20 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
-	waitpid(pid, &g_ms.exit_code, 0);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status) != 0)
+	{
+		g_ms.exit_code = WEXITSTATUS(status);
+	}
+	else
+	{
+		g_ms.exit_code = 0;
+	}
 }
 
 void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_for_wait_for_without_of_waitpid)
 {
+	int	status;
 	pid_t	pid;
 	
 	if (container->prev_operator == AND && g_ms.exit_code != 0)
@@ -496,7 +513,6 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 		else
 		{
 			// LAST
-			int	status;
 			juggle_pipes(fd);
 			pid = last_cont_🍴(fd[0], container);
 			close(fd[0][0]);
@@ -506,7 +522,7 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 			waitpid(pid, &status, 0);
 			if (WIFEXITED(status) != 0)
 			{
-				g_ms.exit_code = status;
+				g_ms.exit_code = WEXITSTATUS(status);
 			}
 			else
 			{
@@ -543,7 +559,15 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 	}
 	if (container->next_operator != PIPE)
 	{
-		waitpid(pid, &g_ms.exit_code, 0);
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status) != 0)
+		{
+			g_ms.exit_code = WEXITSTATUS(status);
+		}
+		else
+		{
+			g_ms.exit_code = 0;
+		}
 	}
 }
 

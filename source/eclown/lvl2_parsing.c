@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lvl2_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/27 16:10:25 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 20:06:51 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -302,6 +302,30 @@ char *strdup_null_safe(char *str)
 	return ft_strdup(str);
 }
 
+void	replace_var_to_exit_code(char **str)
+{
+	char	*ec_var;
+	char	*tmp;
+	char	*str_exit_code;
+
+
+	ec_var = ft_strnstr(*str, "$?", ft_strlen(*str));
+	while (ec_var)
+	{
+		str_exit_code = ft_itoa(g_ms.exit_code);
+		if (! str_exit_code)
+			exit(1);
+		tmp = replace_str_in_str(*str, ec_var, 2,  str_exit_code);
+		if (! tmp)
+			exit(1);
+		free(str_exit_code);
+		free(*str);
+		*str = tmp;
+		ec_var = ft_strnstr(*str, "$?", ft_strlen(*str));
+	}
+	
+}
+
 void	expand_vars(char **cmd, t_vars *vars, int need_unquote)
 {
 	char	*tmp;
@@ -310,6 +334,7 @@ void	expand_vars(char **cmd, t_vars *vars, int need_unquote)
 	int		name_len;
 	char	*var_value;
 
+	replace_var_to_exit_code(cmd);
 	tmp = *cmd;
 	tmp = ft_strchr(tmp, '$');
 	while (tmp)
@@ -789,6 +814,21 @@ void expand_vars_in_rdrs(t_rdr_fls *rdrs, t_vars *ms_vars)
 	}
 }
 
+void error_empty_command_crutch(char **str)
+{
+	char	*tmp;
+
+	if (ft_strchr(*str, '\'') || ft_strchr(*str, '"'))
+	{
+		tmp = open_quotes(*str);
+		if (tmp[0] == '\0')
+		{
+			free(*str);
+			*str = ft_strdup("314159265358979323840");
+		}
+		free(tmp);
+	}	
+}
 
 /*
 INPUT:
@@ -821,6 +861,7 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars)
 	args = NULL;
 	decode_text(tmp);
 	i = 0;
+	error_empty_command_crutch(&(tmp[0]));
 	while (tmp[i])
 	{
 		str_tmp = open_quotes(tmp[i++]);

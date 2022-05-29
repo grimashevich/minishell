@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   envp_init.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 04:08:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 21:28:31 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 18:42:05 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,6 @@ void	envp_init(char **envp)
 		exit(1);
 	}
 	envp_replace("SHLVL", shell_level);
+	envp_remove("OLDPWD");
 	free(shell_level);
 }

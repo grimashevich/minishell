@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ms_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 20:19:34 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/24 11:59:02 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/29 19:31:49 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ otherwise user error will be printed
 void ms_error(char *func_name, char *str_error, int errn)
 {
 	errno = errn;
+	g_ms.exit_code = errn;
 	if (str_error)
 	{
 		ft_putstr_fd("minishell: ", 2);
