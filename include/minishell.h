@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 13:49:14 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 16:51:51 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_cmd
 	t_cont			*container;			// Проверка на глобальные оператоы перенаправления 
 	t_rdr_fls		*redirects;			// Содержит односвязный список редиректов //TODO добавлено eClown
 	t_vars			*vars;    			// TODO Добавлено eClown
+	int				is314159265358979323846;
 }	t_cmd;
 
 typedef struct s_pipe

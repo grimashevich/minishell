@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/29 20:06:51 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/30 17:49:52 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -814,20 +814,21 @@ void expand_vars_in_rdrs(t_rdr_fls *rdrs, t_vars *ms_vars)
 	}
 }
 
-void error_empty_command_crutch(char **str)
+void error_empty_command_crutch(char **str, t_cmd *cmd)
 {
 	char	*tmp;
 
-	if (ft_strchr(*str, '\'') || ft_strchr(*str, '"'))
+	if (*str && (ft_strchr(*str, '\'') || ft_strchr(*str, '"')))
 	{
 		tmp = open_quotes(*str);
 		if (tmp[0] == '\0')
-		{
-			free(*str);
-			*str = ft_strdup("314159265358979323840");
-		}
+			cmd->is314159265358979323846 = 1;
+		else
+			cmd->is314159265358979323846 = 0;
 		free(tmp);
-	}	
+	}
+	else
+		cmd->is314159265358979323846 = 0;
 }
 
 /*
@@ -861,7 +862,7 @@ void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars)
 	args = NULL;
 	decode_text(tmp);
 	i = 0;
-	error_empty_command_crutch(&(tmp[0]));
+	error_empty_command_crutch(&(tmp[0]), cmd_struct);
 	while (tmp[i])
 	{
 		str_tmp = open_quotes(tmp[i++]);
