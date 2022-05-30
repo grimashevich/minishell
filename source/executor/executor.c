@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 15:41:06 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 16:11:58 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,8 +241,8 @@ void	first_cont_🍴(int pipe[2], t_cont *container)
 	}
 	if (pid == 0)
 	{
-		redirects_in(container->redirects);
 		dup2(pipe[1], STDOUT_FILENO);
+		redirects_in(container->redirects);
 		redirects_out(container->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
@@ -263,8 +263,8 @@ pid_t	last_cont_🍴(int pipe[2], t_cont *container)
 	}
 	if (pid == 0)
 	{
-		redirects_in(container->redirects);
 		dup2(pipe[0], STDIN_FILENO);
+		redirects_in(container->redirects);
 		redirects_out(container->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
@@ -286,9 +286,9 @@ void	cont_🍴(int fd[2][2], t_cont *container)
 	}
 	if (pid == 0)
 	{
-		redirects_in(container->redirects);
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
+		redirects_in(container->redirects);
 		redirects_out(container->redirects);
 		close(fd[0][0]);
 		close(fd[0][1]);
@@ -312,8 +312,8 @@ void	first_🍴(int pipe[2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
-		redirects_in(command->redirects);
 		dup2(pipe[1], STDOUT_FILENO);
+		redirects_in(command->redirects);
 		redirects_out(command->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
@@ -339,8 +339,8 @@ pid_t	last_🍴(int pipe[2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
-		redirects_in(command->redirects);
 		dup2(pipe[0], STDIN_FILENO);
+		redirects_in(command->redirects);
 		redirects_out(command->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
@@ -367,9 +367,9 @@ void	🍴(int fd[2][2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
-		redirects_in(command->redirects);
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
+		redirects_in(command->redirects);
 		redirects_out(command->redirects);
 		close(fd[0][0]);
 		close(fd[0][1]);
