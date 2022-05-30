@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 13:40:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 20:03:06 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 22:25:47 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_cmd, t_vars *ms_vars);
 void	delete_all_vars(t_vars *start);
 char	*get_var_value(t_vars *start, char *name);
+
 
 void	print_export(void)
 {
@@ -80,6 +81,37 @@ void	append_envp(char *command)
 		delete_all_vars(variable);
 	}
 }
+t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_cmd, t_vars *ms_vars);
+
+/* void add_global_local_var(char *arg)
+{
+	t_vars	*tmp;
+	char	*cmd_wout_vars_assign;
+
+	tmp = extract_var_assign(arg, &cmd_wout_vars_assign, 0, g_ms.variables);
+	if (tmp == NULL)
+	{
+		//TODO остановился тут тоже		
+	}
+} */
+
+int is_normal_var_name(char *var_name)
+{
+	int	i;
+
+	if (! var_name)
+		return (0);
+	if (var_name[0] != '_' && ! ft_isalpha(var_name[0]))
+		return (0);
+	i = 1;
+	while (var_name[i])
+	{
+		if (! (ft_isalnum(var_name[i]) || var_name[i] == '_'))
+			return (0);
+		i++;
+	}
+	return (1);
+}
 
 void	built_export(char **command)
 {
@@ -94,13 +126,19 @@ void	built_export(char **command)
 		command++;
 		while (*command != NULL)
 		{
-			if (**command != '_' && ft_isalpha(**command) == FALSE)
+			if (! is_normal_var_name(*command))
 			{
 				write(2, "minishell: export: ", 19);
 				write(2, *command, ft_strlen(*command));
 				write(2, ": not a valid identifier\n", 25);
 			}
-			append_envp(*command);
+			else
+			{
+				
+				//TODO останавился тут
+				//add_global_local_var(*command);
+				append_envp(*command);
+			}
 			command++;
 		}
 	}

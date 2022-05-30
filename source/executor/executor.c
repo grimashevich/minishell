@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 20:15:53 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 20:34:41 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ static char	*get_file(char *command, char **envp)
 	char	*file;
 
 	if (*command == '/' && access(command, 0) == 0) // bugfix
+		return (command);
+	if (*command == '.' && access(command, 0) == 0) // bugfix
 		return (command);
 	path = get_path(envp, command);
 	i = 0;

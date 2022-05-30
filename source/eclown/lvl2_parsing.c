@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/12 16:04:22 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/30 17:49:52 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/30 21:25:50 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ int is_var_assign(char *str, t_vars **out_var)
 	}
 	*out_var = malloc(sizeof(t_vars));
 	(*out_var)->next = NULL;
+	(*out_var)->is_global = 0;
 	if (! out_var)
 		return (0);
 	(*out_var)->name = ft_substr(str, 0, i);
@@ -339,6 +340,13 @@ void	expand_vars(char **cmd, t_vars *vars, int need_unquote)
 	tmp = ft_strchr(tmp, '$');
 	while (tmp)
 	{
+		if (ft_isspace(*(tmp + 1)) || *(tmp + 1) == '\0')
+		{
+			if (*(tmp + 1) == '\0')
+				break;
+			tmp++;
+			continue;
+		}
 		name_len = get_var_name_len(tmp, &var_name);
 		if (name_len > 0 && is_char_in_quotes(*cmd, tmp)!= '\'')
 		{
