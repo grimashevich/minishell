@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 16:11:58 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 19:20:58 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,10 +175,12 @@ int	built_in(t_cmd *command)
 	return (FALSE);
 }
 
-void	redirects_in(t_rdr_fls *redirects)
+int	redirects_in(t_rdr_fls *redirects)
 {
 	int	fd;
+	int	exit_code;
 
+	exit_code = 0;
 	while (redirects != NULL)
 	{
 		if (redirects->type == READ)
@@ -195,17 +197,21 @@ void	redirects_in(t_rdr_fls *redirects)
 			write(2, redirects->path, ft_strlen(redirects->path));
 			write(2, ": ", 2);
 			perror(NULL);
+			exit_code = errno;
 		}
 		dup2(fd, redirects->fd);
 		close(fd); // ban
 		redirects = redirects->next;
 	}
+	return (exit_code);
 }
 
-void	redirects_out(t_rdr_fls *redirects)
+int	redirects_out(t_rdr_fls *redirects)
 {
 	int	fd;
+	int	exit_code;
 
+	exit_code = 0;
 	while (redirects != NULL)
 	{
 		if (redirects->type == WRITE)
@@ -222,11 +228,13 @@ void	redirects_out(t_rdr_fls *redirects)
 			write(2, redirects->path, ft_strlen(redirects->path));
 			write(2, ": ", 2);
 			perror(NULL);
+			exit_code = errno;
 		}
 		dup2(fd, redirects->fd);
 		close(fd); // ban
 		redirects = redirects->next;
 	}
+	return (exit_code);
 }
 
 void	first_cont_🍴(int pipe[2], t_cont *container)
@@ -242,8 +250,8 @@ void	first_cont_🍴(int pipe[2], t_cont *container)
 	if (pid == 0)
 	{
 		dup2(pipe[1], STDOUT_FILENO);
-		redirects_in(container->redirects);
-		redirects_out(container->redirects);
+		if (redirects_in(container->redirects) ||  redirects_out(container->redirects))
+			exit(errno);
 		close(pipe[0]);
 		close(pipe[1]);
 		executor(container->tag);
@@ -264,8 +272,8 @@ pid_t	last_cont_🍴(int pipe[2], t_cont *container)
 	if (pid == 0)
 	{
 		dup2(pipe[0], STDIN_FILENO);
-		redirects_in(container->redirects);
-		redirects_out(container->redirects);
+		if (redirects_in(container->redirects) ||  redirects_out(container->redirects))
+			exit(errno);
 		close(pipe[0]);
 		close(pipe[1]);
 		executor(container->tag);
@@ -288,8 +296,8 @@ void	cont_🍴(int fd[2][2], t_cont *container)
 	{
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
-		redirects_in(container->redirects);
-		redirects_out(container->redirects);
+		if (redirects_in(container->redirects) ||  redirects_out(container->redirects))
+			exit(errno);
 		close(fd[0][0]);
 		close(fd[0][1]);
 		close(fd[1][0]);
@@ -313,8 +321,8 @@ void	first_🍴(int pipe[2], t_cmd *command)
 	if (pid == 0)
 	{
 		dup2(pipe[1], STDOUT_FILENO);
-		redirects_in(command->redirects);
-		redirects_out(command->redirects);
+		if (redirects_in(command->redirects) ||  redirects_out(command->redirects))
+			exit(1);
 		close(pipe[0]);
 		close(pipe[1]);
 		if (built_in(command) == TRUE)
@@ -340,8 +348,8 @@ pid_t	last_🍴(int pipe[2], t_cmd *command)
 	if (pid == 0)
 	{
 		dup2(pipe[0], STDIN_FILENO);
-		redirects_in(command->redirects);
-		redirects_out(command->redirects);
+		if (redirects_in(command->redirects) ||  redirects_out(command->redirects))
+			exit(errno);
 		close(pipe[0]);
 		close(pipe[1]);
 		if (built_in(command) == TRUE)
@@ -369,8 +377,8 @@ void	🍴(int fd[2][2], t_cmd *command)
 	{
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
-		redirects_in(command->redirects);
-		redirects_out(command->redirects);
+		if (redirects_in(command->redirects) ||  redirects_out(command->redirects))
+			exit(errno);
 		close(fd[0][0]);
 		close(fd[0][1]);
 		close(fd[1][0]);
@@ -475,8 +483,12 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 	}
 	if (command->redirects != NULL)
 	{
-		redirects_in(command->redirects);
-		redirects_out(command->redirects);
+		if (redirects_in(command->redirects) || redirects_out(command->redirects))
+		{
+			g_ms.exit_code = errno;
+			return ;
+		}
+		
 	}
 	if (command->command[0][0] == '\0')
 	{
@@ -582,8 +594,8 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 	}
 	if (pid == 0)
 	{
-		redirects_in(container->redirects);
-		redirects_out(container->redirects);
+		if (redirects_in(container->redirects) ||  redirects_out(container->redirects))
+			exit(errno);
 		executor(container->tag);
 		exit(g_ms.exit_code);
 	}
