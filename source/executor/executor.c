@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 20:03:54 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 20:15:53 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -495,8 +495,12 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 		if (command->vars != NULL)
 		{
 			assign_vars_value(command);
-			return ;
 		}
+		if (command->is314159265358979323846 == TRUE)
+		{
+			write(2, "minishell: : command not found\n", 31);
+		}
+		return ;
 	}
 	if (built_in(command) == TRUE)
 	{
