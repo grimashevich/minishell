@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/29 16:41:02 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 13:51:41 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,36 +117,28 @@ void	remove_tree(t_tag *head)
 
 void	delete_all_vars(t_vars *start);
 
+int	check_syntax_more(char *string)
+{
+	int	i;
+
+	i = 0;
+	while (ft_isspace(string[i]) == TRUE)
+	{
+		i += 1;
+	}
+	if (string[i] == '\0')
+	{
+		return (-1);
+	}
+	return (0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void) argv;
 	(void) argc;
 	(void) envp;
-
-
-/* // TEST CASE
 	
-	char *answer = malloc(256);
-
-	char **text = NULL;
-
-	while (answer)
-	{
-		answer = readline("Enter str: ");
-		add_history(answer);
-		text = add_to_text(answer, text);
-		print_text(text);
-		printf("\n\n");
-		//free(answer);
-	}
-	ft_free_text(text); */
-
-// TEST CASE lvl2_parsing
-
-
-	//char *answer = malloc(256);
-	//char *answer = ft_strdup("<infile.txt echo 1 > outfile.txt 2> error.log *m* 3>*o*");
-
 	t_tag	*head;
 	t_cmd	*command;
 	char	*answer;
@@ -166,6 +158,11 @@ int	main(int argc, char **argv, char **envp)
 			exit (0);
 		}
 		if (*answer == '\0')
+		{
+			free(answer);
+			continue ;
+		}
+		if (check_syntax_more(answer) != 0)
 		{
 			free(answer);
 			continue ;

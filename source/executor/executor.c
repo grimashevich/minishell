@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/29 18:20:49 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/30 15:41:06 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,7 +175,34 @@ int	built_in(t_cmd *command)
 	return (FALSE);
 }
 
-void	redirects(t_rdr_fls *redirects)
+void	redirects_in(t_rdr_fls *redirects)
+{
+	int	fd;
+
+	while (redirects != NULL)
+	{
+		if (redirects->type == READ)
+		{
+			fd = open(redirects->path, O_RDONLY);
+		}
+		if (redirects->type == HERE_DOC)
+		{
+			fd = here_doc(redirects->path);
+		}
+		if (fd == -1)
+		{
+			write(2, "minishell: ", 11);
+			write(2, redirects->path, ft_strlen(redirects->path));
+			write(2, ": ", 2);
+			perror(NULL);
+		}
+		dup2(fd, redirects->fd);
+		close(fd); // ban
+		redirects = redirects->next;
+	}
+}
+
+void	redirects_out(t_rdr_fls *redirects)
 {
 	int	fd;
 
@@ -189,17 +216,12 @@ void	redirects(t_rdr_fls *redirects)
 		{
 			fd = open(redirects->path, O_CREAT | O_APPEND | O_WRONLY, 0677);
 		}
-		if (redirects->type == READ)
-		{
-			fd = open(redirects->path, O_RDONLY);
-		}
-		if (redirects->type == HERE_DOC)
-		{
-			fd = here_doc(redirects->path);
-		}
 		if (fd == -1)
 		{
-			perror("minishell:");
+			write(2, "minishell: ", 11);
+			write(2, redirects->path, ft_strlen(redirects->path));
+			write(2, ": ", 2);
+			perror(NULL);
 		}
 		dup2(fd, redirects->fd);
 		close(fd); // ban
@@ -219,8 +241,9 @@ void	first_cont_🍴(int pipe[2], t_cont *container)
 	}
 	if (pid == 0)
 	{
+		redirects_in(container->redirects);
 		dup2(pipe[1], STDOUT_FILENO);
-		redirects(container->redirects);
+		redirects_out(container->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
 		executor(container->tag);
@@ -240,8 +263,9 @@ pid_t	last_cont_🍴(int pipe[2], t_cont *container)
 	}
 	if (pid == 0)
 	{
+		redirects_in(container->redirects);
 		dup2(pipe[0], STDIN_FILENO);
-		redirects(container->redirects);
+		redirects_out(container->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
 		executor(container->tag);
@@ -262,9 +286,10 @@ void	cont_🍴(int fd[2][2], t_cont *container)
 	}
 	if (pid == 0)
 	{
+		redirects_in(container->redirects);
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
-		redirects(container->redirects);
+		redirects_out(container->redirects);
 		close(fd[0][0]);
 		close(fd[0][1]);
 		close(fd[1][0]);
@@ -287,8 +312,9 @@ void	first_🍴(int pipe[2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
+		redirects_in(command->redirects);
 		dup2(pipe[1], STDOUT_FILENO);
-		redirects(command->redirects);
+		redirects_out(command->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
 		if (built_in(command) == TRUE)
@@ -313,8 +339,9 @@ pid_t	last_🍴(int pipe[2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
+		redirects_in(command->redirects);
 		dup2(pipe[0], STDIN_FILENO);
-		redirects(command->redirects);
+		redirects_out(command->redirects);
 		close(pipe[0]);
 		close(pipe[1]);
 		if (built_in(command) == TRUE)
@@ -340,9 +367,10 @@ void	🍴(int fd[2][2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
+		redirects_in(command->redirects);
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
-		redirects(command->redirects);
+		redirects_out(command->redirects);
 		close(fd[0][0]);
 		close(fd[0][1]);
 		close(fd[1][0]);
@@ -447,7 +475,8 @@ void	launch_command(t_cmd *command, int fd[2][2], int *number_of_process_for_wai
 	}
 	if (command->redirects != NULL)
 	{
-		redirects(command->redirects);
+		redirects_in(command->redirects);
+		redirects_out(command->redirects);
 	}
 	if (command->command[0][0] == '\0')
 	{
@@ -553,7 +582,8 @@ void	launch_container(t_cont *container, int fd[2][2], int *number_of_process_fo
 	}
 	if (pid == 0)
 	{
-		redirects(container->redirects);
+		redirects_in(container->redirects);
+		redirects_out(container->redirects);
 		executor(container->tag);
 		exit(g_ms.exit_code);
 	}
