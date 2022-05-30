@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:20 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 19:03:07 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/30 19:28:43 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,6 +119,8 @@ static int	get_lenght(char *string)
 
 static int	check_parentheses_all_t(char **string, int *operator)
 {
+	int	i;
+	
 	if (**string == '\'')
 		*string += skip_single_quotation_mark(*string + 1) + 1;
 	if (**string == '\"')
@@ -128,16 +130,26 @@ static int	check_parentheses_all_t(char **string, int *operator)
 		*string += 1;
 		while (ft_isspace(**string) == TRUE)
 			*string += 1;
-		while (ft_isalnum(**string) == TRUE)
+		while (ft_isalnum(**string) == TRUE || **string == '_')
 			*string += 1;
 		while (ft_isspace(**string) == TRUE)
 			*string += 1;
 	}
+	i = 0;
+	while (ft_isdigit((*string)[i]) == TRUE)
+	{
+		i += 1;
+	}
+	if ((*string)[i] == '>' || (*string)[i] == '<')
+	{
+		*operator = is_this_operator(string);
+		return (0);
+	}
 	if (ft_isalnum(**string) == TRUE)
 	{
 		write(2, "minishell: syntax error near unexpected token '", 47);
-		write(1, *string, get_lenght(*string));
-		write(1, "''", 1);
+		write(2, *string, get_lenght(*string));
+		write(2, "'\n", 2);
 		return (-1);
 	}
 	*operator = is_this_operator(string);
