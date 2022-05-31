@@ -3,25 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 13:40:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 22:25:47 by EClown           ###   ########.fr       */
+/*   Updated: 2022/05/31 05:12:31 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_cmd, t_vars *ms_vars);
+t_vars	*extract_var_assign(char *str, char **out_cmd_wout_assign, \
+	int free_old_cmd, t_vars *ms_vars);
 void	delete_all_vars(t_vars *start);
 char	*get_var_value(t_vars *start, char *name);
-
 
 void	print_export(void)
 {
 	char	**envp;
 	int		i;
-	
+
 	envp = g_ms.envp;
 	while (*envp)
 	{
@@ -32,10 +32,10 @@ void	print_export(void)
 			i += 1;
 		}
 		write(1, *envp, i);
-		ft_putchar_fd('\"' , 1);
+		ft_putchar_fd('\"', 1);
 		write(1, *envp + i, ft_strlen(*envp + i));
-		ft_putchar_fd('\"' , 1);
-		ft_putchar_fd('\n' , 1);
+		ft_putchar_fd('\"', 1);
+		ft_putchar_fd('\n', 1);
 		envp++;
 	}
 }
@@ -58,7 +58,7 @@ void	append_envp(char *command)
 	t_vars	*variable;
 	char	*out;
 	int		index;
-	
+
 	variable = extract_var_assign(command, &out, FALSE, NULL);
 	if (variable == NULL)
 	{
@@ -81,7 +81,8 @@ void	append_envp(char *command)
 		delete_all_vars(variable);
 	}
 }
-t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_cmd, t_vars *ms_vars);
+t_vars	*extract_var_assign(char *str, char **out_cmd_wout_assign, \
+	int free_old_cmd, t_vars *ms_vars);
 
 /* void add_global_local_var(char *arg)
 {
@@ -95,7 +96,7 @@ t_vars *extract_var_assign(char *str, char **out_cmd_wout_assign, int free_old_c
 	}
 } */
 
-int is_normal_var_name(char *var_name)
+int	is_normal_var_name(char *var_name)
 {
 	int	i;
 
@@ -134,7 +135,6 @@ void	built_export(char **command)
 			}
 			else
 			{
-				
 				//TODO останавился тут
 				//add_global_local_var(*command);
 				append_envp(*command);

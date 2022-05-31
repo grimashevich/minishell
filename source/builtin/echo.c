@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 15:28:27 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/25 19:02:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 05:10:30 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	echo_print(char **command)
 {
 	char	*line;
-	
+
 	line = ft_strings_to_string(command, " ");
 	if (line == NULL)
 	{
