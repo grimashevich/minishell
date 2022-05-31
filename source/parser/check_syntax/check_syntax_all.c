@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 18:10:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 03:40:57 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 09:20:35 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	check_syntax_costil_nbr2(char *string)
 		return (0);
 	}
 	i = 0;
-	while (string[i + 1] != '\0')
+	while (string[i] != '\0')
 	{
 		i += 1;
 	}
