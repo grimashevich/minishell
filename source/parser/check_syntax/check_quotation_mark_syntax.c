@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:23 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 21:00:09 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 03:03:26 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	check_single_quotation_mark(char *string)
 		if (*string == '\'')
 		{
 			string += 1;
-
 			string += skip_single_quotation_mark(string);
 			if (*string == '\0')
 				return (-1);

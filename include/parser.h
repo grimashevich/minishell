@@ -30,4 +30,17 @@ int		is_this_operator(char **string);
 int		skip_single_quotation_mark(char *string);
 int		skip_double_quotation_mark(char *string);
 
+int		check_syntax_of_redirect_outfile(char *string);
+int		check_error_infile(char *string, int i);
+int		check_syntax_of_redirect_infile(char *string);
+
+void	skip_red_all(char **string, int *operator);
+int		check_parentheses_all_t(char **string, int *operator);
+int		check_parentheses_after_operator(char *string);
+
+int		check_newline(char *string);
+int		check_fd_redirect_outfile(char *string);
+int		check_fd_redirect_infile(char *string);
+int		print_error_redirect_outfile(char *string);
+
 #endif // PARSR_H

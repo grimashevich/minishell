@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:52 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 13:49:39 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 03:20:06 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,32 +21,22 @@ int	check_syntax_costil_nbr1(char *string);
 
 int	check_syntax(char *string)
 {
+	int	status;
+
+	status = 0;
 	if (check_syntax_costil_nbr1(string) != 0)
-	{
-		g_ms.exit_code = 258;
-		return (-1);
-	}
-	if (check_quotation_mark_syntax(string) != 0)
-	{
-		g_ms.exit_code = 258;
-		return (-1);
-	}
-	if (check_syntax_costil_nbr2(string) == 1)
-	{
-		g_ms.exit_code = 258;
-		return (0);
-	}
-	if (check_syntax_of_parentheses(string) != 0)
-	{
-		g_ms.exit_code = 258;
-		return (-1);
-	}
-	if (check_syntax_of_operators(string) != 0)
-	{
-		g_ms.exit_code = 258;
-		return (-1);
-	}
-	if (check_syntax_of_redirect(string) != 0)
+		status = -1;
+	else if (check_quotation_mark_syntax(string) != 0)
+		status = -1;
+	else if (check_syntax_costil_nbr2(string) == 1)
+		status = -1;
+	else if (check_syntax_of_parentheses(string) != 0)
+		status = -1;
+	else if (check_syntax_of_operators(string) != 0)
+		status = -1;
+	else if (check_syntax_of_redirect(string) != 0)
+		status = -1;
+	if (status != 0)
 	{
 		g_ms.exit_code = 258;
 		return (-1);

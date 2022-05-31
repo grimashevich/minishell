@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/29 17:18:48 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/31 03:29:02 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,8 @@ CC			=	cc
 
 CPPFLAGS	=	-I libft/include			\
 				-I include
-CPPFLAGS	+=	-Wall -Wextra -Werror -g
-# CPPFLAGS	+=	-g
+# CPPFLAGS	+=	-Wall -Wextra -Werror -g
+CPPFLAGS	+=	-g
 CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 
@@ -92,6 +92,8 @@ FUNCTIONS	+=	$(addprefix parser/,				\
 					check_syntax_of_operators.c		\
 					check_syntax_of_parentheses.c	\
 					check_syntax_of_redirect.c		\
+					check_syntax_parentheses_utils.c\
+					check_syntax_redirect_utils.c	\
 					check_syntax.c					\
 					)								\
 				$(addprefix print/,					\
