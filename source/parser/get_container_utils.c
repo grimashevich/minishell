@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 04:31:40 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 04:35:03 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 19:27:49 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ char	*func_join_all(char *line, char *left)
 char	*par_for_red(char *line)
 {
 	char	*left;
-	char	*right;
 	int		i;
 
 	i = 0;

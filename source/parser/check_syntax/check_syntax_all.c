@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/24 18:10:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 09:20:35 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 19:25:57 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	check_syntax_costil_nbr2(char *string)
 	}
 }
 
-void	print_itisnot_right(int right, int left)
+void	print_itisnot_right(int right)
 {
 	if (right == 3)
 	{
@@ -49,7 +49,7 @@ void	print_itisnot_right(int right, int left)
 	}
 }
 
-void	print_itisnot_left(int right, int left)
+void	print_itisnot_left(int left)
 {
 	if (left <= 3)
 	{
@@ -71,12 +71,12 @@ void	print_itisnot_ok(int right, int left)
 {
 	if (right > 2)
 	{
-		print_itisnot_right(right, left);
+		print_itisnot_right(right);
 		return ;
 	}
 	if (left != 0 && right == 0)
 	{
-		print_itisnot_left(right, left);
+		print_itisnot_left(left);
 		return ;
 	}
 	if (left == 1)

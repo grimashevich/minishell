@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 03:17:07 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 03:18:22 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 19:26:33 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	get_lenght(char *string)
 	return (i);
 }
 
-void	skip_red_all(char **string, int *operator)
+void	skip_red_all(char **string)
 {
 	if (**string == '\'')
 		*string += skip_single_quotation_mark(*string + 1) + 1;
@@ -46,7 +46,7 @@ int	check_parentheses_all_t(char **string, int *operator)
 {
 	int	i;
 
-	skip_red_all(string, operator);
+	skip_red_all(string);
 	i = 0;
 	while (ft_isdigit((*string)[i]) == TRUE)
 		i += 1;
