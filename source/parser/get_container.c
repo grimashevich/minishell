@@ -6,15 +6,17 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 18:30:07 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/24 21:45:07 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 04:31:53 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-t_tag	*create_the_current_level(char *line);
-void	remove_insignificant_spases(char **line);
-void	remove_insignificant_brackets(char **line);
+t_tag		*create_the_current_level(char *line);
+void		remove_insignificant_spases(char **line);
+void		remove_insignificant_brackets(char **line);
+t_rdr_fls	*extract_all_rdrs(char **str);
+char		*ft_strjoin3(char *str1, char *str2, char *str3);
 
 static int	is_this_an_operator(char *line)
 {
@@ -30,7 +32,7 @@ static int	is_this_an_operator(char *line)
 	{
 		return (PIPE);
 	}
-	else if (*line == ';')	
+	else if (*line == ';')
 	{
 		return (SEQUENCE);
 	}
@@ -57,7 +59,7 @@ static int	get_prev_operator(char *line)
 		}
 		line += 1;
 	}
-	return (EMPTY);	
+	return (EMPTY);
 }
 
 static int	get_next_operator(char *line)
@@ -82,7 +84,7 @@ static int	get_next_operator(char *line)
 		}
 		i += 1;
 	}
-	return (EMPTY);	
+	return (EMPTY);
 }
 
 char	*new_line(char *line)
@@ -101,46 +103,6 @@ char	*new_line(char *line)
 	return (line);
 }
 
-t_rdr_fls	*extract_all_rdrs(char **str);
-char		*ft_strjoin3(char *str1, char *str2, char *str3);
-
-char	*par_for_red(char *line)
-{
-	char	*left;
-	char	*right;
-	int		i;
-	int		lenght;
-
-	i = 0;
-	while (line[i] != '\0' && line[i] != '(')
-		i += 1;
-	left = ft_substr(line, 0, i);
-	if (left == NULL)
-	{
-		perror("minishell");
-		exit(1);
-	}
-	lenght = ft_strlen(line);
-	i = lenght;
-	while (i > 0 && line[i] != ')')
-		i -= 1;
-	right = ft_substr(line, i + 1, lenght - i - 1);
-	if (right == NULL)
-	{
-		perror("minishell");
-		exit(1);
-	}
-	line = ft_strjoin3(left, " ", right);
-	if (line == NULL)
-	{
-		perror("minishell");
-		exit(1);
-	}
-	free(left);
-	free(right);
-	return (line);
-}
-// echo 1 && (echo 2 || echo 3) > file
 t_cont	*get_container(char *line)
 {
 	t_cont	*container;

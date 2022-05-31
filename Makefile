@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/31 03:29:02 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/31 04:52:46 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -102,8 +102,10 @@ FUNCTIONS	+=	$(addprefix parser/,				\
 					)								\
 				count_the_number_of_operators.c		\
 				get_command.c						\
+				get_container_utils.c				\
 				get_container.c						\
 				give_a_line_before_operator.c		\
+				give_a_line_utils.c					\
 				parser.c							\
 				remove_insignificant.c				\
 				just_print.c						\

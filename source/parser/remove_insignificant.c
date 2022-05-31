@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:39 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/19 21:45:28 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 04:55:59 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,13 @@ void	remove_insignificant_spases(char **line)
 	int		start;
 	int		lenght;
 
-	if (!(ft_isspace(**line) == TRUE || ft_isspace(last_character(*line)) == TRUE))
+	if (!(ft_isspace(**line) == TRUE || \
+		ft_isspace(last_character(*line)) == TRUE))
 		return ;
 	temporary = *line;
 	start = 0;
 	while (ft_isspace(temporary[start]) == TRUE)
-	{
 		start += 1;
-	}
 	lenght = ft_strlen(temporary) - 1;
 	while (ft_isspace(temporary[lenght]) == TRUE)
 	{

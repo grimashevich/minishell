@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 19:10:46 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 04:37:42 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,13 +75,11 @@ t_tag	*create_the_current_level(char *line)
 	return (head);
 }
 
-
 t_tag	*create_tree(char *line)
 {
 	t_tag	*head;
 
 	remove_insignificant_spases(&line);
-	// remove_insignificant_brackets(&line);
 	head = create_the_current_level(line);
 	free(line);
 	return (head);

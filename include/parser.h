@@ -43,4 +43,7 @@ int		check_fd_redirect_outfile(char *string);
 int		check_fd_redirect_infile(char *string);
 int		print_error_redirect_outfile(char *string);
 
+char	*func_join_all(char *line, char *left);
+char	*par_for_red(char *line);
+
 #endif // PARSR_H

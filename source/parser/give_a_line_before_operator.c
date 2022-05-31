@@ -6,39 +6,13 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:33 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/29 17:37:12 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 04:53:17 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
 
-static int	is_this_an_operator(char *line, int *j)
-{
-	if (ft_strncmp(line, "&&", 2) == 0)
-	{
-		*j = 2;
-		return (TRUE);
-	}
-	else if (ft_strncmp(line, "||", 2) == 0)
-	{
-		*j = 2;
-		return (TRUE);
-	}
-	else if (*line == '|')	
-	{
-		*j = 1;
-		return (TRUE);
-	}
-	else if (*line == ';')	
-	{
-		*j = 1;
-		return (TRUE);
-	}
-	else
-	{
-		return (FALSE);
-	}
-}
+int	cool_func(char **temporary, char **line, int *i, int *prev_op_int);
 
 static void	is_this_a_brace(char *line, int *i)
 {
@@ -49,7 +23,7 @@ static void	is_this_a_brace(char *line, int *i)
 		return ;
 	j = 1;
 	number_of_open_brackets = 1;
-	while (number_of_open_brackets != 0) 
+	while (number_of_open_brackets != 0)
 	{
 		if (line[j] == '(')
 		{
@@ -98,37 +72,20 @@ char	*give_a_line_before_operator(char **line, int *prev_op_int)
 {
 	char	*temporary;
 	int		i;
-	int		j;
+	int		status;
 
 	temporary = *line;
 	i = 0;
-	j = 0;
 	while (temporary[i] != '\0')
 	{
 		is_this_a_double_quotation_mark(temporary + i, &i);
 		is_this_a_single_quotation_mark(temporary + i, &i);
 		is_this_a_brace(temporary + i, &i);
-		if (is_this_an_operator(temporary + i, &j) == TRUE)
-		{
-			temporary = ft_substr(temporary - *prev_op_int, 0, i + *prev_op_int + j);
-			if (temporary == NULL)
-			{
-				perror("minishell");
-				exit(1);
-			}
-			i += j;
-			*line += i;
-			*prev_op_int = j;
+		status = cool_func(&temporary, line, &i, prev_op_int);
+		if (status == -1)
+			break ;
+		if (status == 1)
 			return (temporary);
-		}
-		else
-		{
-			if (temporary[i] == '\0')
-			{
-				break ;
-			}
-			i += 1;
-		}
 	}
 	temporary = ft_substr(temporary - *prev_op_int, 0, i + *prev_op_int);
 	if (temporary == NULL)

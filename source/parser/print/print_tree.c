@@ -1,4 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   print_tree.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/05/31 04:56:38 by ccamie            #+#    #+#             */
+/*   Updated: 2022/05/31 04:58:32 by ccamie           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parser.h"
+
+void	print_tcmd(t_cmd *cmd);
+void	print_rdr(t_rdr_fls *item);
 
 void	print_operator(int operator)
 {
@@ -22,15 +37,15 @@ void	print_operator(int operator)
 	{
 		printf("\x1b[35m-\x1b[0m");
 	}
-
 }
 
 void	print_tree(t_tag *head)
 {
-	t_cont	*container;
-	t_cmd	*command;
-	int		i;
-	int		j;
+	t_cont		*container;
+	t_cmd		*command;
+	t_rdr_fls	*rdr;
+	int			i;
+	int			j;
 
 	i = 0;
 	while (1)
@@ -46,8 +61,6 @@ void	print_tree(t_tag *head)
 				j += 1;
 			}
 			printf(" ");
-			t_rdr_fls	*rdr;
-
 			rdr = command->redirects;
 			while (rdr != NULL)
 			{
@@ -62,19 +75,15 @@ void	print_tree(t_tag *head)
 				printf("\x1b[33m%s \x1b[0m", rdr->path);
 				rdr = rdr->next;
 			}
-			// printf("\x1b[34m COMMAND \x1b[0m");
 			print_operator(command->next_operator);
 		}
 		else if (head[i].type == CONTAINER)
 		{
 			container = head[i].data;
 			print_operator(container->prev_operator);
-			// printf("\x1b[34m CONTAINER \x1b[0m");
 			printf(" (");
 			print_tree(container->tag);
 			printf(") ");
-				t_rdr_fls	*rdr;
-
 			rdr = container->redirects;
 			while (rdr != NULL)
 			{
@@ -93,42 +102,24 @@ void	print_tree(t_tag *head)
 		}
 		else if (head[i].type == END)
 		{
-			// printf("\x1b[41m❌\x1b[0m");
 			break ;
 		}
 		i += 1;
 	}
-	// i = 0;
-	// while (1)
-	// {
-	// 	if (head[i].type == CONTAINER)
-	// 	{
-	// 		container = (t_cont *)head[i].data;
-	// 		print_tree(container->tag);
-	// 	}
-	// 	else if (head[i].type == END)
-	// 	{
-	// 		break ;
-	// 	}
-	// 	i += 1;
-	// }
-	// printf("\n");
 }
 
-void	print_tcmd(t_cmd *cmd);
-void	print_rdr(t_rdr_fls *item);
-
-void print_tcont(t_cont *container)
+void	print_tcont(t_cont *container)
 {
-	int i = 0;
-	t_rdr_fls *tmp_rdr;
+	int			i;
+	t_rdr_fls	*tmp_rdr;
 
+	i = 0;
 	printf("\nCONTAINER:\n---\n");
 	printf("REDIRECTS:\n");
 	tmp_rdr = container->redirects;
 	while (tmp_rdr)
 	{
-		printf("%2d:",i++);
+		printf("%2d:", i++);
 		print_rdr(tmp_rdr);
 		tmp_rdr = tmp_rdr->next;
 	}
@@ -146,10 +137,8 @@ void	print_cmd(t_tag *head)
 		{
 			print_tcmd(head[i].data);
 		}
-
 		else if (head[i].type == END)
 		{
-			// printf("\x1b[41m❌\x1b[0m");
 			break ;
 		}
 		i += 1;
@@ -170,6 +159,3 @@ void	print_cmd(t_tag *head)
 		i += 1;
 	}
 }
-
-// echo 1 > outfile && echo 2 | echo "3 echo 4 || >> append" > outfile < infile
-// echo 1 && (echo 2 || echo 3) | echo 4

@@ -6,13 +6,13 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/28 20:31:56 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 03:46:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parser.h"
-// echo 1 "asd'" ''
-void lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars);
+
+void	lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars);
 
 static int	is_this_an_operator(char *line)
 {
@@ -28,7 +28,7 @@ static int	is_this_an_operator(char *line)
 	{
 		return (PIPE);
 	}
-	else if (*line == ';')	
+	else if (*line == ';')
 	{
 		return (SEQUENCE);
 	}
@@ -55,7 +55,7 @@ static int	get_prev_operator(char *line)
 		}
 		line += 1;
 	}
-	return (EMPTY);	
+	return (EMPTY);
 }
 
 static int	get_next_operator(char *line)
@@ -83,7 +83,7 @@ static int	get_next_operator(char *line)
 		}
 		i += 1;
 	}
-	return (EMPTY);	
+	return (EMPTY);
 }
 
 char	*new_line_after_operator(char *line, t_cmd *commamd)
@@ -93,21 +93,17 @@ char	*new_line_after_operator(char *line, t_cmd *commamd)
 	int		end;
 
 	start = 0;
-	if (commamd->prev_operator != EMPTY)
-	{
-		if (commamd->prev_operator == AND || commamd->prev_operator == OR)
+	if (commamd->prev_operator != EMPTY && (commamd->prev_operator == AND || \
+		commamd->prev_operator == OR))
 			start = 2;
-		else
+	else if (commamd->prev_operator != EMPTY)
 			start = 1;
-	}
 	end = 0;
-	if (commamd->next_operator != EMPTY)
-	{
-		if (commamd->next_operator == AND || commamd->next_operator == OR)
+	if (commamd->next_operator != EMPTY && (commamd->next_operator == AND || \
+		commamd->next_operator == OR))
 			end = 2;
-		else
+	else if (commamd->next_operator != EMPTY)
 			end = 1;
-	}
 	new = ft_substr(line, start, ft_strlen(line) - end - start);
 	if (new == NULL)
 	{

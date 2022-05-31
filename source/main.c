@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/31 03:29:31 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 05:01:48 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ int	main(int argc, char **argv, char **envp)
 	answer = (char *)1;
 	while (answer)
 	{
-		answer = readline("minishell3️⃣.1️⃣ 4️⃣ #️⃣  ");
+		answer = readline("minishell🧹💃 ");
 		if (answer == NULL)
 		{
 			write(1, "\b\bexit\n", 10);

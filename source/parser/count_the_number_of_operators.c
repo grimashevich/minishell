@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:27 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/29 17:36:40 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 04:37:22 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ static void	is_this_an_operator(char **line, int *number_of_operators)
 	{
 		*line += 2;
 	}
-	else if (**line == '|')	
+	else if (**line == '|')
 	{
 		*line += 1;
 	}
-	else if (**line == ';')	
+	else if (**line == ';')
 	{
 		*line += 1;
 	}
@@ -46,7 +46,7 @@ static void	is_this_a_brace(char **line)
 		return ;
 	*line += 1;
 	number_of_open_brackets = 1;
-	while (number_of_open_brackets != 0) 
+	while (number_of_open_brackets != 0)
 	{
 		if (**line == '(')
 		{
