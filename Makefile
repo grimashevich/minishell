@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/31 04:52:46 by ccamie           ###   ########.fr        #
+#    Updated: 2022/05/31 10:24:04 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,19 @@ FUNCTIONS	+=	$(addprefix envp/,					\
 
 FUNCTIONS	+=	$(addprefix executor/,				\
 				assign_vars_value.c					\
+				built_in.c							\
+				child_pipe_cmd.c					\
+				child_pipe_cont.c					\
+				cmd_pipe.c							\
+				cont_pipe.c							\
 				executor.c							\
+				here_doc.c							\
+				is_something.c						\
+				launch_command.c					\
+				launch_container.c					\
+				pipe_utils.c						\
+				redirects.c							\
+				utils.c								\
 				)
 
 FUNCTIONS	+=	$(addprefix parser/,				\

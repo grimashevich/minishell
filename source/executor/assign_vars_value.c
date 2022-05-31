@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 00:38:46 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/27 00:39:03 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/05/31 08:18:04 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void	assign_vars_value(t_cmd *command)
 	}
 	else
 	{
-		g_ms.variables = update_vars(g_ms.variables, command->vars->name, command->vars->value);
+		g_ms.variables = update_vars(g_ms.variables, command->vars->name, \
+			command->vars->value);
 	}
 }
