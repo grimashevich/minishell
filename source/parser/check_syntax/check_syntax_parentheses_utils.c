@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 03:17:07 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 19:26:33 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/01 19:20:47 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,9 +70,9 @@ int	check_parentheses_after_operator(char *string)
 {
 	int	operator;
 
-	operator = EMPTY;
 	while (*string != '\0')
 	{
+		operator = EMPTY;
 		while (*string != ')' && *string != '\0')
 		{
 			if (*string == '\'')
@@ -85,6 +85,7 @@ int	check_parentheses_after_operator(char *string)
 			return (0);
 		while (operator == EMPTY && *string != '\0')
 		{
+			operator = EMPTY;
 			if (check_parentheses_all_t(&string, &operator) == -1)
 			{
 				return (-1);

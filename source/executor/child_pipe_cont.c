@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 09:53:41 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 10:11:55 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/01 20:16:47 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	chil_pipcont_last(t_cont *container, int *process_up_down, int fd[2][2])
 
 	juggle_pipes(fd);
 	pid = last_cont_pipe(fd[0], container);
+	printf("Minecraft\n");
 	close(fd[0][0]);
 	close(fd[0][1]);
 	fd[1][0] = STDIN_FILENO;

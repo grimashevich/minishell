@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:29:39 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 08:33:44 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/01 20:20:38 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,9 @@ void	first_cmd_pipe(int pipe[2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
+		// dprintf(2, "first_cmd_pipe\n");
+		// dprintf(2, "pipe[0]: %d\n", pipe[0]);
+		// dprintf(2, "pipe[1]: %d\n", pipe[1]);
 		dup2(pipe[1], STDOUT_FILENO);
 		if (redirects(command->redirects))
 			exit(1);
@@ -52,6 +55,9 @@ pid_t	last_cmd_pipe(int pipe[2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
+		// dprintf(2, "last_cmd_pipe\n");
+		// dprintf(2, "pipe[0]: %d\n", pipe[0]);
+		// dprintf(2, "pipe[1]: %d\n", pipe[1]);
 		dup2(pipe[0], STDIN_FILENO);
 		if (redirects(command->redirects))
 			exit(errno);
@@ -69,6 +75,7 @@ pid_t	last_cmd_pipe(int pipe[2], t_cmd *command)
 
 static void	ft_close_fd(int fd[2][2])
 {
+	(void)fd;
 	close(fd[0][0]);
 	close(fd[0][1]);
 	close(fd[1][0]);
@@ -88,6 +95,11 @@ void	cmd_pipe(int fd[2][2], t_cmd *command)
 	}
 	if (pid == 0)
 	{
+		// dprintf(2, "cmd_pipe\n");
+		// dprintf(2, "fd[0][0]: %d\n", fd[0][0]);
+		// dprintf(2, "fd[0][1]: %d\n", fd[0][1]);
+		// dprintf(2, "fd[1][0]: %d\n", fd[1][0]);
+		// dprintf(2, "fd[1][1]: %d\n", fd[1][1]);
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
 		if (redirects(command->redirects))

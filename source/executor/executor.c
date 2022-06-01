@@ -6,20 +6,18 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 10:21:59 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/01 20:19:45 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
 
-void	executor_init(int fd[2][2], int binout[2])
+void	executor_init(int fd[2][2])
 {
 	fd[0][0] = 0;
 	fd[0][1] = 1;
 	fd[1][0] = 0;
 	fd[1][1] = 1;
-	binout[0] = dup(0);
-	binout[1] = dup(1);
 }
 
 void	executor(t_tag *head)
@@ -33,6 +31,8 @@ void	executor(t_tag *head)
 	process_up_down = 0;
 	while (head[i].type != END)
 	{
+		binout[0] = dup(0);
+		binout[1] = dup(1);
 		if (head[i].type == COMMAND)
 		{
 			launch_command(head[i].data, fd, &process_up_down);

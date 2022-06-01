@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/31 19:58:37 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/01 20:05:50 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,16 +135,15 @@ int	check_syntax_more(char *string)
 
 void	signal_new_line(int num)
 {
-	if (num != SIGINT)
+	if (num == SIGINT)
 	{
-		return ;
+		ft_putstr_fd("                ", 1);
+		ft_putstr_fd("\rminishell🧹🗿\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_clear_visible_line();
+		rl_redisplay();
 	}
-	ft_putstr_fd("                ", 1);
-	ft_putstr_fd("\rminishell🧹🗿\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_clear_visible_line();
-	rl_redisplay();
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -168,18 +167,16 @@ int	main(int argc, char **argv, char **envp)
 	while (answer)
 	{
 		answer = readline("minishell🧹🗿 ");
-		// rl_replace_line();
 		if (answer == NULL)
 		{
-			write(1, "\b\bexit\n", 10);
-			exit (0);
+			write(1, "\b\bexit\n", 7);
+			exit(0);
 		}
 		if (*answer == '\0')
 		{
 			free(answer);
 			continue ;
 		}
-		// rl_replace_line();
 		if (check_syntax_more(answer) != 0)
 		{
 			free(answer);
