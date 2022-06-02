@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/06/02 20:21:48 by ccamie           ###   ########.fr        #
+#    Updated: 2022/06/02 22:43:01 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -137,7 +137,9 @@ FUNCTIONS	+=	$(addprefix wildcard/,				\
 				wildcard_2.c						\
 				)
 
-FUNCTIONS	+=	main.c
+FUNCTIONS	+=	main.c		\
+				remove.c	\
+				signal.c	\
 
 SOURCE		=	$(addprefix source/, $(FUNCTIONS))
 OBJECT		=	$(addprefix object/, $(FUNCTIONS:.c=.o))
