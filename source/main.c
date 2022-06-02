@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/02 22:45:06 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/03 00:09:25 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ void	minishell(void)
 	answer = (char *)1;
 	while (answer)
 	{
-		answer = readline("minishell🧹🗿 ");
+		answer = readline("minishell🌥 ");
 		check_ctrl_d(answer);
 		if (*answer == '\0' || check_syntax_more(answer) != 0)
 		{
