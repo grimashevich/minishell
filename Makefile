@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
+#    By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/31 10:24:04 by ccamie           ###   ########.fr        #
+#    Updated: 2022/06/02 23:41:26 by EClown           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ CPPFLAGS	=	-I libft/include			\
 				-I include
 # CPPFLAGS	+=	-Wall -Wextra -Werror -g
 CPPFLAGS	+=	-g
-CFLAGS		+=	-fsanitize=address
+# CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 
 LDFLAGS 	=	-lreadline
@@ -44,7 +44,9 @@ HEADER		=	libft/include/libft.h			\
 FUNCTIONS	=	$(addprefix builtin/,				\
 				echo.c								\
 				exit.c								\
-				export.c							\
+				export1.c							\
+				export2.c							\
+				export3.c							\
 				pwd.c								\
 				unset.c								\
 				)
@@ -58,7 +60,18 @@ FUNCTIONS	+=	$(addprefix eclown/,				\
 					ft_strjoin3.c					\
 					)								\
 				cd_function.c						\
+				cd_function2.c						\
 				lvl2_parsing.c						\
+				lvl2_parsing1.c						\
+				lvl2_parsing2.c						\
+				lvl2_parsing3.c						\
+				lvl2_parsing4.c						\
+				lvl2_parsing5.c						\
+				lvl2_parsing6.c						\
+				lvl2_parsing7.c						\
+				lvl2_parsing8.c						\
+				lvl2_parsing9.c						\
+				lvl2_parsing10.c						\
 				)
 
 FUNCTIONS	+=	$(addprefix envp/,					\
@@ -131,8 +144,13 @@ FUNCTIONS	+=	$(addprefix utils/,					\
 
 FUNCTIONS	+=	$(addprefix wildcard/,				\
 				eclown_func1.c						\
+				eclown_func2.c						\
+				eclown_func3.c						\
 				wildcard_1.c						\
 				wildcard_2.c						\
+				wildcard_3.c						\
+				wildcard_4.c						\
+				wildcard_5.c						\
 				)
 
 FUNCTIONS	+=	main.c
@@ -163,13 +181,13 @@ libft		:
 clean		:
 				$(RM) $(OBJECT)
 				$(RMDIR) $(FOLDER)
-				make clean -C libft
+#				make clean -C libft
 
 fclean		:
 				$(RM) $(OBJECT)
 				$(RM) $(NAME)
 				$(RMDIR) $(FOLDER)
-				make fclean -C libft
+#				make fclean -C libft
 
 re			:	fclean all
 

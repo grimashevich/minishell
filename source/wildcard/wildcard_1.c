@@ -6,13 +6,13 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:28:44 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/06 13:08:45 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/01 19:49:57 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wildcard.h"
 
-int compare_closed_str(char *str, char *ptrn)
+int	compare_closed_str(char *str, char *ptrn)
 {
 	int		str_len;
 	int		ptrn_len;
@@ -33,14 +33,14 @@ int compare_closed_str(char *str, char *ptrn)
 	{
 		str = ft_strnstr(str, substrs[i], ft_strlen(str));
 		if (str == NULL && result--)
-			break;
+			break ;
 		str += ft_strlen(substrs[i++]);
 	}
 	ft_free_text(substrs);
 	return (result);
 }
 
-int compare_start(char *str, char *ptrn)
+int	compare_start(char *str, char *ptrn)
 {
 	char	**ptrn_list;
 	int		result;
@@ -57,12 +57,12 @@ int compare_start(char *str, char *ptrn)
 	return (result);
 }
 
-static int cmp_str_from_end(char *str1, char* str2, int len)
+static int	cmp_str_from_end(char *str1, char *str2, int len)
 {
 	int	i;
 	int	j;
-	
-	i = ft_strlen(str1) - 1;	
+
+	i = ft_strlen(str1) - 1;
 	j = ft_strlen(str2) - 1;
 	if (len > i + 1 || len > j + 1 || len < 1)
 		return (0);
@@ -77,13 +77,12 @@ static int cmp_str_from_end(char *str1, char* str2, int len)
 	return (1);
 }
 
-int compare_end(char *str, char *ptrn)
+int	compare_end(char *str, char *ptrn)
 {
 	char	**ptrn_list;
 	char	**ptrn_tmp;
 	int		result;
 	int		ptrn_len;
-
 
 	result = -1;
 	ptrn_len = ft_strlen(ptrn);

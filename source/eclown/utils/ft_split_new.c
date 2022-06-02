@@ -6,13 +6,13 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/09 00:05:45 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/06 13:29:59 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/02 23:47:55 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "eclown_utils.h"
 
-int get_char_count(char *str, char c)
+int	get_char_count(char *str, char c)
 {
 	int	result;
 
@@ -23,7 +23,7 @@ int get_char_count(char *str, char c)
 			result++;
 		str++;
 	}
-	return result;
+	return (result);
 }
 
 char	**clear_and_finish(char **text)
@@ -34,10 +34,10 @@ char	**clear_and_finish(char **text)
 	while (text[i])
 		free(text[i]);
 	free(text);
-	return(NULL);
+	return (NULL);
 }
 
-char **get_pointer_array(char *str, char sep, int words_cnt)
+char	**get_pointer_array(char *str, char sep, int words_cnt)
 {
 	int		i;
 	int		j;
@@ -61,12 +61,12 @@ char **get_pointer_array(char *str, char sep, int words_cnt)
 		if (! result[j - 1])
 			return (clear_and_finish(result));
 		if (str[i - 1] == 0)
-			break;
+			break ;
 	}
 	return (result);
 }
 
-void fill_array(char **text, char *str, char sep)
+void	fill_array(char **text, char *str, char sep)
 {
 	int		i;
 	int		j;
@@ -83,7 +83,7 @@ void fill_array(char **text, char *str, char sep)
 			j = 0;
 			n++;
 			i++;
-			continue;
+			continue ;
 		}
 		text[n][j++] = str[i++];
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/31 10:28:50 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/01 19:08:57 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,15 +133,18 @@ int	check_syntax_more(char *string)
 	return (0);
 }
 
+char	*string_with_spaces_crutch(char *arg);
+
 int	main(int argc, char **argv, char **envp)
 {
 	(void) argv;
 	(void) argc;
 	(void) envp;
-	
+
 	t_tag	*head;
 	t_cmd	*command;
 	char	*answer;
+
 
 	envp_init(envp);
 	g_ms.variables = NULL;
@@ -152,6 +155,8 @@ int	main(int argc, char **argv, char **envp)
 	while (answer)
 	{
 		answer = readline("minishell🧹🗿 ");
+/* 		answer = malloc(512);
+		scanf("%s", answer); */
 		if (answer == NULL)
 		{
 			write(1, "\b\bexit\n", 10);
@@ -213,22 +218,23 @@ int	main(int argc, char **argv, char **envp)
 	//char *answer = malloc(256);
 	t_rdr_fls	*rdr;
 
-	//answer = readline("Enter str: "); 
+	char *answer1984 = readline("Enter str: "); 
 	//char *answer = ft_strdup("ehco abc <<hereDOC >out.txt <infile 2>../dir1/error.log 3>number3file -param1 param2");
-	char *answer = ft_strdup("ehco abc -param1 <infile \"1>param2\" >\"out fi\'le\" param3 3>fd3-2fl");
+	//char *answer = ft_strdup("ehco abc -param1 <infile \"1>param2\" >\"out fi\'le\" param3 3>fd3-2fl");
 	//answer = ft_strdup("ehco abc 2>error.log next_cmd");
 	//add_history(answer);
-	rdr = extract_all_rdrs(&answer);
+	rdr = extract_all_rdrs(&answer1984);
 	while (rdr)
 	{
 		print_rdr(rdr);
 		rdr = rdr->next;
 	}
 	
-	printf("\n---\n%s\n", answer);
+	printf("\n---\n%s\n", answer1984);
 	//int *result = find_num_left_from_char(answer, ft_strnstr(answer, "<", ft_strlen(answer)));
-	free(answer);
-	free_rdr_list(rdr); */
+	free(answer1984);
+	free_rdr_list(rdr);
+	return (0); */
 
 	
 /* // TEST CASE FOR expand_wildcard_in_str
@@ -389,6 +395,9 @@ int	main(int argc, char **argv, char **envp)
 	ft_free_text(text);
 	print_text(text2);
 	ft_free_text(text2);
+
+
+> qwer || >
 */
 	
 	return (0);

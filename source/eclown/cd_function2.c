@@ -1,31 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_is_str_equal.c                                  :+:      :+:    :+:   */
+/*   cd_function2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/04/08 16:44:49 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/02 23:45:52 by EClown           ###   ########.fr       */
+/*   Created: 2022/06/02 16:45:00 by EClown            #+#    #+#             */
+/*   Updated: 2022/06/02 16:45:27 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "eclown_utils.h"
+#include "cd_function.h"
 
-/* 
-Compare 2 strings
-Return 1: if str1 == str2 (by symbols, not by memory)
-Return 0: if not. If any error has occured. If any str is NULL
- */
-
-int	ft_is_str_equal(char *str1, char *str2)
+int	ms_error_free_return(char *msg, char *to_free)
 {
-	int	result;
-
-	if (str1 == NULL || str2 == NULL)
-		return (0);
-	result = ft_strcmp(str1, str2);
-	if (result == 0)
-		return (1);
-	return (0);
+	if (to_free)
+		free(to_free);
+	ms_error(msg, NULL, errno);
+	return (errno);
 }
