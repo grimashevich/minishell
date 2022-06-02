@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 03:17:07 by ccamie            #+#    #+#             */
-/*   Updated: 2022/06/01 19:20:47 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 21:39:10 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void	skip_red_all(char **string)
 		*string += 1;
 		while (ft_isspace(**string) == TRUE)
 			*string += 1;
-		while (ft_isalnum(**string) == TRUE || **string == '_')
+		while (ft_isalnum(**string) == TRUE || **string == '_' \
+			|| **string == '.')
 			*string += 1;
 		while (ft_isspace(**string) == TRUE)
 			*string += 1;

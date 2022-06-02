@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 10:19:28 by ccamie            #+#    #+#             */
-/*   Updated: 2022/06/02 16:38:37 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 20:04:01 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,31 +38,15 @@ static void	wait_pid(pid_t pid)
 	waitpid(pid, &status, 0);
 	signal(SIGINT, signal_new_line);
 	signal(SIGQUIT, SIG_IGN);
-	if (WIFEXITED(status))
-	{
-		if (!status)
-			g_ms.exit_code = 0;
-		if (WEXITSTATUS(status) == 255)
-			g_ms.exit_code = 127;
-	}
-	else if (WIFSIGNALED(status))
-	{
-		if (WTERMSIG(status) == 2)
-			g_ms.exit_code = 130;
-		else if (WTERMSIG(status) == 3)
-			g_ms.exit_code = 131;
-		else
-			g_ms.exit_code = WEXITSTATUS(status);
-	}
-	else
-		g_ms.exit_code = 0;
+	set_exit_code(status);
 }
 
-void	launch_command(t_cmd *command, int fd[2][2], int *process_up_down)
+void	launch_command(t_cmd *command, int fd[2][2], int *process_up_down, \
+	int *is_launch)
 {
 	pid_t	pid;
 
-	if (need_to_go_back(command, process_up_down, fd) == TRUE)
+	if (need_to_go_back(command, process_up_down, fd, is_launch) == TRUE)
 		return ;
 	pid = fork();
 	if (pid == -1)

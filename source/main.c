@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/02 16:25:37 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 21:04:49 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ int	main(int argc, char **argv, char **envp)
 		add_history(answer);
 		free(answer);
 		command = head->data;
-		// print_diagram(head);
+		// // print_diagram(head);
 		// print_tree(head);
 		// print_cmd(head);
 		// printf("-----------------------------------------\n");

@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/06/01 20:19:45 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 20:03:05 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	executor(t_tag *head)
 	int	binout[2];
 	int	process_up_down;
 	int	i;
+	int	is_launch;
 
 	i = 0;
 	process_up_down = 0;
@@ -34,13 +35,9 @@ void	executor(t_tag *head)
 		binout[0] = dup(0);
 		binout[1] = dup(1);
 		if (head[i].type == COMMAND)
-		{
-			launch_command(head[i].data, fd, &process_up_down);
-		}
+			launch_command(head[i].data, fd, &process_up_down, &is_launch);
 		else if (head[i].type == CONTAINER)
-		{
-			launch_container(head[i].data, fd, &process_up_down);
-		}
+			launch_container(head[i].data, fd, &process_up_down, &is_launch);
 		dup2(binout[1], 1);
 		dup2(binout[0], 0);
 		i += 1;

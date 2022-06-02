@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 18:30:07 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 04:31:53 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 21:06:45 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,6 @@ t_cont	*get_container(char *line)
 	free(string);
 	line = new_line(line);
 	remove_insignificant_spases(&line);
-	remove_insignificant_brackets(&line);
 	container->tag = create_the_current_level(line);
 	free(line);
 	return (container);
