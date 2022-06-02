@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 16:19:17 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/02 22:30:24 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 00:47:39 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	if_in_var_without_value(char **var_value, char **new_var_name, t_vars *tmp)
 	*var_value = get_var_value(g_ms.variables, *new_var_name);
 	if (*var_value == NULL)
 	{
+		if (envp_get_index(*new_var_name) != -1)
+			return (1);
 		free_var(tmp);
 		tmp = create_var(*new_var_name, "");
 		tmp->is_global = 1;
@@ -71,7 +73,7 @@ int	add_global_local_var(char *arg)
 		return (free_var_and_return(tmp, 0));
 	}
 	if (tmp == NULL || tmp->value[0] == '\0')
-		if_in_var_without_value(&var_value, &new_var_name, tmp);
+		return (if_in_var_without_value(&var_value, &new_var_name, tmp));
 	g_ms.variables = delete_var(g_ms.variables, new_var_name);
 	return (0);
 }

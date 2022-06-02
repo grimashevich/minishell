@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:27:07 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/02 23:36:50 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 00:57:02 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int	find_word_right_from_needle(char *c, const char *needle, char **to_write)
 		i++;
 	while (c[i] && ft_isspace(c[i]))
 		_ = (word_len >= 0 && i++ == result++);
-	while ((c[i] != '>' && c[i] && ! ft_isspace(c[i]))
+	while ((c[i] != '>' && c[i] != '<' && c[i] && ! ft_isspace(c[i]))
 		|| is_char_in_quotes(&c[i - result], &c[i]))
 		_ = (0 <= word_len++ && i++ == result++);
 	if (word_len == 0)
