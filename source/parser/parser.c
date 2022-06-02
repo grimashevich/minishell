@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:57 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 04:37:42 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/03 01:36:10 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ t_tag	*parser(char *line)
 	}
 	if (check_syntax(line) != 0)
 	{
+		free(line);
 		return (NULL);
 	}
 	head = create_tree(line);

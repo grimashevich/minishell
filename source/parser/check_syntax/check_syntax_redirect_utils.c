@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 03:13:51 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 03:14:24 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/03 01:39:08 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	check_syntax_of_redirect_outfile(char *string)
 			if (check_fd_redirect_outfile(string) == TRUE)
 				return (-1);
 			if (ft_isalnum(*string) == FALSE && *string != '\"' && \
-				*string != '*' && *string != '?')
+				*string != '*' && *string != '?' && *string != '/')
 			{
 				if (print_error_redirect_outfile(string) == -1)
 					return (-1);

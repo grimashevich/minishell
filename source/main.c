@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/03 01:00:25 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 01:21:06 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ void	minishell_launch(char *answer, t_tag *head)
 {
 	add_history(answer);
 	free(answer);
-	// // print_diagram(head);
+	// print_diagram(head);
 	// print_tree(head);
 	// print_cmd(head);
 	// printf("-----------------------------------------\n");
