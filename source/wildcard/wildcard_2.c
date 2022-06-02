@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard_2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:36:31 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/01 20:02:43 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 00:02:10 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	str_wildcard_compare(char *str, char *ptrn)
 	if (! closed_str)
 		return (0);
 	closed_ptrn = ec_str_copy(ptrn, star_cut, end_cut);
+	result = 0;
 	return (str_wildcard_compare_2(&closed_ptrn, closed_str, result));
 }
 
