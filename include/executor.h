@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:52 by ccamie            #+#    #+#             */
-/*   Updated: 2022/06/02 20:04:55 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/03 00:00:51 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,9 @@ void	chil_pipcont_first(t_cont *container, int *process_up_down, \
 
 int		is_pipe_cont(t_cont *container, int *process_up_down, int fd[2][2]);
 
-int	need_to_go_back_cont(t_cont *container, int *process_up_down, \
+int		need_to_go_back_cont(t_cont *container, int *process_up_down, \
 	int fd[2][2], int *is_launch);
-int	need_to_go_back(t_cmd *command, int *process_up_down, int fd[2][2], \
+int		need_to_go_back(t_cmd *command, int *process_up_down, int fd[2][2], \
 	int *is_launch);
 
 void	launch_command(t_cmd *command, int fd[2][2], int *process_up_down, \
