@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lvl2_parsing10.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 23:27:07 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/03 02:40:41 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 02:49:20 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ void	lvl2_parsing(char *cmd_str, t_cmd *cmd_struct, t_vars *ms_vars)
 	ft_free_text(tmp);
 	if (args == NULL)
 		args = add_str_to_text(ft_strdup(""), args);
-	cmd_struct->command = args;s
+	cmd_struct->command = args;
 }
 
 void	tabs_to_spaces_crutch(char *str)
