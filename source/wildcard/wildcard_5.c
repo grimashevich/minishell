@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 19:46:40 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/01 20:23:38 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 02:42:16 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,28 @@
 
 char	**expand_wildcard_arr(char *wildcard);
 char	**quote_str_with_spec(char **text);
+void	encode_quotes_str(char *str, char *char2encode);
+
+char	**encode_file_names(char **text)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (text[i])
+	{
+		while (text[i][j])
+		{
+			if (text[i][j] == '*')
+				text[i][j] *= -1;
+			j++;
+		}
+		i++;
+		j = 0;
+	}
+	return (text);
+}
 
 char	**apply_wildcard(char *pattern, char **text)
 {

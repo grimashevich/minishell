@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/01 19:38:53 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/01 20:23:01 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 02:44:02 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int		is_spec_in_string(char *str);
 char	*put_str_in_quotes(char *str, char quote, int need_free);
 void	hide_hidden_fles(char **files, char *wildcard);
 void	exit_if_null(void *pointer);
+char	**encode_file_names(char **text);
 
 char	**quote_str_with_spec(char **text)
 {
@@ -128,7 +129,7 @@ char	**expand_wildcard_arr(char *wildcard)
 	if (! files)
 		return (NULL);
 	hide_hidden_fles(files, wildcard);
-	result_files = apply_wildcard(wildcard, files);
+	result_files = apply_wildcard(wildcard, encode_file_names(files));
 	ft_free_text(files);
 	if (!result_files || !result_files[0])
 		return (add_str_to_text(wildcard, NULL));

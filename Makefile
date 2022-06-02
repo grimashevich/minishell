@@ -6,7 +6,7 @@
 #    By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/06/02 22:43:01 by ccamie           ###   ########.fr        #
+#    Updated: 2022/06/03 02:40:48 by EClown           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,6 +74,7 @@ FUNCTIONS	+=	$(addprefix eclown/,				\
 				lvl2_parsing8.c						\
 				lvl2_parsing9.c						\
 				lvl2_parsing10.c						\
+				lvl2_parsing11.c						\
 				)
 
 FUNCTIONS	+=	$(addprefix envp/,					\
