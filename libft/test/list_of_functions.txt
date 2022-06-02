@@ -1,6 +1,0 @@
-ft_strlen
-ft_strcpy
-ft_strdup
-ft_putstr_fd
-ft_substr
-ft_strend

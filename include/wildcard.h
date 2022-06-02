@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wildcard.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/03 11:38:10 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/23 21:17:52 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/02 17:03:55 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,37 +41,6 @@ typedef struct s_dict
 	char			*value;
 	struct s_str	*next;
 }	t_dict;
-/*
-enum Exec_condition
-{
-	ANY_CASE,
-	ERROR,
-	SUCCESS
-};
-
-typedef struct s_cmd
-{
-	int				exec_condition;	// Условие выполнения в зависимости от результат предыдущей команды 'A' (Any case), 'E' (error) 'S' (succes)
-	int				in_fd;			// fd для входящего потока
-	int				out_fd;			// fd для исходящего потока
-	int				isbroken;		// 1 если команда задана не верно, иначе 0		???
-	char			*error_text;	// Если is_broken == 1, содержит текст ошибки для вывода	???
-	int				isfunc;			// 1 если команда является внутренний функций, иначе 0
-	char			**command;		// Массив. 0-й аргумент путь до файла (имя функции), остальные элементы - аргументы.
-	struct s_cmd	*next;			// Указатель на следующий элемент (по горизонтали)
-	struct s_cmd	*child;			// Указатель на потомка (NULL по умолчанию). Если  NULL, то это команда.
-}	t_cmd;
-
-typedef struct s_cmd_cntr
-{
-	t_cmd				*first_command;
-	int					exec_condition;	// Условие выполнения в зависимости от результат предыдущей команды 'A' (Any case), 'E' (error) 'S' (succes)
-	struct s_cmd_cntr	*children;
-	t_list				*cntrs;
-
-}	t_cmd_c;
-
-*/
 
 typedef struct s_2int2
 {
@@ -79,8 +48,7 @@ typedef struct s_2int2
 	int	p[2];
 }	t_2int2;
 
-
-char	**apply_wildcard(char *pattern, char** text);
+char	**apply_wildcard(char *pattern, char **text);
 int		total_compare(char *str, char *ptrn);
 int		get_lines_count(char **text);
 int		find_first_char(char *str, char c);
@@ -98,11 +66,11 @@ int		symb_count_before_char(char c, char *str, char *before);
 int		symb_count_after_char(char c, char *after);
 int		pre_str_wildcard_compare(char *str, char *ptrn);
 
-
 void	ft_list_add_back(t_list **list, t_list *new);
 void	ft_list_add_front(t_list **list, t_list *new);
 void	ft_list_remove_all(t_list **list, void (*del)(void *));
-int		ft_list_remove_current(t_list **list, t_list *current, void (*del)(void *));
+int		ft_list_remove_current(t_list **list, t_list *current, \
+	void (*del)(void *));
 void	ft_list_remove(t_list *list, void (*del)(void *));
 size_t	ft_list_get_count(t_list *list);
 t_list	*ft_list_get_last(t_list *list);
@@ -113,38 +81,5 @@ t_list	*ft_list_new(void *content);
 char	**ft_list_to_strings(t_list *list);
 
 t_list	*ft_strings_to_list(char **strings);
-
-/* 
-
-РЕКУРСИВНЫЙ ПАРСЕР 1 УР.
-
-s_cmd	*parser_lvl1(char *str, int start, int end)
-
-((cmd1 && (cmd2 param1 param2 | cmd 3) || cmd4 param1) | ((((cmd5) | cmd 6))))
-выделить сущности между &&, || и |
-
- вернет
- cont	-	-	-	cmd5 | cmd6
-  |
-  |
-  |
-  |
- cmd1	-	cont	-	cmd4
-			  |
-			  |
-			  |
-			  |
-			  cmd2	-	cmd3
- 
- 
- ПАРСЕР 2 УР.
- Парсит сущности, которые создал парсер 1 ур.
- 	Фактически рабзирает каждую конкретную команду на саму команду и параметры.
-	Преобразовывает переменные в их значения
-	Разбирает кавычки
-
- char	**parser_lvl2(char *str);
-
- */
 
 #endif  /* WILDCARD_H */

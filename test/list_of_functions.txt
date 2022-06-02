@@ -1,2 +1,0 @@
-count_number_of_operators
-give_line_before_operator

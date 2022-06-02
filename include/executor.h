@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:52 by ccamie            #+#    #+#             */
-/*   Updated: 2022/06/02 16:00:30 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 17:00:20 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,13 +47,17 @@ void	juggle_pipes(int arr[2][2]);
 int		is_pipe_cmd(t_cmd *command, int *process_up_down, int fd[2][2]);
 int		is_variable(t_cmd *command);
 
-void	chil_pipcont_last(t_cont *container, int *process_up_down, int fd[2][2]);
-void	chil_pipcont_midd(t_cont *container, int *process_up_down, int fd[2][2]);
-void	chil_pipcont_first(t_cont *container, int *process_up_down, int fd[2][2]);
+void	chil_pipcont_last(t_cont *container, int *process_up_down, \
+	int fd[2][2]);
+void	chil_pipcont_midd(t_cont *container, int *process_up_down, \
+	int fd[2][2]);
+void	chil_pipcont_first(t_cont *container, int *process_up_down, \
+	int fd[2][2]);
 
 int		is_pipe_cont(t_cont *container, int *process_up_down, int fd[2][2]);
 
-int		need_to_go_back_cont(t_cont *container, int *process_up_down, int fd[2][2]);
+int		need_to_go_back_cont(t_cont *container, int *process_up_down, \
+	int fd[2][2]);
 int		need_to_go_back(t_cmd *command, int *process_up_down, int fd[2][2]);
 
 void	launch_command(t_cmd *command, int fd[2][2], int *process_up_down);
