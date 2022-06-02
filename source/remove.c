@@ -1,46 +1,42 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   executor.c                                         :+:      :+:    :+:   */
+/*   remove.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/25 16:58:02 by ccamie            #+#    #+#             */
-/*   Updated: 2022/06/02 20:03:05 by ccamie           ###   ########.fr       */
+/*   Created: 2022/06/02 22:41:38 by ccamie            #+#    #+#             */
+/*   Updated: 2022/06/02 22:43:14 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "executor.h"
+#include "minishell.h"
 
-void	executor_init(int fd[2][2])
-{
-	fd[0][0] = 0;
-	fd[0][1] = 1;
-	fd[1][0] = 0;
-	fd[1][1] = 1;
-}
+void	free_t_cmd(t_cmd *cmd);
 
-void	executor(t_tag *head)
+void	remove_tree(t_tag *head)
 {
-	int	fd[2][2];
-	int	binout[2];
-	int	process_up_down;
-	int	i;
-	int	is_launch;
+	t_cont	*container;
+	t_tag	*start;
+	t_tag	*tag;
+	int		i;
 
 	i = 0;
-	process_up_down = 0;
+	start = head;
 	while (head[i].type != END)
 	{
-		binout[0] = dup(0);
-		binout[1] = dup(1);
 		if (head[i].type == COMMAND)
-			launch_command(head[i].data, fd, &process_up_down, &is_launch);
+		{
+			free_t_cmd(head[i].data);
+		}
 		else if (head[i].type == CONTAINER)
-			launch_container(head[i].data, fd, &process_up_down, &is_launch);
-		dup2(binout[1], 1);
-		dup2(binout[0], 0);
+		{
+			container = head[i].data;
+			tag = container->tag;
+			free(container);
+			remove_tree(tag);
+		}
 		i += 1;
 	}
-	unlink(HEREDOC_TMP_FILENAME);
+	free(start);
 }

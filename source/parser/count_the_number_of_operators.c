@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/13 22:17:27 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 04:37:22 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 21:03:55 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ int	count_the_number_of_operators(char *line)
 		if (*line == '\0')
 			return (number_of_operators);
 		is_this_a_brace(&line);
+		if (*line == '\0')
+			return (number_of_operators);
 		is_this_an_operator(&line, &number_of_operators);
 	}
 	return (number_of_operators);

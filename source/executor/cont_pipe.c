@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:21:47 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 08:28:25 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 16:11:10 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,12 @@ void	first_cont_pipe(int pipe[2], t_cont *container)
 		perror("minishell");
 		exit(1);
 	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		dup2(pipe[1], STDOUT_FILENO);
 		if (redirects(container->redirects))
 			exit(errno);
@@ -44,8 +48,12 @@ pid_t	last_cont_pipe(int pipe[2], t_cont *container)
 		perror("minishell");
 		exit(1);
 	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		dup2(pipe[0], STDIN_FILENO);
 		if (redirects(container->redirects))
 			exit(errno);
@@ -67,8 +75,12 @@ void	cont_pipe(int fd[2][2], t_cont *container)
 		perror("minishell");
 		exit(1);
 	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	if (pid == 0)
 	{
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
 		if (redirects(container->redirects))

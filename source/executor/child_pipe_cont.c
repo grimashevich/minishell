@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 09:53:41 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 10:11:55 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 20:17:13 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ void	chil_pipcont_last(t_cont *container, int *process_up_down, int fd[2][2])
 	fd[1][0] = STDIN_FILENO;
 	fd[1][1] = STDOUT_FILENO;
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) != 0)
-		g_ms.exit_code = WEXITSTATUS(status);
-	else
-		g_ms.exit_code = 0;
+	set_exit_code(status);
 	unlink(HEREDOC_TMP_FILENAME);
 	while (*process_up_down > 0)
 	{

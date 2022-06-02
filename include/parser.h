@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/02 17:03:01 by ccamie            #+#    #+#             */
+/*   Updated: 2022/06/02 17:03:02 by ccamie           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PARSER_H
 # define PARSER_H
 
@@ -34,7 +46,7 @@ int		check_syntax_of_redirect_outfile(char *string);
 int		check_error_infile(char *string, int i);
 int		check_syntax_of_redirect_infile(char *string);
 
-void	skip_red_all(char **string, int *operator);
+void	skip_red_all(char **string);
 int		check_parentheses_all_t(char **string, int *operator);
 int		check_parentheses_after_operator(char *string);
 

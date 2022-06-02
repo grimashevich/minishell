@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 03:17:07 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 03:18:22 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 21:39:10 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static int	get_lenght(char *string)
 	return (i);
 }
 
-void	skip_red_all(char **string, int *operator)
+void	skip_red_all(char **string)
 {
 	if (**string == '\'')
 		*string += skip_single_quotation_mark(*string + 1) + 1;
@@ -35,7 +35,8 @@ void	skip_red_all(char **string, int *operator)
 		*string += 1;
 		while (ft_isspace(**string) == TRUE)
 			*string += 1;
-		while (ft_isalnum(**string) == TRUE || **string == '_')
+		while (ft_isalnum(**string) == TRUE || **string == '_' \
+			|| **string == '.')
 			*string += 1;
 		while (ft_isspace(**string) == TRUE)
 			*string += 1;
@@ -46,7 +47,7 @@ int	check_parentheses_all_t(char **string, int *operator)
 {
 	int	i;
 
-	skip_red_all(string, operator);
+	skip_red_all(string);
 	i = 0;
 	while (ft_isdigit((*string)[i]) == TRUE)
 		i += 1;
@@ -70,9 +71,9 @@ int	check_parentheses_after_operator(char *string)
 {
 	int	operator;
 
-	operator = EMPTY;
 	while (*string != '\0')
 	{
+		operator = EMPTY;
 		while (*string != ')' && *string != '\0')
 		{
 			if (*string == '\'')
@@ -85,6 +86,7 @@ int	check_parentheses_after_operator(char *string)
 			return (0);
 		while (operator == EMPTY && *string != '\0')
 		{
+			operator = EMPTY;
 			if (check_parentheses_all_t(&string, &operator) == -1)
 			{
 				return (-1);

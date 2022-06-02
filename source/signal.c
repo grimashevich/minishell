@@ -1,35 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test.c                                             :+:      :+:    :+:   */
+/*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/10 17:46:17 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/11 18:36:26 by ccamie           ###   ########.fr       */
+/*   Created: 2022/06/02 22:38:28 by ccamie            #+#    #+#             */
+/*   Updated: 2022/06/02 22:38:47 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test.h"
+#include "minishell.h"
 
-int	check_test(void)
+void	signal_new_line(int num)
 {
-	t_data	data;
-	int		status;
-
-	data = parser();
-	data.returned = ft_putstr_fd(data.string, data.fd);
-	status = data.returned == data.expected;
-	if (status != 1)
+	if (num == SIGINT)
 	{
-		remove_all(data);
-		return (1);
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_clear_visible_line();
+		rl_redisplay();
 	}
-	data.output = get_output();
-	status = strcmp(data.output, data.expected_output) == 0;
-	remove_all(data);
-	if (status == 1)
-		return (0);
-	else
-		return (1);
 }

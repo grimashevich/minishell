@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/27 13:40:34 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 05:12:31 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/01 20:28:48 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,17 @@ void	append_envp(char *command)
 t_vars	*extract_var_assign(char *str, char **out_cmd_wout_assign, \
 	int free_old_cmd, t_vars *ms_vars);
 
-/* void add_global_local_var(char *arg)
-{
-	t_vars	*tmp;
-	char	*cmd_wout_vars_assign;
+// void add_global_local_var(char *arg)
+// {
+// 	t_vars	*tmp;
+// 	char	*cmd_wout_vars_assign;
 
-	tmp = extract_var_assign(arg, &cmd_wout_vars_assign, 0, g_ms.variables);
-	if (tmp == NULL)
-	{
-		//TODO остановился тут тоже		
-	}
-} */
+// 	tmp = extract_var_assign(arg, &cmd_wout_vars_assign, 0, g_ms.variables);
+// 	if (tmp == NULL)
+// 	{
+// 		//TODO остановился тут тоже		
+// 	}
+// } 
 
 int	is_normal_var_name(char *var_name)
 {

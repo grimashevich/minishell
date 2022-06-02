@@ -6,7 +6,7 @@
 #    By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/05/31 10:24:04 by ccamie           ###   ########.fr        #
+#    Updated: 2022/06/02 22:43:01 by ccamie           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,12 +20,14 @@ CC			=	cc
 
 CPPFLAGS	=	-I libft/include			\
 				-I include
-# CPPFLAGS	+=	-Wall -Wextra -Werror -g
+CPPFLAGS	+=	-Wall -Wextra -Werror -g
 CPPFLAGS	+=	-g
-CFLAGS		+=	-fsanitize=address
+# CFLAGS		+=	-fsanitize=address
 # CFLAGS		+=	-fsanitize=undefined
 
 LDFLAGS 	=	-lreadline
+LDFLAGS     +=  -L/Users/$(USER)/.brew/opt/readline/lib
+CPPFLAGS    +=  -I/Users/$(USER)/.brew/opt/readline/include
 
 RM			=	rm -f
 MKDIR		=	mkdir -p
@@ -135,7 +137,9 @@ FUNCTIONS	+=	$(addprefix wildcard/,				\
 				wildcard_2.c						\
 				)
 
-FUNCTIONS	+=	main.c
+FUNCTIONS	+=	main.c		\
+				remove.c	\
+				signal.c	\
 
 SOURCE		=	$(addprefix source/, $(FUNCTIONS))
 OBJECT		=	$(addprefix object/, $(FUNCTIONS:.c=.o))

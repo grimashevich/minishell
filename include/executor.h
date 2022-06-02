@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/25 16:58:52 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 10:21:55 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 20:04:55 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void	built_export(char **command);
 void	built_pwd(void);
 void	built_unset(char **command);
 
+void	set_exit_code(int status);
 int		here_doc(char *stop_word);
 int		built_in(t_cmd *command);
 char	*get_file(char *command, char **envp);
@@ -47,16 +48,23 @@ void	juggle_pipes(int arr[2][2]);
 int		is_pipe_cmd(t_cmd *command, int *process_up_down, int fd[2][2]);
 int		is_variable(t_cmd *command);
 
-void	chil_pipcont_last(t_cont *container, int *process_up_down, int fd[2][2]);
-void	chil_pipcont_midd(t_cont *container, int *process_up_down, int fd[2][2]);
-void	chil_pipcont_first(t_cont *container, int *process_up_down, int fd[2][2]);
+void	chil_pipcont_last(t_cont *container, int *process_up_down, \
+	int fd[2][2]);
+void	chil_pipcont_midd(t_cont *container, int *process_up_down, \
+	int fd[2][2]);
+void	chil_pipcont_first(t_cont *container, int *process_up_down, \
+	int fd[2][2]);
 
 int		is_pipe_cont(t_cont *container, int *process_up_down, int fd[2][2]);
 
-int		need_to_go_back_cont(t_cont *container, int *process_up_down, int fd[2][2]);
-int		need_to_go_back(t_cmd *command, int *process_up_down, int fd[2][2]);
+int	need_to_go_back_cont(t_cont *container, int *process_up_down, \
+	int fd[2][2], int *is_launch);
+int	need_to_go_back(t_cmd *command, int *process_up_down, int fd[2][2], \
+	int *is_launch);
 
-void	launch_command(t_cmd *command, int fd[2][2], int *process_up_down);
-void	launch_container(t_cont *container, int fd[2][2], int *process_up_down);
+void	launch_command(t_cmd *command, int fd[2][2], int *process_up_down, \
+	int *is_launch);
+void	launch_container(t_cont *container, int fd[2][2], \
+	int *process_up_down, int *is_launch);
 
 #endif // EXECUTOR_H

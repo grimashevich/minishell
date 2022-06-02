@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:35:11 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 09:07:13 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 20:00:12 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,7 @@ void	child_pipe_last(t_cmd *command, int *process_up_down, int fd[2][2])
 	fd[1][0] = STDIN_FILENO;
 	fd[1][1] = STDOUT_FILENO;
 	waitpid(pid, &status, 0);
-	if (WIFEXITED(status) != 0)
-		g_ms.exit_code = WEXITSTATUS(status);
-	else
-		g_ms.exit_code = 0;
-	unlink(HEREDOC_TMP_FILENAME);
+	set_exit_code(status);
 	while (*process_up_down > 0)
 	{
 		wait(NULL);
