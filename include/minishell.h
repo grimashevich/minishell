@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
+/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/04 14:34:59 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/30 16:51:51 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/02 16:00:37 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,7 @@ t_ms	g_ms;
 void 	ms_error(char *func_name, char *str_error, int errn);
 t_tag	*parser(char *line);
 
+void	signal_new_line(int num);
 t_vars	*update_vars(t_vars *start, char *name, char *new_value);
 t_vars	*add_var_first(t_vars *start, t_vars *new_var);
 void	executor(t_tag *head);

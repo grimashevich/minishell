@@ -6,11 +6,22 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 08:29:39 by ccamie            #+#    #+#             */
-/*   Updated: 2022/06/01 20:20:38 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 16:19:49 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "executor.h"
+
+void	pid_active(pid_t pid)
+{
+	if (pid == -1)
+	{
+		perror("minishell");
+		exit(1);
+	}
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
+}
 
 void	first_cmd_pipe(int pipe[2], t_cmd *command)
 {
@@ -18,25 +29,18 @@ void	first_cmd_pipe(int pipe[2], t_cmd *command)
 	char	*file;
 
 	pid = fork();
-	if (pid == -1)
-	{
-		perror("minishell");
-		exit(1);
-	}
+	pid_active(pid);
 	if (pid == 0)
 	{
-		// dprintf(2, "first_cmd_pipe\n");
-		// dprintf(2, "pipe[0]: %d\n", pipe[0]);
-		// dprintf(2, "pipe[1]: %d\n", pipe[1]);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		dup2(pipe[1], STDOUT_FILENO);
 		if (redirects(command->redirects))
 			exit(1);
 		close(pipe[0]);
 		close(pipe[1]);
 		if (built_in(command) == TRUE)
-		{
 			exit(g_ms.exit_code);
-		}
 		file = get_file(command->command[0], g_ms.envp);
 		execve(file, command->command, g_ms.envp);
 	}
@@ -48,16 +52,11 @@ pid_t	last_cmd_pipe(int pipe[2], t_cmd *command)
 	char	*file;
 
 	pid = fork();
-	if (pid == -1)
-	{
-		perror("minishell");
-		exit(1);
-	}
+	pid_active(pid);
 	if (pid == 0)
 	{
-		// dprintf(2, "last_cmd_pipe\n");
-		// dprintf(2, "pipe[0]: %d\n", pipe[0]);
-		// dprintf(2, "pipe[1]: %d\n", pipe[1]);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		dup2(pipe[0], STDIN_FILENO);
 		if (redirects(command->redirects))
 			exit(errno);
@@ -88,18 +87,11 @@ void	cmd_pipe(int fd[2][2], t_cmd *command)
 	char	*file;
 
 	pid = fork();
-	if (pid == -1)
-	{
-		perror("minishell");
-		exit(1);
-	}
+	pid_active(pid);
 	if (pid == 0)
 	{
-		// dprintf(2, "cmd_pipe\n");
-		// dprintf(2, "fd[0][0]: %d\n", fd[0][0]);
-		// dprintf(2, "fd[0][1]: %d\n", fd[0][1]);
-		// dprintf(2, "fd[1][0]: %d\n", fd[1][0]);
-		// dprintf(2, "fd[1][1]: %d\n", fd[1][1]);
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		dup2(fd[0][0], STDIN_FILENO);
 		dup2(fd[1][1], STDOUT_FILENO);
 		if (redirects(command->redirects))

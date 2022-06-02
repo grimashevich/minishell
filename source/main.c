@@ -6,7 +6,7 @@
 /*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/01 20:05:50 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/02 16:25:37 by ccamie           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,9 @@ void	signal_new_line(int num)
 {
 	if (num == SIGINT)
 	{
-		ft_putstr_fd("                ", 1);
-		ft_putstr_fd("\rminishell🧹🗿\n", 1);
+		// ft_putstr_fd("                ", 1);
+		// ft_putstr_fd("\rminishell🧹🗿\n", 1);
+		write(1, "\n", 1);
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_clear_visible_line();
