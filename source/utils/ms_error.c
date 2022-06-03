@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 20:19:34 by EClown            #+#    #+#             */
-/*   Updated: 2022/05/29 19:31:49 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 04:04:30 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ if str_error is NULL, standart error will be printed
 otherwise user error will be printed
 */
 
-void ms_error(char *func_name, char *str_error, int errn)
+void	ms_error(char *func_name, char *str_error, int errn)
 {
 	errno = errn;
 	g_ms.exit_code = errn;

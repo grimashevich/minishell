@@ -6,7 +6,7 @@
 #    By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/05/23 21:20:20 by EClown            #+#    #+#              #
-#    Updated: 2022/06/03 02:40:48 by EClown           ###   ########.fr        #
+#    Updated: 2022/06/03 04:01:15 by EClown           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -124,10 +124,6 @@ FUNCTIONS	+=	$(addprefix parser/,				\
 					check_syntax_redirect_utils.c	\
 					check_syntax.c					\
 					)								\
-				$(addprefix print/,					\
-					print_diagram.c					\
-					print_tree.c					\
-					)								\
 				count_the_number_of_operators.c		\
 				get_command.c						\
 				get_container_utils.c				\
@@ -186,13 +182,13 @@ libft		:
 clean		:
 				$(RM) $(OBJECT)
 				$(RMDIR) $(FOLDER)
-#				make clean -C libft
+				make clean -C libft
 
 fclean		:
 				$(RM) $(OBJECT)
 				$(RM) $(NAME)
 				$(RMDIR) $(FOLDER)
-#				make fclean -C libft
+				make fclean -C libft
 
 re			:	fclean all
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_command.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 15:00:14 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 03:46:25 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/03 02:52:20 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,15 +95,15 @@ char	*new_line_after_operator(char *line, t_cmd *commamd)
 	start = 0;
 	if (commamd->prev_operator != EMPTY && (commamd->prev_operator == AND || \
 		commamd->prev_operator == OR))
-			start = 2;
+		start = 2;
 	else if (commamd->prev_operator != EMPTY)
-			start = 1;
+		start = 1;
 	end = 0;
 	if (commamd->next_operator != EMPTY && (commamd->next_operator == AND || \
 		commamd->next_operator == OR))
-			end = 2;
+		end = 2;
 	else if (commamd->next_operator != EMPTY)
-			end = 1;
+		end = 1;
 	new = ft_substr(line, start, ft_strlen(line) - end - start);
 	if (new == NULL)
 	{

@@ -6,7 +6,7 @@
 /*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/10 17:17:30 by ccamie            #+#    #+#             */
-/*   Updated: 2022/04/10 23:49:31 by EClown           ###   ########.fr       */
+/*   Updated: 2022/06/03 04:02:59 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "minishell.h"
-
-DIR				*dir;
-struct dirent	*dp;
-
-/* dir = opendir("./lol");
-if (dir == NULL)
-{
-	perror("Cannot open");
-    exit(1);
-}
-while ((dp = readdir(dir)) != NULL)
-{
-	printf("%s\n", dp->d_name);
-} */
-
 
 size_t	get_lenght(char **strings, int separator)
 {
@@ -77,19 +62,3 @@ char	*ft_anti_split(char **strings, char *separator)
 	copy_to_string(strings, string, separator);
 	return (string);
 }
-
-/* int	main(int argc, char **argv, char **envp)
-{
-	char	*lol[2];
-	char	*string;
-
-	lol[0] = "12345";
-	lol[1] = NULL;
-	string= ft_anti_split(lol, "*");
-	if (string == NULL)
-		return (1);
-	printf("%s\n", string);
-	free(string);
-	return (0);
-}
- */

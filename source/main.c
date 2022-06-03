@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 16:45:25 by EClown            #+#    #+#             */
-/*   Updated: 2022/06/03 01:21:06 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/03 03:59:37 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,51 +40,6 @@ void		print_diagram(t_tag *head);
 void		print_tree(t_tag *head);
 void		print_cmd(t_tag *head);
 
-void	print_text(char **text)
-{
-	while (*text)
-	{
-		printf("%s\n", *text);
-		text++;
-	}	
-}
-
-void	print_rdr(t_rdr_fls *item)
-{
-	char *outs = NULL;
-	if (item->out_files)
-		outs = ft_anti_split(item->out_files, ", ");
-	printf("TYPE: %s, FD: %d, PATH: %s OUT_FILES: [%s]\n",
-		get_rdr_type(item->type),
-		item->fd,
-		item->path,
-		outs);
-		free(outs);
-}
-
-void	print_tcmd(t_cmd *cmd)
-{
-	int i = 0;
-	t_rdr_fls *tmp_rdr;
-
-	printf("\nCOMMAND:\n---\n");
-	printf("REDIRECTS:\n");
-	tmp_rdr = cmd->redirects;
-	while (tmp_rdr)
-	{
-		printf("%2d:",i++);
-		print_rdr(tmp_rdr);
-		tmp_rdr = tmp_rdr->next;
-	}
-	printf("COMMANDS/ARGS:\n");
-	i = 0;
-	while (cmd->command[i])
-	{
-		printf("%2d: %s\n",i,  cmd->command[i]);
-		i++;
-	}
-}
-
 int	check_syntax_more(char *string)
 {
 	int	i;
@@ -114,10 +69,6 @@ void	minishell_launch(char *answer, t_tag *head)
 {
 	add_history(answer);
 	free(answer);
-	// print_diagram(head);
-	// print_tree(head);
-	// print_cmd(head);
-	// printf("-----------------------------------------\n");
 	executor(head);
 	remove_tree(head);
 }
@@ -130,7 +81,7 @@ void	minishell(void)
 	answer = (char *)1;
 	while (answer)
 	{
-		answer = readline("minishell🌥 ");
+		answer = readline("minishell ");
 		check_ctrl_d(answer);
 		if (*answer == '\0' || check_syntax_more(answer) != 0)
 		{

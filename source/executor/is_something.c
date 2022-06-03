@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   is_something.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ccamie <ccamie@student.42.fr>              +#+  +:+       +#+        */
+/*   By: EClown <eclown@student.21-school.ru>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/31 09:45:58 by ccamie            #+#    #+#             */
-/*   Updated: 2022/05/31 10:09:35 by ccamie           ###   ########.fr       */
+/*   Updated: 2022/06/03 03:00:48 by EClown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	is_variable(t_cmd *command)
 		if (command->is314159265358979323846 == TRUE)
 		{
 			write(2, "minishell: : command not found\n", 31);
+			g_ms.exit_code = 127;
 		}
 		return (TRUE);
 	}
